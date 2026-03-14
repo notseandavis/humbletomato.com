@@ -1,23 +1,22 @@
 # Humble Tomato — Design & Content Principles
 
-## Design: The Dotnetperls Standard
+## Visual Design: Humble Tomato Brand
 
-- **White/near-white background.** No gradients, no hero sections, no dark mode gimmicks.
-- **Content is the interface.** If you remove the nav, the page should still work.
-- **One column.** No sidebars on content pages. Maybe a TOC on long articles.
-- **System-like typography.** Clean sans-serif body (DM Sans), serif for headings only where it adds clarity. Don't over-style.
-- **No decoration.** No card grids, no emoji sections, no icons-as-features. If content needs an icon to be interesting, the content isn't good enough.
+- **Keep the current visual language.** Tomato red (#E84430), cream (#FFF8F0), DM Sans + DM Serif Display.
+- **The brand identity is warm and distinctive.** Don't flatten it into generic white.
+- **Cards, nav, color accents are fine.** The visual design works.
 - **Fast.** No JavaScript unless absolutely necessary. No frameworks. Plain HTML + CSS.
 - **Mobile-first.** Readable on a phone without pinching.
 - **Code blocks should be excellent.** Good monospace font, proper syntax context, copy-friendly.
 
-## Content Principles
+## Content Style: The Dotnetperls Standard
 
-- **Reference, not marketing.** Every page should answer a question someone actually has.
-- **Explain, don't sell.** Describe what something is and how it works. Let the reader decide if it's useful.
-- **Concrete over abstract.** Examples > theory. Show the PRD. Show the loop. Show the diff.
+- **Quick reference format.** Someone finds this via Google — they get what they need in 60 seconds.
+- **Code examples front and center.** Show, don't tell. The example IS the explanation.
+- **Link out to quality resources.** Don't try to be exhaustive. Be the best summary, then point to the deep dives.
+- **Scannable.** Headers, short paragraphs, code blocks. Gist in 30 seconds, detail in 5 minutes.
+- **Concrete over abstract.** Show the PRD. Show the loop. Show the diff. Real examples, not theory.
 - **Honest about tradeoffs.** Every technique has limitations. Say what they are.
-- **Scannable.** Headers, short paragraphs, code examples. Someone should get the gist in 30 seconds and the detail in 5 minutes.
 - **No buzzwords.** No "revolutionize," no "game-changing," no "unlock the power of." Just describe the thing.
 - **Credit sources.** If a technique came from somewhere, link it.
 - **Living content.** Pages get updated as techniques evolve. Date the last update.

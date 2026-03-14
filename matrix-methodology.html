@@ -59,7 +59,7 @@
             <p>Each iteration starts with fresh context — just the specs, architecture, and current task. This prevents context degradation that happens in long "vibe coding" sessions where quality degrades as the session drags on.</p>
 
             <h3>Supervision Pattern</h3>
-            <p>A supervisory agent monitors the execution loop with different context than the worker. While the worker focuses on ticking checkboxes, the supervisor has access to platform documentation, golden samples, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
+            <p>A supervisory agent monitors the execution loop with different context than the worker. While the worker focuses on ticking checkboxes, the supervisor has access to platform documentation, reference implementations, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
 
             <h2>The Context Matrix</h2>
 
@@ -134,7 +134,7 @@
                     </tr>
                     <tr>
                         <td>Missing dependency</td>
-                        <td>Searches golden sample, adds it</td>
+                        <td>Searches reference implementation, adds it</td>
                     </tr>
                 </tbody>
             </table>

@@ -13,9 +13,15 @@
 
 - **Quick reference format.** Someone finds this via Google — they get what they need in 60 seconds.
 - **Code examples front and center.** Show, don't tell. The example IS the explanation.
+- **Lead with code, explain after.** Don't start with abstract concepts. Show code first, then explain what it demonstrates.
+- **Code progression over explanation.** When explaining a concept, show it through a series of code examples that build on each other. The reader should SEE the pattern, not just read about it.
+- **3-screen rule.** If a page is longer than 3 screens (~120 lines of content), either split it or tighten it. Long pages aren't scannable.
 - **Link out to quality resources.** Don't try to be exhaustive. Be the best summary, then point to the deep dives.
 - **Scannable.** Headers, short paragraphs, code blocks. Gist in 30 seconds, detail in 5 minutes.
 - **Concrete over abstract.** Show the PRD. Show the loop. Show the diff. Real examples, not theory.
+- **Examples ground philosophy.** Philosophical/conceptual pages need at least 2-3 concrete code examples to anchor abstract ideas.
+- **Code-first test.** Before publishing/refining a page, ask: "Could I understand this from the code examples alone, without reading the text?" If no, add better examples.
+- **Tables supplement, don't replace.** Comparison tables are good but don't replace concrete examples. Use both.
 - **Honest about tradeoffs.** Every technique has limitations. Say what they are.
 - **No buzzwords.** No "revolutionize," no "game-changing," no "unlock the power of." Just describe the thing.
 - **No AI writing tells.** Avoid: em dashes (—), "The Core Insight," "Let's dive in," "Here's the thing," "It's worth noting," "Crucially," "Importantly." Use periods and commas. Write like a person, not a language model. If a heading sounds like a ChatGPT section title, rewrite it.

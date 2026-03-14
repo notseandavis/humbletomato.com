@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMAD Method — Humble Tomato</title>
+    <meta name="description" content="A complementary approach to spec-driven development using structured agent roles. Coming soon with detailed patterns and practices.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="bmad.html" class="active">BMAD</a></li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>BMAD Method</h1>
+            <p class="subtitle">Structured AI-assisted development with specific agent roles for different phases of software creation.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>What Is BMAD?</h2>
+
+            <p>BMAD is a complementary approach to spec-driven development that organizes AI agent work through specialized roles rather than a single autonomous loop.</p>
+
+            <p>While the <a href="matrix-methodology.html">Matrix Methodology</a> focuses on specifications as source of truth and the <a href="ralph-wiggum.html">Ralph Loop</a> provides autonomous execution, BMAD explores how different agent roles can collaborate on complex development tasks.</p>
+
+            <h2>Core Concept</h2>
+
+            <p>The central idea: <strong>different phases of development benefit from different agent configurations</strong> — different context windows, different prompts, different specializations.</p>
+
+            <p>Rather than a single agent handling everything from architecture to implementation to testing, BMAD distributes work across specialized roles:</p>
+
+            <ul>
+                <li><strong>Builder</strong> — Generates implementation code from specifications</li>
+                <li><strong>Maintainer</strong> — Handles refactoring, optimization, and technical debt</li>
+                <li><strong>Analyzer</strong> — Reviews code quality, architecture alignment, test coverage</li>
+                <li><strong>Designer</strong> — Focuses on user experience, interface patterns, accessibility</li>
+            </ul>
+
+            <p>Each role has different constraints, different context priorities, and different success criteria.</p>
+
+            <h2>How It Complements Matrix</h2>
+
+            <p>The Matrix Methodology provides the <em>what</em> and <em>how</em> through structured specs and architecture patterns. BMAD provides the <em>who</em> — which agent role should handle which type of work.</p>
+
+            <p>Think of Matrix as the governance layer (specs, templates, quality gates) and BMAD as the execution layer (role-based agent orchestration).</p>
+
+            <h2>Coming Soon</h2>
+
+            <p>Detailed BMAD documentation is in development and will cover:</p>
+
+            <ul>
+                <li>Specific role definitions and responsibilities</li>
+                <li>Handoff patterns between roles</li>
+                <li>Context management strategies for each role</li>
+                <li>When to use BMAD vs. Ralph Loop vs. hybrid approaches</li>
+                <li>Real-world case studies and patterns</li>
+                <li>Tooling and infrastructure requirements</li>
+            </ul>
+
+            <h3>Why Not Release Now?</h3>
+
+            <p>We're following our own principles: start rough, sharpen through execution. The Matrix and Ralph patterns are battle-tested — they've been used in production to generate real capabilities. BMAD is still being refined through experimentation.</p>
+
+            <p>Rather than document theory, we're building the patterns first and documenting what works. This page will be updated as those patterns solidify.</p>
+
+            <h2>Early Insights</h2>
+
+            <p>While detailed documentation is pending, here are some early learnings:</p>
+
+            <h3>Role Specialization Reduces Context Bloat</h3>
+
+            <p>A single agent trying to handle architecture, implementation, and testing simultaneously struggles with context management. Specialized roles can maintain focused context windows with only the information relevant to their phase.</p>
+
+            <h3>Handoffs Need Structure</h3>
+
+            <p>The transition between roles (Builder → Analyzer, for example) requires structured artifacts. Just like the Matrix uses specs and fix_plan.md, BMAD needs role-specific handoff documents.</p>
+
+            <h3>Not Every Task Needs Every Role</h3>
+
+            <p>Simple feature additions might only need Builder. Complex refactors might need Maintainer + Analyzer. New user-facing features might need Designer + Builder + Analyzer. The orchestration layer needs to be smart about which roles to activate.</p>
+
+            <h2>Relationship to Other Patterns</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Focus</th>
+                        <th>When to Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="matrix-methodology.html">Matrix</a></td>
+                        <td>Spec quality, templates, daily iteration</td>
+                        <td>Always — it's the foundation</td>
+                    </tr>
+                    <tr>
+                        <td><a href="ralph-wiggum.html">Ralph Loop</a></td>
+                        <td>Autonomous execution, fresh context</td>
+                        <td>Well-defined features with clear acceptance criteria</td>
+                    </tr>
+                    <tr>
+                        <td>BMAD</td>
+                        <td>Role-based orchestration</td>
+                        <td>Complex work requiring specialized perspectives</td>
+                    </tr>
+                    <tr>
+                        <td><a href="continuous-evolution.html">Continuous Evolution</a></td>
+                        <td>Diff-based dev, migrations, live products</td>
+                        <td>Working with production systems and real users</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Stay Updated</h2>
+
+            <p>This page will be updated as BMAD patterns mature. In the meantime:</p>
+
+            <ul>
+                <li>Start with the <a href="matrix-methodology.html">Matrix Methodology</a> to understand spec-driven fundamentals</li>
+                <li>Use the <a href="ralph-wiggum.html">Ralph Loop</a> for autonomous feature development</li>
+                <li>Explore <a href="continuous-evolution.html">Continuous Evolution</a> for production system patterns</li>
+            </ul>
+
+            <p>The BMAD approach will build on these foundations once the patterns are proven in practice.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 — Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

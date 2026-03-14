@@ -86,16 +86,21 @@
 
             <h3>PRD as Translation Layer</h3>
 
-            <p>The PRD translates generic product requirements into platform-specific concepts:</p>
+            <p>The PRD translates generic product requirements into framework-specific implementation concepts. For example, using Spring Boot and AWS:</p>
 
-            <ul>
-                <li>"User enters address" → Interactive Activity with validation</li>
-                <li>"System validates address" → Background Activity with processor</li>
-                <li>"Save to case" → Entity extending BaseEntity, event publishing</li>
-                <li>"Support personal and business" → Activity Modes</li>
-            </ul>
+            <table>
+                <thead>
+                    <tr><th>Product requirement</th><th>Translates to</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>"User enters address"</td><td>REST controller with <code>@Valid</code> request body, Thymeleaf form with client-side validation</td></tr>
+                    <tr><td>"System validates address"</td><td><code>@Async</code> service method, SQS message consumer with retry policy</td></tr>
+                    <tr><td>"Save to case"</td><td>JPA entity extending <code>BaseEntity</code>, Spring Data repository, <code>ApplicationEvent</code> published on save</td></tr>
+                    <tr><td>"Support personal and business"</td><td>Strategy pattern with <code>CustomerType</code> enum, conditional bean wiring via <code>@Profile</code></td></tr>
+                </tbody>
+            </table>
 
-            <p>This translation is where product and engineering meet. The PRD template guides teams to provide requirements at the right level of detail.</p>
+            <p>This translation is where product and engineering meet. The PRD template guides teams to provide requirements at the right level of detail for the agent to generate working code, not just boilerplate.</p>
 
             <h2>Dialing In Output</h2>
 

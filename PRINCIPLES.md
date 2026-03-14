@@ -18,6 +18,7 @@
 - **Concrete over abstract.** Show the PRD. Show the loop. Show the diff. Real examples, not theory.
 - **Honest about tradeoffs.** Every technique has limitations. Say what they are.
 - **No buzzwords.** No "revolutionize," no "game-changing," no "unlock the power of." Just describe the thing.
+- **No AI writing tells.** Avoid: em dashes (—), "The Core Insight," "Let's dive in," "Here's the thing," "It's worth noting," "Crucially," "Importantly." Use periods and commas. Write like a person, not a language model. If a heading sounds like a ChatGPT section title, rewrite it.
 - **Credit sources.** If a technique came from somewhere, link it.
 - **Living content.** Pages get updated as techniques evolve. Date the last update.
 

@@ -383,6 +383,118 @@ footer a {
     margin-bottom: 32px;
 }
 
+/* Nav Section Labels */
+.nav-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--light);
+    font-weight: 600;
+    padding: 8px 0 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.nav-section-label:first-child {
+    border-top: none;
+}
+
+/* Breadcrumb / Step Indicator */
+.breadcrumb {
+    font-size: 13px;
+    color: var(--light);
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.breadcrumb strong {
+    color: var(--tomato);
+}
+
+/* Prev/Next Navigation */
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 64px 0 48px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    gap: 24px;
+}
+
+.page-nav a {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--mid);
+    transition: color 0.2s;
+    max-width: 45%;
+}
+
+.page-nav a:hover {
+    color: var(--tomato);
+}
+
+.page-nav-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.page-nav-title {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.page-nav-prev {
+    align-items: flex-start;
+}
+
+.page-nav-next {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.page-nav-spacer {
+    flex: 1;
+}
+
+/* Journey Cards (Homepage) */
+.journey-section {
+    margin: 48px 0;
+}
+
+.journey-card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.journey-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.journey-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 22px;
+}
+
+.journey-card p {
+    margin-bottom: 16px;
+}
+
+.journey-card .card-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    display: block;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     h1 {
@@ -416,5 +528,23 @@ footer a {
 
     th, td {
         padding: 10px 12px;
+    }
+
+    .page-nav {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .page-nav a {
+        max-width: 100%;
+    }
+
+    .page-nav-next {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .nav-section-label {
+        padding: 12px 24px 8px;
     }
 }

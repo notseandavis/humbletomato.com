@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specs as DNA — Humble Tomato</title>
+    <meta name="description" content="Why specifications behave like genetic code in AI-driven development. The DNA analogy, diffusion model analogy, and the information theory behind spec-driven development.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Specs as DNA</h1>
+            <p class="subtitle">Why specifications are genetic code, agents are expression machinery, and intermediate synthesis destroys information.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>The DNA Analogy</h2>
+
+            <p>Specifications are like DNA. The AI agent is gene expression machinery.</p>
+
+            <p>DNA doesn't build an organism directly. It encodes instructions that, when expressed in the right cellular environment, produce proteins that assemble into structures. The DNA itself is inert. It's the machinery of gene expression that turns code into life.</p>
+
+            <p>Specs work the same way. A PRD, data model, and API contract sitting in a repo don't do anything on their own. But when an AI agent "expresses" them — reading the specs, interpreting them against architectural patterns, and executing in a live development environment — working software emerges.</p>
+
+            <h3>The mapping</h3>
+
+            <table>
+                <thead>
+                    <tr><th>Biology</th><th>Spec-Driven Development</th><th>Why it matters</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DNA</td><td>Specifications (PRD, data model, API contracts)</td><td>The source of truth. Inert without expression machinery.</td></tr>
+                    <tr><td>Gene expression</td><td>Agent reading + executing specs</td><td>The process that turns encoded information into a working system.</td></tr>
+                    <tr><td>Epigenetic context</td><td>Golden samples</td><td>Doesn't change the DNA, but influences how it's expressed.</td></tr>
+                    <tr><td>Cell division</td><td>The Ralph loop</td><td>Each cycle produces a more differentiated, more specialized result.</td></tr>
+                    <tr><td>Immune system</td><td>Supervisor agent</td><td>Monitors for mutations (bugs, architectural drift) and corrects before they propagate.</td></tr>
+                    <tr><td>Messenger RNA</td><td>fix_plan.md</td><td>Carries current instructions from the master blueprint to execution machinery.</td></tr>
+                </tbody>
+            </table>
+
+            <h3>The implication</h3>
+
+            <p>If you get the DNA right — clean, complete specifications — the expression is almost deterministic. Bad specs produce malformed output, just like mutations produce malformed proteins.</p>
+
+            <p>The methodology's emphasis on spec quality isn't bureaucratic overhead. It's genetic hygiene.</p>
+
+            <h2 id="diffusion">The Diffusion Model Analogy</h2>
+
+            <p>The iterative generation process works like a diffusion model resolving an image.</p>
+
+            <p>A diffusion model starts with noise and progressively refines it into a coherent picture, guided by the prompt and the model's learned understanding of structure.</p>
+
+            <p>The agent starts with an empty project — noise — and iteratively resolves it into working software. The specifications are the prompt. Architecture patterns are the learned structure. Each iteration of the execution loop is a denoising step.</p>
+
+            <table>
+                <thead>
+                    <tr><th>Diffusion Models</th><th>Spec-Driven Development</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Random noise</td><td>Empty project / blank canvas</td></tr>
+                    <tr><td>Text prompt</td><td>Specifications</td></tr>
+                    <tr><td>Learned structure</td><td>Architecture patterns + golden samples</td></tr>
+                    <tr><td>Denoising step</td><td>One iteration of the execution loop</td></tr>
+                    <tr><td>Early steps: broad composition</td><td>Scaffolding, data models, API shapes</td></tr>
+                    <tr><td>Late steps: fine detail</td><td>Edge cases, error handling, polish</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="information-theory">Why Raw Inputs Beat Synthesized Ones</h2>
+
+            <p>A natural instinct: take your PRD and architecture docs, synthesize them into one clean "spec" document, then feed that to the agent. This is a mistake.</p>
+
+            <p>The <strong>Data Processing Inequality</strong> from information theory explains why. For any processing chain X → Y → Z:</p>
+
+            <p><code>I(X; Z) ≤ I(X; Y)</code></p>
+
+            <p>Processing can only preserve or destroy information. It cannot create it. When you synthesize documents X and Y into document Z, you haven't added information. You've compressed it — lossily.</p>
+
+            <h3>What gets lost</h3>
+
+            <ul>
+                <li><strong>Redundancy</strong> — The same concept described two different ways in X and Y gives the agent two chances to understand it. Z picks one description and discards the other.</li>
+                <li><strong>Context</strong> — The way information is structured in the original document carries meaning. Reorganizing it loses structural context.</li>
+                <li><strong>Edge cases</strong> — Synthesis tends to capture the main points and drop the details. The details are where bugs live.</li>
+                <li><strong>Implicit information</strong> — What's adjacent to what in the original documents encodes relationships. Synthesis disrupts these.</li>
+            </ul>
+
+            <h3>When synthesis IS valuable</h3>
+
+            <p>The exception: when the synthesis step adds genuinely <em>new</em> information that wasn't in either source document.</p>
+
+            <ul>
+                <li><strong>Human judgment</strong> — Resolving ambiguities between X and Y that the agent can't resolve alone</li>
+                <li><strong>Derived constraints</strong> — "Given the data model AND the API contract, the batch size must be &lt; 1000" (neither doc says this alone)</li>
+                <li><strong>Conflict resolution</strong> — When X and Y contradict each other, a human choosing which is correct adds information</li>
+            </ul>
+
+            <p>If your synthesis step is just reformatting or combining, skip it. Feed the raw documents. The agent handles multiple inputs better than you think.</p>
+
+            <h2>Further Reading</h2>
+
+            <ul>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a> — The complete framework that applies these principles</li>
+                <li><a href="ralph-wiggum.html">The Ralph Loop</a> — The execution pattern (cell division in the DNA analogy)</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a> — How specs evolve for live products (mutations in a living organism)</li>
+            </ul>
+
+            <p class="last-updated"><em>Last updated: March 13, 2026</em></p>
+
+        </section>
+
+    </div>
+
+    <script>
+        document.querySelector('.menu-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-links')?.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

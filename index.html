@@ -43,9 +43,57 @@
 
         <section class="content">
             <h2>What Is This?</h2>
-            <p>Software development is changing. AI agents can now generate full-stack applications from structured specifications. But this capability only works when the inputs are precise, complete, and well-structured.</p>
             
-            <p>Spec-driven development is a methodology for building software where specifications aren't just documentation — they're the source of truth that agents use to generate working code.</p>
+            <p>Here's a simple example. Same specification, two frameworks:</p>
+
+            <pre><code># User Story
+- Show user profile with name, email, join date
+- Format join date as "Member since MMM YYYY"
+- If no email, show "No email on file"</code></pre>
+
+            <p>Express with React:</p>
+
+            <pre><code>function UserProfile({ user }) {
+  const joinDate = new Date(user.joinedAt)
+    .toLocaleDateString('en-US', { 
+      month: 'short', year: 'numeric' 
+    });
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
+      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+            <p>Express with Vue:</p>
+
+            <pre><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
+    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  computed: {
+    formattedJoinDate() {
+      return new Date(this.user.joinedAt)
+        .toLocaleDateString('en-US', { 
+          month: 'short', year: 'numeric' 
+        });
+    }
+  }
+}
+&lt;/script&gt;</code></pre>
+
+            <p>Same spec ("DNA"), different expression ("proteins"). The spec is framework-agnostic. The architecture context determines implementation.</p>
+            
+            <p><strong>This is spec-driven development:</strong> specifications aren't just documentation — they're the source of truth that agents use to generate working code.</p>
 
             <p>The idea: <strong>specifications are like DNA.</strong> Just as DNA encodes instructions that, when expressed in the right cellular environment, produce proteins and structures, specifications encode product intent that, when processed by AI agents in the right development environment, produce working software.</p>
 

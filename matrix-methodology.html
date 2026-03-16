@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Methodology — Humble Tomato</title>
+    <title>Matrix Methodology - Humble Tomato</title>
     <meta name="description" content="The foundational approach to spec-driven development. How structured specifications and AI agents combine to produce deterministic software.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -29,6 +29,7 @@
                 <li class="nav-section-label">Deepen</li>
                 <li><a href="specs-as-dna.html">Specs as DNA</a></li>
                 <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+                <!-- BMAD hidden until content is ready -->
             </ul>
         </div>
     </nav>
@@ -62,7 +63,7 @@
             <h3>Iterative Loop with Fresh Context</h3>
             <p>The <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> is critical: <strong>Read fix_plan.md → Do ONE task → Verify → Update → Repeat</strong></p>
 
-            <p>Each iteration starts with fresh context — just the specs, architecture, and current task. This prevents context degradation that happens in long "vibe coding" sessions where quality degrades as the session drags on.</p>
+            <p>Each iteration starts with fresh context - just the specs, architecture, and current task. This prevents context degradation that happens in long "vibe coding" sessions where quality degrades as the session drags on.</p>
 
             <h3>Supervision Pattern</h3>
             <p>A supervisory agent monitors the execution loop with different context than the worker. While the worker focuses on ticking checkboxes, the supervisor has access to platform documentation, reference implementations, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
@@ -189,14 +190,14 @@
                     </tr>
                     <tr>
                         <td>5</td>
-                        <td>—</td>
+                        <td>-</td>
                         <td>RC0 → FINAL</td>
                         <td>Ship it</td>
                     </tr>
                 </tbody>
             </table>
 
-            <p>Early iterations (R0, R1, R2) are exploratory. Later iterations become release candidates once the PRD stabilizes. When an RC passes all gates — build green, tests green, product signoff, architecture signoff — you mark it final and ship.</p>
+            <p>Early iterations (R0, R1, R2) are exploratory. Later iterations become release candidates once the PRD stabilizes. When an RC passes all gates - build green, tests green, product signoff, architecture signoff - you mark it final and ship.</p>
 
             <h3>Why This Works</h3>
 
@@ -240,29 +241,27 @@
                 </tbody>
             </table>
 
-            <p><strong>Key point:</strong> You don't need L3 specs to start. Begin at L0 and let R0 tell you what's missing. This is the SpaceX approach applied to software — rapid iteration reveals truth faster than exhaustive upfront planning.</p>
+            <p><strong>Key point:</strong> You don't need L3 specs to start. Begin at L0 and let R0 tell you what's missing. This is the SpaceX approach applied to software - rapid iteration reveals truth faster than exhaustive upfront planning.</p>
 
             <h2>Role Evolution</h2>
 
             <p>The velocity of agent-driven development changes how teams work:</p>
 
-            <h3>Product Role Splits Horizontally</h3>
+            <h3>Product Managers and Product Owners Become Builders</h3>
 
-            <p><strong>Product Strategist</strong> — Market research, roadmap, prioritization. Longer planning horizon. Freed from implementation details.</p>
+            <p>When agents generate code from specs, the person writing the spec <em>is</em> the builder. PMs and POs move from describing what they want to directly shaping what gets built. Their product judgment becomes the primary input to the build loop.</p>
 
-            <p><strong>Product Architect</strong> — Implementation-level product decisions. Works at the generation cycle cadence. Absorbs engineering judgment and client-facing BA work. The PM-equivalent for Matrix Methodology.</p>
+            <h3>Engineers Become Architects and Orchestrators</h3>
 
-            <h3>Engineers Become Integration Points</h3>
-
-            <p>Engineers sit where product intent meets domain boundaries. Their job shifts from "writing code" to "orchestrating the software printer." They debug the loop, not just the code.</p>
+            <p>Engineers shift from writing code to designing the systems that generate it. They own the templates, architecture docs, and infrastructure that make the build loop reliable. They debug the loop, not just the code.</p>
 
             <h2>Related Concepts</h2>
 
             <p>The Matrix Methodology is grounded in deeper principles about how specifications relate to generated output:</p>
 
             <ul>
-                <li><strong><a href="specs-as-dna.html">Specs as DNA</a></strong> — Why specifications behave like genetic code, and agents are the expression machinery</li>
-                <li><strong><a href="specs-as-dna.html#diffusion">Specs as Diffusion</a></strong> — Why iterative generation works like a diffusion model resolving noise into coherent output</li>
+                <li><strong><a href="specs-as-dna.html">Specs as DNA</a></strong> - Why specifications behave like genetic code, and agents are the expression machinery</li>
+                <li><strong><a href="specs-as-dna.html#diffusion">Specs as Diffusion</a></strong> - Why iterative generation works like a diffusion model resolving noise into coherent output</li>
             </ul>
 
             <h2>Principles</h2>
@@ -309,7 +308,7 @@
     </div>
 
     <footer>
-        <div class="footer-line">Built by <strong>RS</strong> 🤖 — Practicing what we preach</div>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 - Practicing what we preach</div>
         <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
         <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>

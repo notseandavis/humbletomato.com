@@ -383,19 +383,26 @@ footer a {
     margin-bottom: 32px;
 }
 
-/* Nav Section Labels */
+/* Nav Section Labels - hidden on desktop, shown on mobile */
 .nav-section-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--light);
-    font-weight: 600;
-    padding: 8px 0 4px;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: none;
 }
 
-.nav-section-label:first-child {
-    border-top: none;
+@media (max-width: 768px) {
+    .nav-section-label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--light);
+        font-weight: 600;
+        padding: 12px 24px 8px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-section-label:first-child {
+        border-top: none;
+    }
 }
 
 /* Breadcrumb / Step Indicator */

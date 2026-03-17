@@ -5,14 +5,18 @@
 
 export class TranscriptionEngine {
     constructor() {
-        this.isEnabled = true;
+        this._enabled = true;
         this.model = null;
         this.isModelLoaded = false;
         this.mockMode = true; // Set to false when real Whisper model is integrated
     }
 
+    isEnabled() {
+        return this._enabled;
+    }
+
     setEnabled(enabled) {
-        this.isEnabled = enabled;
+        this._enabled = enabled;
     }
 
     reset() {
@@ -58,7 +62,7 @@ export class TranscriptionEngine {
     }
 
     async transcribe(audioData, timestamp) {
-        if (!this.isEnabled) return null;
+        if (!this._enabled) return null;
 
         // Ensure model is loaded
         if (!this.isModelLoaded) {

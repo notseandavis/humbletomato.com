@@ -5,7 +5,7 @@
 
 export class SpeakerIdentifier {
     constructor() {
-        this.isEnabled = true;
+        this._enabled = true;
         this.speakers = [];
         this.currentSpeakerId = null;
         this.lastEnergy = 0;
@@ -26,13 +26,17 @@ export class SpeakerIdentifier {
         ];
     }
 
+    isEnabled() {
+        return this._enabled;
+    }
+
     setEnabled(enabled) {
-        this.isEnabled = enabled;
+        this._enabled = enabled;
     }
 
     toggle() {
-        this.isEnabled = !this.isEnabled;
-        return this.isEnabled;
+        this._enabled = !this._enabled;
+        return this._enabled;
     }
 
     reset() {
@@ -43,7 +47,7 @@ export class SpeakerIdentifier {
     }
 
     async identifySpeaker(audioData, timestamp, duration) {
-        if (!this.isEnabled) {
+        if (!this._enabled) {
             return this.getOrCreateSpeaker(0);
         }
 

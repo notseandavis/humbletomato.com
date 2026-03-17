@@ -5,20 +5,24 @@
 
 export class TranslationService {
     constructor() {
-        this.isEnabled = false;
+        this._enabled = false;
         this.sourceLanguage = 'auto';
         this.targetLanguage = 'en';
         this.cache = new Map();
         this.maxCacheSize = 1000;
     }
 
+    isEnabled() {
+        return this._enabled;
+    }
+
     setEnabled(enabled) {
-        this.isEnabled = enabled;
+        this._enabled = enabled;
     }
 
     toggle() {
-        this.isEnabled = !this.isEnabled;
-        return this.isEnabled;
+        this._enabled = !this._enabled;
+        return this._enabled;
     }
 
     setTargetLanguage(language) {
@@ -31,7 +35,7 @@ export class TranslationService {
     }
 
     async translate(text) {
-        if (!this.isEnabled || !text) {
+        if (!this._enabled || !text) {
             return null;
         }
 

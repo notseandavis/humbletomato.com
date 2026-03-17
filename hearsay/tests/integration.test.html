@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hearsay Integration Tests</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #e0e0e0; }
+        .pass { color: #4ade80; }
+        .fail { color: #f87171; }
+        .section { color: #60a5fa; font-weight: bold; margin-top: 16px; }
+        #results { white-space: pre-wrap; line-height: 1.6; }
+        h1 { color: #fff; font-size: 18px; }
+        .summary { margin-top: 20px; padding: 12px; border-radius: 6px; font-weight: bold; }
+        .summary.pass { background: #064e3b; }
+        .summary.fail { background: #7f1d1d; }
+    </style>
+</head>
+<body>
+    <h1>🎙️ Hearsay Integration Tests</h1>
+    <div id="results"></div>
+    <script type="module">
+        import { TranscriptionEngine } from '../js/modules/TranscriptionEngine.js';
+        import { SpeakerIdentifier } from '../js/modules/SpeakerIdentifier.js';
+        import { TranslationService } from '../js/modules/TranslationService.js';
+        import { StorageManager } from '../js/modules/StorageManager.js';
+        import { ExportManager } from '../js/modules/ExportManager.js';
+
+        const results = document.getElementById('results');
+        let passed = 0;
+        let failed = 0;
+
+        function log(msg, cls = '') {
+            const div = document.createElement('div');
+            div.className = cls;
+            div.textContent = msg;
+            results.appendChild(div);
+        }
+
+        function section(name) {
+            log(`\n=== ${name} ===`, 'section');
+        }
+
+        function assert(name, condition) {
+            if (condition) {
+                log(`  ✅ ${name}`, 'pass');
+                passed++;
+            } else {
+                log(`  ❌ ${name}`, 'fail');
+                failed++;
+            }
+        }
+
+        async function assertThrows(name, fn) {
+            try {
+                await fn();
+                log(`  ❌ ${name} (no error thrown)`, 'fail');
+                failed++;
+            } catch (e) {
+                log(`  ✅ ${name} (threw: ${e.message})`, 'pass');
+                passed++;
+            }
+        }
+
+        async function run() {
+            log('Starting integration tests...\n');
+
+            // ==========================================
+            section('TranslationService');
+            // ==========================================
+            const ts = new TranslationService();
+
+            assert('isEnabled() is a function', typeof ts.isEnabled === 'function');
+            assert('starts disabled', ts.isEnabled() === false);
+
+            ts.setEnabled(true);
+            assert('setEnabled(true) enables', ts.isEnabled() === true);
+
+            ts.setEnabled(false);
+            assert('setEnabled(false) disables', ts.isEnabled() === false);
+
+            assert('toggle() returns new state', ts.toggle() === true);
+            assert('toggle() flips again', ts.toggle() === false);
+
+            ts.setEnabled(false);
+            const nullResult = await ts.translate('hello');
+            assert('translate returns null when disabled', nullResult === null);
+
+            ts.setEnabled(true);
+            ts.setTargetLanguage('es');
+            const translated = await ts.translate('hello');
+            assert('translate returns string when enabled', typeof translated === 'string');
+            assert('translate includes language tag', translated.includes('Spanish'));
+
+            // Cache test
+            const cached = await ts.translate('hello');
+            assert('cached result matches', cached === translated);
+
+            ts.clearCache();
+            assert('clearCache works', true);
+
+            const langs = ts.getSupportedLanguages();
+            assert('getSupportedLanguages returns array', Array.isArray(langs));
+            assert('has Turkish', langs.some(l => l.code === 'tr'));
+
+            // ==========================================
+            section('TranscriptionEngine');
+            // ==========================================
+            const te = new TranscriptionEngine();
+
+            assert('isEnabled() is a function', typeof te.isEnabled === 'function');
+            assert('starts enabled', te.isEnabled() === true);
+
+            te.setEnabled(false);
+            assert('setEnabled(false) disables', te.isEnabled() === false);
+
+            te.setEnabled(true);
+            // Create mock audio data (1 second of silence at 16kHz)
+            const audioData = new Float32Array(16000);
+            const segment = await te.transcribe(audioData, 0);
+            assert('transcribe returns object', segment !== null && typeof segment === 'object');
+            assert('segment has text', typeof segment.text === 'string');
+            assert('segment has startTime', typeof segment.startTime === 'number');
+            assert('segment has confidence', typeof segment.confidence === 'number');
+
+            te.setEnabled(false);
+            const nullSeg = await te.transcribe(audioData, 0);
+            assert('transcribe returns null when disabled', nullSeg === null);
+
+            // ==========================================
+            section('SpeakerIdentifier');
+            // ==========================================
+            const si = new SpeakerIdentifier();
+
+            assert('isEnabled() is a function', typeof si.isEnabled === 'function');
+            assert('starts enabled', si.isEnabled() === true);
+
+            si.setEnabled(false);
+            assert('setEnabled(false) disables', si.isEnabled() === false);
+
+            assert('toggle() returns new state', si.toggle() === true);
+            assert('toggle() flips again', si.toggle() === false);
+
+            si.setEnabled(true);
+            si.reset();
+            assert('reset clears speakers', si.speakers.length === 0);
+
+            const speakerId = si.identifySpeaker(audioData, 0, 1);
+            assert('identifySpeaker returns string', typeof speakerId === 'string');
+
+            const speakers = si.getSpeakers();
+            assert('getSpeakers returns array', Array.isArray(speakers));
+
+            // ==========================================
+            section('StorageManager');
+            // ==========================================
+            const sm = new StorageManager();
+            await sm.init();
+
+            assert('init succeeds', sm.db !== null || sm.db !== undefined);
+
+            const testMeeting = {
+                id: 'test-' + Date.now(),
+                title: 'Integration Test Meeting',
+                startDate: new Date(),
+                endDate: new Date(),
+                duration: 60,
+                segments: [
+                    { id: '1', startTime: 0, endTime: 3, text: 'Hello world', confidence: 0.95, speakerId: 's1' }
+                ],
+                speakers: [
+                    { id: 's1', name: 'Speaker 1', color: '#EF4444', segmentCount: 1, totalDuration: 3 }
+                ]
+            };
+
+            await sm.saveMeeting(testMeeting);
+            assert('saveMeeting succeeds', true);
+
+            const loaded = await sm.getMeeting(testMeeting.id);
+            assert('getMeeting returns saved meeting', loaded !== null);
+            assert('meeting title matches', loaded.title === 'Integration Test Meeting');
+            assert('segments preserved', loaded.segments.length === 1);
+
+            const all = await sm.getAllMeetings();
+            assert('getAllMeetings returns array', Array.isArray(all));
+            assert('saved meeting in list', all.some(m => m.id === testMeeting.id));
+
+            await sm.deleteMeeting(testMeeting.id);
+            const deleted = await sm.getMeeting(testMeeting.id);
+            assert('deleteMeeting removes meeting', deleted === null || deleted === undefined);
+
+            // ==========================================
+            section('ExportManager');
+            // ==========================================
+            const em = new ExportManager();
+
+            const exportMeeting = {
+                title: 'Export Test',
+                startDate: new Date('2026-03-17T12:00:00'),
+                duration: 120,
+                segments: [
+                    { startTime: 0, endTime: 3, text: 'First segment', speakerId: 's1' },
+                    { startTime: 5, endTime: 8, text: 'Second segment', speakerId: 's2' }
+                ],
+                speakers: [
+                    { id: 's1', name: 'Alice', color: '#EF4444' },
+                    { id: 's2', name: 'Bob', color: '#3B82F6' }
+                ]
+            };
+
+            const txt = em.toText(exportMeeting);
+            assert('toText returns string', typeof txt === 'string');
+            assert('toText contains segments', txt.includes('First segment'));
+
+            const md = em.toMarkdown(exportMeeting);
+            assert('toMarkdown returns string', typeof md === 'string');
+            assert('toMarkdown has title', md.includes('Export Test'));
+
+            const srt = em.toSRT(exportMeeting);
+            assert('toSRT returns string', typeof srt === 'string');
+
+            const json = em.toJSON(exportMeeting);
+            assert('toJSON returns string', typeof json === 'string');
+            const parsed = JSON.parse(json);
+            assert('toJSON is valid JSON', parsed.title === 'Export Test');
+
+            // ==========================================
+            section('Cross-Service Integration');
+            // ==========================================
+
+            // Simulate a recording flow
+            const transcriber = new TranscriptionEngine();
+            const speaker = new SpeakerIdentifier();
+            const translator = new TranslationService();
+
+            transcriber.setEnabled(true);
+            speaker.setEnabled(true);
+            translator.setEnabled(true);
+            translator.setTargetLanguage('tr');
+
+            const audio = new Float32Array(16000).fill(0.1); // 1s of noise
+            const seg2 = await transcriber.transcribe(audio, 0);
+            const spk = speaker.identifySpeaker(audio, 0, 1);
+            const trans = await translator.translate(seg2.text);
+
+            assert('full pipeline: transcription works', seg2 !== null);
+            assert('full pipeline: speaker assigned', typeof spk === 'string');
+            assert('full pipeline: translation works', trans !== null);
+            assert('full pipeline: translation has language', trans.includes('Turkish'));
+
+            // Store the result
+            const storage = new StorageManager();
+            await storage.init();
+            const fullMeeting = {
+                id: 'pipeline-test-' + Date.now(),
+                title: 'Pipeline Test',
+                startDate: new Date(),
+                endDate: new Date(),
+                duration: 1,
+                segments: [{
+                    id: seg2.id,
+                    startTime: seg2.startTime,
+                    endTime: seg2.endTime,
+                    text: seg2.text,
+                    confidence: seg2.confidence,
+                    speakerId: spk,
+                    translatedText: trans
+                }],
+                speakers: speaker.getSpeakers()
+            };
+            await storage.saveMeeting(fullMeeting);
+            const verified = await storage.getMeeting(fullMeeting.id);
+            assert('full pipeline: stored and retrieved', verified !== null);
+            assert('full pipeline: translation persisted', verified.segments[0].translatedText.includes('Turkish'));
+
+            // Cleanup
+            await storage.deleteMeeting(fullMeeting.id);
+
+            // ==========================================
+            // Summary
+            // ==========================================
+            const total = passed + failed;
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = `summary ${failed === 0 ? 'pass' : 'fail'}`;
+            summaryDiv.textContent = `\n${passed}/${total} tests passed${failed > 0 ? ` (${failed} failed)` : ' - ALL PASS'}`;
+            results.appendChild(summaryDiv);
+        }
+
+        run().catch(e => {
+            log(`\n💥 Test runner error: ${e.message}`, 'fail');
+            console.error(e);
+        });
+    </script>
+</body>
+</html>

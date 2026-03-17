@@ -123,6 +123,79 @@ export default {
 
             <p>The spec mutation propagates to the code. Just like a DNA mutation changes protein structure.</p>
 
+            <h2>How to Write Good Specs</h2>
+
+            <p>Not all specs constrain the solution space effectively. Here's the difference:</p>
+
+            <h3>Bad Spec (Too Vague)</h3>
+
+            <pre><code># Feature: User Settings
+Users need to be able to change their preferences.
+Make it easy to use.</code></pre>
+
+            <p>This produces unpredictable output. What preferences? What UI pattern? How is data stored?</p>
+
+            <h3>Better Spec (Constrained)</h3>
+
+            <pre><code># Feature: User Settings
+
+## Data Model
+- Add `user_preferences` table
+  - user_id (FK to users)
+  - theme: 'light' | 'dark' | 'auto'
+  - email_notifications: boolean
+  - language: string (ISO 639-1)
+
+## UI Requirements
+- Settings page at /account/settings
+- Form with labeled inputs for each preference
+- "Save Changes" button (disabled until form is dirty)
+- Show "Saved!" confirmation for 2 seconds on success
+- Validate: language must be one of ['en', 'es', 'fr', 'de']
+
+## API Contract
+POST /api/user/preferences
+Body: { theme, email_notifications, language }
+Returns: 200 + updated preferences object
+         400 + validation errors if invalid
+
+## Acceptance Criteria
+- Changing theme updates UI immediately (no page reload)
+- Invalid language shows inline error
+- Closing tab without saving shows "unsaved changes" warning
+- Typecheck passes</code></pre>
+
+            <p>Now the agent knows exactly what to build. The solution space is narrow.</p>
+
+            <h3>Pattern: Constrain Without Over-Specifying</h3>
+
+            <p>Good specs define <em>what</em> and <em>constraints</em>, not <em>how</em> at the code level:</p>
+
+            <table>
+                <thead>
+                    <tr><th>Too Vague</th><th>Just Right</th><th>Over-Specified</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Make it fast"</td>
+                        <td>"Response time &lt;200ms p95"</td>
+                        <td>"Use Redis with 60s TTL and read-through caching pattern"</td>
+                    </tr>
+                    <tr>
+                        <td>"Handle errors"</td>
+                        <td>"Show user-friendly message on network failure, log technical details"</td>
+                        <td>"Use try-catch with console.error() and toast notification via react-hot-toast"</td>
+                    </tr>
+                    <tr>
+                        <td>"Users can search"</td>
+                        <td>"Full-text search, debounced 300ms, max 20 results"</td>
+                        <td>"Use Elasticsearch with ngram tokenizer and custom scoring function"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>The "Just Right" column lets the agent choose implementation details based on architecture context. The "Over-Specified" column locks in decisions that might be wrong for the framework.</p>
+
             <h3>The mapping</h3>
 
             <table>

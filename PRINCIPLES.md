@@ -11,12 +11,14 @@
 
 ## Content Style: The Dotnetperls Standard
 
+**Why this matters:** Stack Overflow's 2025 Developer Survey (90,000+ developers) found 66% cite "almost right, but not quite" AI-generated code as their biggest frustration. Quick reference format with concrete examples addresses this — readers learn patterns, not just copy code.
+
 - **Quick reference format.** Someone finds this via Google — they get what they need in 60 seconds.
 - **Code examples front and center.** Show, don't tell. The example IS the explanation.
 - **Lead with code, explain after.** Don't start with abstract concepts. Show code first, then explain what it demonstrates. Never start with "The Core Insight" or "Why This Matters" — start with a code block.
 - **Code progression over explanation.** When explaining a concept, show it through a series of code examples that build on each other. The reader should SEE the pattern, not just read about it. See solution-space.html for the gold standard.
-- **Code progression pattern.** For constraint-based concepts: (1) vague spec → multiple valid solutions, (2) add constraint → show eliminated solutions, (3) add constraint → show final solution. The reader learns by watching the solution space collapse.
-- **3-screen rule (strictly enforced).** Max ~120 lines of content per page. If longer, split into multiple pages or cut ruthlessly. Long pages violate the quick reference format. Matrix Methodology and Continuous Evolution both violate this — fix them.
+- **Code progression pattern.** For constraint-based concepts: (1) vague spec → multiple valid solutions, (2) add constraint → show eliminated solutions, (3) add constraint → show final solution. The reader learns by watching the solution space collapse. Example: "Sort a list" → 3 solutions, + "in-place O(n log n)" → heapsort, + "stable" → in-place mergesort.
+- **3-screen rule (strictly enforced).** Max ~120 lines of content per page. If longer, split into multiple pages or cut ruthlessly. Long pages violate the quick reference format. Matrix Methodology and Continuous Evolution both violate this — need refactoring.
 - **Link out to quality resources.** Don't try to be exhaustive. Be the best summary, then point to the deep dives.
 - **Scannable.** Headers, short paragraphs, code blocks. Gist in 30 seconds, detail in 5 minutes.
 - **Concrete over abstract.** Show the PRD. Show the loop. Show the diff. Real examples, not theory.
@@ -59,4 +61,4 @@ Every day:
 
 ---
 
-*Last updated: 2026-03-16 — Enhanced code-first patterns, added code progression pattern, enforced 3-screen rule, hidden BMAD placeholder*
+*Last updated: 2026-03-17 — Added SO survey validation, refined code progression pattern with concrete example, updated based on daily research findings*

@@ -1,0 +1,32 @@
+{
+  "name": "Hearsay - Privacy-First Meeting Recorder",
+  "short_name": "Hearsay",
+  "description": "Privacy-first meeting recorder with real-time transcription, speaker identification, and translation. All processing happens in your browser.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#5B68E5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "screenshots": [],
+  "permissions": {
+    "audio": {
+      "description": "Required for recording meetings"
+    },
+    "storage": {
+      "description": "Required for saving meetings locally"
+    }
+  }
+}

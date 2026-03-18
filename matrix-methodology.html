@@ -64,30 +64,32 @@
 
             <h2>The Context Matrix</h2>
 
-            <p>The magic happens when you combine two dimensions:</p>
+            <p>Three inputs compose the context window:</p>
 
             <table>
                 <thead>
                     <tr>
-                        <th>PRD (What)</th>
+                        <th>PRD (Business)</th>
+                        <th>Spec Template (Translation)</th>
                         <th>Architecture (How)</th>
-                        <th>Result</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>User stories, data requirements, API contracts</td>
-                        <td>Framework patterns, anti-patterns, reference implementations</td>
-                        <td>Predictable implementation</td>
+                        <td>Pure business context. What the business wants, in business language. No implementation details.</td>
+                        <td>Maps business intent to implementation decisions. The validation checkpoint.</td>
+                        <td>Framework patterns, anti-patterns, reference implementations.</td>
                     </tr>
                 </tbody>
             </table>
 
-            <p>The PRD describes <em>what</em> to build. The architecture docs describe <em>how</em> to build it. Together, they constrain the solution space enough that output becomes deterministic.</p>
+            <p>The PRD describes <em>what</em> the business wants. The architecture docs describe <em>how</em> things are built on this platform. The spec template connects the two: it resolves abstract business requirements into concrete implementation choices. Together, they constrain the solution space enough that output becomes predictable.</p>
+
+            <p>The PRD is also fed directly to the agent as additional context. The agent sees both the raw business intent and the resolved implementation mapping. This preserves maximum information (see <a href="telephone-game.html">The Telephone Game</a>).</p>
 
             <h3>The Spec Template as Validation Point</h3>
 
-            <p>The spec template is where product and engineering meet. It maps unstructured context (product requirements, architecture decisions) to specific implementation choices. For example, using Spring Boot and AWS:</p>
+            <p>The spec template is where product and engineering meet. It maps business requirements to specific implementation choices. For example, using Spring Boot and AWS:</p>
 
             <table>
                 <thead>

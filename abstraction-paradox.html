@@ -88,19 +88,22 @@ orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
 
             <p>Your custom service layer, your internal SDK, your domain patterns. If they're not in the context window, they don't exist for the agent. Hiding them behind a vague description is the worst of both worlds: the agent can't fall back on training knowledge, and you've removed the only source of truth.</p>
 
-            <pre><code># Abstracted context
-## Backend
-- Handle authentication
-- Handle cart operations
-- Handle payments
+            <p>This is why the <a href="matrix-methodology.html">Context Matrix</a> works the way it does. Spec plus architecture equals implementation. You don't get to skip one side:</p>
 
-# Actual context the agent needs
-## Auth            ## API             ## State
-- OAuth2 + JWT     - POST /login      - Redis sessions
-- User-scoped      - CRUD /cart/*     - Cache layer
-- PCI tokenized    - POST /pay        - Saga + tx log</code></pre>
+            <pre><code># Spec alone (no architecture)
+"Build a cart service with checkout"
+→ Agent invents its own auth model, state strategy, payment flow
 
-            <p>Every cell produces a different implementation decision. Collapsing them doesn't simplify the problem. It hides the information needed to solve it.</p>
+# Architecture alone (no spec)
+"We use OAuth2, Redis, Stripe"
+→ Agent has no idea what to build
+
+# Spec + Architecture (full context)
+"Cart service with checkout. OAuth2+JWT auth,
+ Redis sessions, Stripe tokenized payments, saga pattern."
+→ Agent produces a correct implementation</code></pre>
+
+            <p>Abstracting either side away doesn't simplify the problem. It hides the information needed to solve it.</p>
 
             <p>Abstraction doesn't reduce complexity. It relocates it. From "things you deal with now" to "things that ambush you later." For humans and agents alike, the total complexity is conserved.</p>
 

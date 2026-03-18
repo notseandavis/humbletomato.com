@@ -198,16 +198,16 @@ export class RecordingEngine {
         }
         const rms = Math.sqrt(sumSquares / audioData.length);
 
-        // Target RMS ~0.1 (good level for speech recognition)
-        // Quiet speech is often 0.005-0.02 RMS
-        const targetRMS = 0.1;
+        // Target RMS ~0.15 (aggressive level for speech recognition)
+        // Quiet speech is often 0.005-0.02 RMS — we want to boost hard
+        const targetRMS = 0.15;
         const minGain = 1.0;   // Never reduce below unity
-        const maxGain = 20.0;  // Cap to avoid blowing up noise
+        const maxGain = 50.0;  // Cap to avoid blowing up noise
 
         if (rms > 0.001) { // Only adjust if there's actual signal (not silence)
             const desiredGain = Math.min(maxGain, Math.max(minGain, targetRMS / rms));
-            // Smooth towards target (slow attack, slower release) to avoid pumping
-            const smoothing = desiredGain > this.targetGain ? 0.05 : 0.02;
+            // Smooth towards target (fast attack for quiet audio, slower release)
+            const smoothing = desiredGain > this.targetGain ? 0.1 : 0.03;
             this.targetGain += (desiredGain - this.targetGain) * smoothing;
         } else {
             // In silence, slowly drift back to unity

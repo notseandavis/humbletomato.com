@@ -124,15 +124,11 @@ Step 3:  "Task Breakdown"  -->  Code             (even more lost)</code></pre>
 
             <p>Human synthesis can add value because humans bring knowledge not in the documents. LLM synthesis can only rearrange what's already there, and it always loses something in the process.</p>
 
-            <h2>The Spec Template as Validation Point</h2>
+            <h2>The Spec as Validation Point</h2>
 
-            <p>This is why the spec template in the <a href="matrix-methodology.html">Matrix Methodology</a> works despite the telephone game principle. The template isn't an LLM synthesizing two documents into one. It's a human connecting dots between unstructured context (PRD, architecture) and specific implementation decisions.</p>
+            <p>This is why writing a spec in the <a href="matrix-methodology.html">Matrix Methodology</a> works despite the telephone game principle. A human writing a spec isn't compressing two documents into one. They're resolving ambiguity and adding implementation decisions — mapping "user enters address" to "REST controller with @Valid request body." That mapping didn't exist in the business requirements or the architecture. It's new information.</p>
 
-            <p>When you write a spec template that maps "user enters address" to "REST controller with @Valid request body," you're not compressing information. You're adding the mapping that didn't exist in either source document. You can see how the different concepts resolve together. That's new information.</p>
-
-            <p>It's not theoretically necessary. You could feed raw PRD + architecture directly and get working code. But the spec template is a validation checkpoint: if the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code. That's worth the extra step.</p>
-
-            <p>The key distinction: a human creating a spec template is <strong>resolving ambiguity and adding implementation decisions</strong>. An LLM "unifying" two documents is <strong>compressing and paraphrasing</strong>. One adds signal. The other loses it.</p>
+            <p>If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code. A human creating a spec adds signal. An LLM "unifying" documents loses it.</p>
 
             <h2>The Practical Takeaway</h2>
 

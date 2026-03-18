@@ -118,10 +118,16 @@ export class RecordingEngine {
             // Create source node
             this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
 
+            // Create gain node for boosting quiet audio
+            this.gainNode = this.audioContext.createGain();
+            this.gainNode.gain.value = 1.0; // Start at unity, auto-adjust below
+            this.targetGain = 1.0;
+            this.sourceNode.connect(this.gainNode);
+
             // Create analyser for visualization
             this.analyserNode = this.audioContext.createAnalyser();
             this.analyserNode.fftSize = 256;
-            this.sourceNode.connect(this.analyserNode);
+            this.gainNode.connect(this.analyserNode);
 
             // Create script processor for real-time audio data
             // Note: ScriptProcessorNode is deprecated but AudioWorklet requires separate file
@@ -133,10 +139,11 @@ export class RecordingEngine {
                 if (!this.isRecording) return;
                 
                 const inputData = e.inputBuffer.getChannelData(0);
+                this.autoAdjustGain(inputData);
                 this.processAudioChunk(inputData);
             };
 
-            this.sourceNode.connect(this.processorNode);
+            this.gainNode.connect(this.processorNode);
             this.processorNode.connect(this.audioContext.destination);
 
             // Set up MediaRecorder for full audio backup
@@ -181,6 +188,34 @@ export class RecordingEngine {
             console.error('Failed to start recording:', error);
             throw error;
         }
+    }
+
+    autoAdjustGain(audioData) {
+        // Calculate RMS level of the current buffer
+        let sumSquares = 0;
+        for (let i = 0; i < audioData.length; i++) {
+            sumSquares += audioData[i] * audioData[i];
+        }
+        const rms = Math.sqrt(sumSquares / audioData.length);
+
+        // Target RMS ~0.1 (good level for speech recognition)
+        // Quiet speech is often 0.005-0.02 RMS
+        const targetRMS = 0.1;
+        const minGain = 1.0;   // Never reduce below unity
+        const maxGain = 20.0;  // Cap to avoid blowing up noise
+
+        if (rms > 0.001) { // Only adjust if there's actual signal (not silence)
+            const desiredGain = Math.min(maxGain, Math.max(minGain, targetRMS / rms));
+            // Smooth towards target (slow attack, slower release) to avoid pumping
+            const smoothing = desiredGain > this.targetGain ? 0.05 : 0.02;
+            this.targetGain += (desiredGain - this.targetGain) * smoothing;
+        } else {
+            // In silence, slowly drift back to unity
+            this.targetGain += (minGain - this.targetGain) * 0.01;
+        }
+
+        // Apply smoothly to avoid clicks
+        this.gainNode.gain.setTargetAtTime(this.targetGain, this.audioContext.currentTime, 0.1);
     }
 
     processAudioChunk(audioData) {

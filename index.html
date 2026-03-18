@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Humble Tomato — Spec-Driven Development</title>
-    <meta name="description" content="A knowledge hub for spec-driven development methodology. Learn how structured specifications enable deterministic software generation with AI.">
+    <title>Humble Tomato — AI-Assisted Software Development</title>
+    <meta name="description" content="Patterns, thought experiments, and practical approaches for building software with AI. No hype. Just what works.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -44,121 +44,105 @@
 
         <section class="hero">
             <div class="hero-icon">🍅</div>
-            <h1>Spec-Driven Development</h1>
-            <p class="subtitle">Treating specifications like DNA — clean inputs produce deterministic outputs. A methodology for building software in the AI age.</p>
+            <h1>Humble Tomato</h1>
+            <p class="subtitle">Patterns, thought experiments, and practical approaches for building software with AI.</p>
         </section>
 
         <section class="content">
+
             <h2>What Is This?</h2>
-            
-            <p>Here's a simple example. Same specification, two frameworks:</p>
 
-            <pre><code># User Story
-- Show user profile with name, email, join date
-- Format join date as "Member since MMM YYYY"
-- If no email, show "No email on file"</code></pre>
+            <p>A collection of ideas about how software development changes when AI writes most of the code. Not a framework. Not a product. Just observations from doing it every day.</p>
 
-            <p>Express with React:</p>
+            <p>Some pages explore <strong>why</strong> things work (or don't). Others describe <strong>how</strong> to do it. Start wherever looks interesting.</p>
 
-            <pre><code>function UserProfile({ user }) {
-  const joinDate = new Date(user.joinedAt)
-    .toLocaleDateString('en-US', { 
-      month: 'short', year: 'numeric' 
-    });
-
-  return (
-    &lt;div&gt;
-      &lt;h2&gt;{user.name}&lt;/h2&gt;
-      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
-      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-
-            <p>Express with Vue:</p>
-
-            <pre><code>&lt;template&gt;
-  &lt;div&gt;
-    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
-    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
-    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-export default {
-  computed: {
-    formattedJoinDate() {
-      return new Date(this.user.joinedAt)
-        .toLocaleDateString('en-US', { 
-          month: 'short', year: 'numeric' 
-        });
-    }
-  }
-}
-&lt;/script&gt;</code></pre>
-
-            <p>Same spec ("DNA"), different expression ("proteins"). The spec is framework-agnostic. The architecture context determines implementation.</p>
-            
-            <p><strong>This is spec-driven development:</strong> specifications aren't just documentation — they're the source of truth that agents use to generate working code.</p>
-
-            <p>The idea: <strong>specifications are like DNA.</strong> Just as DNA encodes instructions that, when expressed in the right cellular environment, produce proteins and structures, specifications encode product intent that, when processed by AI agents in the right development environment, produce working software.</p>
-
-            <h2>Start Your Journey</h2>
+            <h2>Understand the Problem</h2>
 
             <div class="journey-section">
                 <div class="journey-card">
                     <span class="card-icon">💬</span>
-                    <h3>New to AI-assisted development?</h3>
-                    <p>Start with the fundamental question: when should you chat with AI versus write specs? Understanding the tradeoffs between conversational coding and structured specs will guide everything else.</p>
-                    <a href="vibe-coding-vs-spec-driven.html"><strong>Start with Vibe vs Spec →</strong></a>
-                </div>
-
-                <div class="journey-card">
-                    <span class="card-icon">🧬</span>
-                    <h3>Ready to go deeper?</h3>
-                    <p>The Matrix Methodology is the foundation. Learn how structured specifications combined with architecture patterns produce deterministic implementations. This is where spec-driven development becomes practical.</p>
-                    <a href="matrix-methodology.html"><strong>Explore Matrix Methodology →</strong></a>
-                </div>
-
-                <div class="journey-card">
-                    <span class="card-icon">🔄</span>
-                    <h3>Want the execution playbook?</h3>
-                    <p>The Ralph Loop shows how agents execute autonomously from specs. Read the plan, do one task, verify, update, repeat. Fresh context every iteration prevents degradation.</p>
-                    <a href="ralph-wiggum.html"><strong>Learn Ralph Loop →</strong></a>
+                    <h3><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></h3>
+                    <p>When should you chat with AI versus write structured specs? The tradeoffs aren't obvious.</p>
                 </div>
 
                 <div class="journey-card">
                     <span class="card-icon">🎯</span>
-                    <h3>Interested in the theory?</h3>
-                    <p>Specs as DNA explores the philosophy behind treating specifications as executable source of truth. Why this works, when it doesn't, and how to think about the relationship between specs and code.</p>
-                    <a href="specs-as-dna.html"><strong>Explore Specs as DNA →</strong></a>
+                    <h3><a href="solution-space.html">The Solution Space</a></h3>
+                    <p>Every prompt maps to a space of possible outputs. Specs narrow that space. Vague prompts don't.</p>
+                </div>
+
+                <div class="journey-card">
+                    <span class="card-icon">📞</span>
+                    <h3><a href="telephone-game.html">The Telephone Game</a></h3>
+                    <p>Information degrades every time it passes through a layer. LLM chains make this worse.</p>
+                </div>
+
+                <div class="journey-card">
+                    <span class="card-icon">🪞</span>
+                    <h3><a href="abstraction-paradox.html">The Abstraction Paradox</a></h3>
+                    <p>Hiding complexity from the AI doesn't remove it. It just moves the debugging later.</p>
+                </div>
+            </div>
+
+            <h2>Approaches</h2>
+
+            <div class="journey-section">
+                <div class="journey-card">
+                    <span class="card-icon">🧬</span>
+                    <h3><a href="matrix-methodology.html">Matrix Methodology</a></h3>
+                    <p>Compose context from business requirements, spec templates, and architecture. Our approach.</p>
+                </div>
+
+                <div class="journey-card">
+                    <span class="card-icon">🔄</span>
+                    <h3><a href="ralph-wiggum.html">Ralph Loop</a></h3>
+                    <p>Read the plan, do one task, verify, update. Autonomous execution with fresh context each cycle.</p>
                 </div>
 
                 <div class="journey-card">
                     <span class="card-icon">⚡</span>
-                    <h3>Working with production systems?</h3>
-                    <p>Continuous Evolution extends spec-driven development to live products with real users. Work from diffs, not regeneration. Migrations, API versioning, and safe evolution patterns.</p>
-                    <a href="continuous-evolution.html"><strong>Evolution Patterns →</strong></a>
+                    <h3><a href="gsd.html">GSD</a></h3>
+                    <p>Get Stuff Done. A structured approach to AI-assisted development.</p>
+                </div>
+
+                <div class="journey-card">
+                    <span class="card-icon">🏗️</span>
+                    <h3><a href="bmad.html">BMAD</a></h3>
+                    <p>Break it down, map it out, assign roles, deliver. Multi-agent orchestration.</p>
                 </div>
             </div>
 
-            <h2>Why This Matters Now</h2>
-            
-            <p>Several factors have converged to make specification-driven AI development viable:</p>
+            <h2>Thought Experiments</h2>
 
-            <ul>
-                <li><strong>Model capability leap</strong> — Modern AI can reason about architecture, understand patterns, and self-correct when encountering errors</li>
-                <li><strong>CLI execution</strong> — Agents can build, test, and verify their work in real development environments</li>
-                <li><strong>Iterative loops</strong> — Small, verified steps with fresh context prevent the quality degradation that plagued earlier approaches</li>
-                <li><strong>Supervision patterns</strong> — Separating execution from oversight allows agents to work autonomously while staying aligned</li>
-            </ul>
+            <div class="journey-section">
+                <div class="journey-card">
+                    <span class="card-icon">🧪</span>
+                    <h3><a href="specs-as-dna.html">Specs as DNA</a></h3>
+                    <p>Specifications encode intent the way DNA encodes organisms. Same spec, different environments, different expressions.</p>
+                </div>
 
-            <p>The bottleneck is no longer implementation speed. It's the quality and completeness of specifications. This methodology addresses that challenge.</p>
+                <div class="journey-card">
+                    <span class="card-icon">🌫️</span>
+                    <h3><a href="code-diffusion-model.html">Code Diffusion Model</a></h3>
+                    <p>LLMs resolve code from noise the way diffusion models resolve images. Detail in, detail out.</p>
+                </div>
 
-            <h2>More Patterns Coming</h2>
+                <div class="journey-card">
+                    <span class="card-icon">⚙️</span>
+                    <h3><a href="fuzzy-compiler.html">Fuzzy Compiler</a></h3>
+                    <p>A compiler that accepts natural language and never throws syntax errors. It just guesses.</p>
+                </div>
+            </div>
 
-            <p>We're also developing patterns for multi-agent orchestration and role-based development, but we're following our own principles: build it, test it, document what works. That content will appear when the patterns are proven in practice.</p>
+            <h2>Concepts</h2>
+
+            <div class="journey-section">
+                <div class="journey-card">
+                    <span class="card-icon">🔄</span>
+                    <h3><a href="continuous-evolution.html">Continuous Evolution</a></h3>
+                    <p>Spec-driven development for live systems. Work from diffs, not regeneration.</p>
+                </div>
+            </div>
 
         </section>
 
@@ -171,7 +155,6 @@ export default {
     </footer>
 
     <script>
-        // Mobile menu toggle
         document.querySelector('.menu-toggle').addEventListener('click', function() {
             document.querySelector('.nav-links').classList.toggle('active');
         });

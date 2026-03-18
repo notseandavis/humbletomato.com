@@ -15,7 +15,7 @@ export class TranscriptionEngine {
         this.pipeline = null;
         this.isModelLoaded = false;
         this.isLoading = false;
-        this.modelId = 'onnx-community/whisper-base.en';
+        this.modelId = 'onnx-community/whisper-small.en';
         this.onProgress = null;
         this.mode = null; // 'webspeech' or 'whisper'
         this.recognition = null;
@@ -93,12 +93,13 @@ export class TranscriptionEngine {
         const modelMap = {
             'tiny.en': 'onnx-community/whisper-tiny.en',
             'base.en': 'onnx-community/whisper-base.en',
+            'small.en': 'onnx-community/whisper-small.en',
             'tiny': 'onnx-community/whisper-tiny',
             'base': 'onnx-community/whisper-base',
             'small': 'onnx-community/whisper-small',
         };
 
-        this.modelId = modelMap[modelSize] || modelMap['base.en'];
+        this.modelId = modelMap[modelSize] || modelMap['small.en'];
         console.log(`📦 Loading Whisper model: ${this.modelId}`);
 
         try {

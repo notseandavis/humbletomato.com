@@ -136,13 +136,31 @@ orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);
 
             <p>The agent needs the same understanding a human architect needs. Abstractions that hide complexity from humans hide it from agents too. And agents, like junior developers on Path B, will produce code that compiles and fails in production.</p>
 
+            <h2>The Scoping Instinct</h2>
+
+            <p>Engineers are trained to isolate. Encapsulate. Reduce scope. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise. More focused."</p>
+
+            <p>Good instinct for writing code. Wrong instinct for composing context.</p>
+
+            <p>The agent building the cart needs to see the auth model, the payment flow, the inventory rules. Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong> How the cart scopes to a user depends on how auth works. How checkout hands off depends on how payments work. How "add to cart" validates depends on how inventory works.</p>
+
+            <pre><code># Scoped context (engineer's instinct)
+"Build the cart service. Here's the cart spec."
+→ Cart works perfectly in isolation.
+→ Breaks the moment it touches auth, payments, inventory.
+
+# Full system context
+"Build the cart service. Here's the cart spec,
+ the auth model, the payment flow, the inventory rules."
+→ Cart integrates correctly on first generation.</code></pre>
+
+            <p>Scoping context is just another form of abstraction. You're hiding the rest of the system behind a boundary and hoping the agent doesn't need it. It always does.</p>
+
             <h2>The Uncomfortable Truth</h2>
 
             <p>Abstraction doesn't reduce complexity. It relocates it. From "things you deal with now" to "things that ambush you later." The total complexity of the system is conserved.</p>
 
-            <p>In spec-driven development, this means: <strong>your specs need to be as detailed as the system is complex.</strong> No shortcut. No "the framework handles that." Either the context window contains the information, or the output is wrong in ways you won't catch until production.</p>
-
-            <p>The good news: once you accept this, you stop fighting it. You build complete context instead of clever abstractions. And the code works the first time.</p>
+            <p>You don't get to build a component. You build a component <em>within a system</em>, or you debug the system the agent imagined around it.</p>
 
         </section>
 

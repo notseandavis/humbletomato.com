@@ -108,25 +108,11 @@ before generation (in the spec) or after (in debugging).</code></pre>
 
             <p>When your spec says "handle authentication," you haven't saved any work. You've moved it from "writing the spec" to "debugging why the agent used session cookies when you needed JWT." The complexity showed up anyway. It just showed up at the worst possible time.</p>
 
-            <h2>The Engineer's Wrong Instinct</h2>
-
-            <p>Engineers are trained to isolate. Encapsulate. Reduce scope. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise. More focused."</p>
-
-            <p>Good instinct for writing code. Wrong instinct for composing context.</p>
-
-            <p>The agent building the cart needs to see the auth model, the payment flow, the inventory rules. Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong> How the cart scopes to a user depends on how auth works. How checkout hands off depends on how payments work. How "add to cart" validates depends on how inventory works.</p>
-
-            <pre><code># Scoped context (engineer's instinct)
-"Build the cart service. Here's the cart spec."
-→ Cart works perfectly in isolation.
-→ Breaks the moment it touches auth, payments, inventory.
-
-# Full system context
-"Build the cart service. Here's the cart spec,
- the auth model, the payment flow, the inventory rules."
-→ Cart integrates correctly on first generation.</code></pre>
+            <h2>What This Means</h2>
 
             <p>The <a href="matrix-methodology.html">Context Matrix</a> is built around this idea. Every row needs every column. You can't give the agent one row in isolation and expect it to resolve correctly, because each cell is constrained by the cells around it.</p>
+
+            <p>The instinct to scope context down when building a sub-component is a form of the <a href="abstraction-paradox.html">Abstraction Paradox</a> — hiding complexity that the agent needs to produce correct output.</p>
 
             <p>You don't get to build a component. You build a component <em>within a system</em>, or you debug the system the agent imagined around it.</p>
 

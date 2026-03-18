@@ -135,36 +135,6 @@ AI:  *refactors*</code></pre>
 
             <p>Most teams land here. Speed during exploration, structure during implementation.</p>
 
-            <h2>Levels of Spec Rigor</h2>
-
-            <pre><code># Spec-First: high-level requirements, agent picks implementation
-"Full-text search, debounced 300ms, max 20 results"
-→ Agent chooses Elasticsearch vs Postgres FTS
-
-# Spec-Anchored: define the contract, implementation can vary
-"GET /api/users/search → { users: User[], total: number }, &lt;200ms p95"
-→ Agent can refactor internals freely
-
-# Spec-As-Source: specs ARE the code (Prisma, Terraform, etc.)
-"model User { id Int @id, email String @unique }"
-→ Agent runs migrations, generates types</code></pre>
-
-            <p>Most teams use Spec-First for features and Spec-Anchored for APIs.</p>
-
-            <h2>Common Mistakes</h2>
-
-            <p><strong>Vibe pitfalls:</strong> shipping chat-window code to production, no record of decisions, onboarding teammates by sharing chat logs.</p>
-
-            <p><strong>Spec pitfalls:</strong> writing specs for throwaway scripts, over-specifying implementation (agent can't adapt), never updating specs when code changes.</p>
-
-            <h2>Related</h2>
-
-            <ul>
-                <li><a href="matrix-methodology.html">Matrix Methodology</a> — spec-driven framework</li>
-                <li><a href="specs-as-dna.html">Specs as DNA</a> — specs as source of truth</li>
-                <li><a href="ralph-wiggum.html">Ralph Loop</a> — autonomous execution from specs</li>
-            </ul>
-
         </section>
 
     </div>

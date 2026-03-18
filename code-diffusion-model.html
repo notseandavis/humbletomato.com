@@ -51,33 +51,33 @@
 
         <section class="content">
 
-            <h2>The Analogy</h2>
+            <pre><code># Vague spec = vague output
+Prompt: "build a website"
+Output: Generic template. Could be anyone's site.
 
-            <p>A diffusion model generates images by resolving noise into coherent output. Give it "a photo" and you get something blurry and generic. Give it "a barista pouring latte art in a sunlit cafe, morning light through steam, shallow depth of field" and you get something specific and detailed.</p>
-
-            <p>The output can't contain more information than the input. A vague prompt produces a vague image. A detailed prompt produces a detailed image. The complexity of the result is bounded by the information you provide.</p>
-
-            <pre><code>Prompt: "a website"
-Output: Generic template. Looks like a website. Doesn't look like YOUR website.
-
+# Detailed spec = detailed output
 Prompt: "e-commerce platform, OAuth2 auth, Redis-cached cart,
          Stripe payments, saga-based order processing,
          role-based access for customers vs merchants"
-Output: Specific implementation. Looks like what you described.</code></pre>
+Output: Specific implementation that matches what you described.</code></pre>
 
-            <h2>Conservation Law</h2>
+            <p>Same principle as image diffusion models: the output can't contain more information than the input. A vague prompt produces a vague result. A detailed prompt produces a detailed result.</p>
 
-            <p>Complexity is conserved. You can move it around — from code to specs, from specs to architecture docs, from architecture docs to tribal knowledge. But you can't destroy it.</p>
+            <h2>Complexity is Conserved</h2>
 
             <pre><code>Simple spec    → Agent guesses → Complex debugging
 Detailed spec  → Agent resolves → Working system
-                                  
-The work is the same. The question is when you do it:
+
+The total work is the same. You choose when you do it:
 before generation (in the spec) or after (in debugging).</code></pre>
 
-            <p>When your spec says "handle authentication," you haven't saved any work. You've moved it from "writing the spec" to "debugging why the agent used session cookies when you needed JWT." The complexity showed up anyway. It just showed up at the worst possible time.</p>
+            <p>When your spec says "handle authentication," you haven't saved work. You've moved it from "writing the spec" to "debugging why the agent picked session cookies when you needed JWT."</p>
 
-            <p>This isn't a new idea. <a href="https://en.wikipedia.org/wiki/Tesler%27s_law">Tesler's Law</a> says every application has an inherent amount of irreducible complexity — the only question is who deals with it. In information theory, <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a> defines the minimum description length of a system — you literally can't compress the spec below this without losing information. The conservation law has mathematical teeth.</p>
+            <p>This has formal backing. <a href="https://en.wikipedia.org/wiki/Tesler%27s_law">Tesler's Law</a>: every system has irreducible complexity, and someone has to deal with it. <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a>: you can't compress a spec below the minimum description length without losing information.</p>
+
+            <h2>The Tradeoff</h2>
+
+            <p>Writing detailed specs is slow. But debugging vague specs is slower. Pick which kind of slow you prefer.</p>
 
         </section>
 

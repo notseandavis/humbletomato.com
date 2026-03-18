@@ -10,37 +10,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">🍅</span>
-                <span>Humble Tomato</span>
-            </a>
-            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li class="nav-section-label">Understand</li>
-                <li><a href="spec-driven-development.html">Spec-Driven Development</a></li>
-                <li><a href="what-the-model-knows.html">What the Model Knows</a></li>
-                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
-                <li><a href="solution-space.html">The Solution Space</a></li>
-                <li><a href="telephone-game.html">The Telephone Game</a></li>
-                <li><a href="abstraction-paradox.html">The Abstraction Paradox</a></li>
-                <li class="nav-section-label">Approach Library</li>
-                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
-                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
-                <li><a href="gsd.html">GSD</a></li>
-                <li><a href="bmad.html">BMAD</a></li>
-                <li class="nav-section-label">Thought Experiments</li>
-                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
-                <li><a href="code-diffusion-model.html">Code Diffusion Model</a></li>
-                <li><a href="fuzzy-compiler.html">Fuzzy Compiler</a></li>
-                <li class="nav-section-label">Concepts</li>
-                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
-            </ul>
-        </div>
-    </nav>
+    <!-- nav injected by nav.js -->
 
     <div class="container">
 
@@ -162,11 +132,6 @@
         <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
-    <script>
-        document.querySelector('.menu-toggle').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
-    </script>
-
+    <script src="nav.js"></script>
 </body>
 </html>

@@ -52,204 +52,25 @@
 
         <section class="content">
 
-            <h2>The Problem Ralph Solves</h2>
+            <h2>The Loop</h2>
 
-            <p>Real features don't fit in one context window. A login system needs schema changes, middleware, UI components, and session handling. No single prompt covers all of that well. And even if you could fit it, quality degrades as the context fills up.</p>
+            <pre><code>Read prd.json → Pick highest-priority task (passes: false)
+→ Implement → Run checks → Commit → Update prd.json → Repeat</code></pre>
 
-            <p>Ralph breaks work into tasks that each fit in one context window, then iterates with fresh context until the feature is complete.</p>
+            <p>Each iteration gets <strong>fresh context</strong>. No accumulated cruft. One task per loop.</p>
 
-            <h2>The Core Pattern</h2>
-
-            <p><strong>Read fix_plan → Do ONE task → Verify → Update → Report → Repeat</strong></p>
-
-            <p>Each iteration is small, focused, and verifiable. The agent commits verified changes rather than generating monolithically. When something breaks, the new issue becomes a blocker in the next loop.</p>
-
-            <p>The critical insight: <strong>each iteration starts with fresh context.</strong> Every loop begins clean with just the specs, architecture docs, and current task. No accumulated cruft from previous iterations. This avoids the context degradation that kills long "vibe coding" sessions.</p>
-
-            <h2>The Execution Flow</h2>
-
-            <h3>1. Read the PRD</h3>
-
-            <p>The agent starts by reading <code>prd.json</code> — a structured JSON document with user stories, acceptance criteria, and priorities.</p>
-
-            <h3>2. Pick the Highest Priority Task</h3>
-
-            <p>The agent scans for the highest priority user story where <code>passes: false</code>. This is the current task. Only one task per iteration.</p>
-
-            <h3>3. Implement the Task</h3>
-
-            <p>The agent writes code, modifies files, and makes the minimum changes needed to satisfy the acceptance criteria for that one story.</p>
-
-            <h3>4. Run Quality Checks</h3>
-
-            <p>The agent runs typecheck, lint, tests — whatever the project requires. All checks must pass before committing.</p>
-
-            <h3>5. Commit Changes</h3>
-
-            <p>If checks pass, commit ALL changes with a structured message:</p>
-
-            <pre><code>feat: [Story ID] - [Story Title]</code></pre>
-
-            <h3>6. Update the PRD</h3>
-
-            <p>Set <code>passes: true</code> for the completed story in <code>prd.json</code>.</p>
-
-            <h3>7. Log Progress</h3>
-
-            <p>Append to <code>progress.txt</code> with what was implemented, files changed, and learnings for future iterations.</p>
-
-            <h3>8. Repeat or Complete</h3>
-
-            <p>If all stories have <code>passes: true</code>, the agent reports completion. Otherwise, another iteration picks up the next task.</p>
-
-            <h2>PRD-to-JSON Conversion</h2>
-
-            <p>Before Ralph can run, a product specification must be converted into the structured <code>prd.json</code> format. This conversion is critical — it's where loose product requirements become executable work orders.</p>
-
-            <h3>Story Sizing: The Number One Rule</h3>
-
-            <p><strong>Each story must be completable in ONE iteration (one context window).</strong></p>
-
-            <p>Ralph spawns a fresh instance per iteration with no memory of previous work. If a story is too big, the model runs out of context before finishing and produces broken code.</p>
-
-            <p>Right-sized stories:</p>
-            <ul>
-                <li>Add a database column and migration</li>
-                <li>Add a UI component to an existing page</li>
-                <li>Update a server action with new logic</li>
-                <li>Add a filter dropdown to a list</li>
-            </ul>
-
-            <p>Too big (split these):</p>
-            <ul>
-                <li>"Build the entire dashboard" → Split into: schema, queries, UI components, filters</li>
-                <li>"Add authentication" → Split into: schema, middleware, login UI, session handling</li>
-                <li>"Refactor the API" → Split into one story per endpoint or pattern</li>
-            </ul>
-
-            <p><strong>Rule of thumb:</strong> If you cannot describe the change in 2-3 sentences, it's too big.</p>
-
-            <h3>Story Ordering: Dependencies First</h3>
-
-            <p>Stories execute in priority order. Earlier stories must not depend on later ones.</p>
-
-            <p>Correct order:</p>
-            <ol>
-                <li>Schema/database changes (migrations)</li>
-                <li>Server actions / backend logic</li>
-                <li>UI components that use the backend</li>
-                <li>Dashboard/summary views that aggregate data</li>
-            </ol>
-
-            <p>Wrong order:</p>
-            <ol>
-                <li>UI component (depends on schema that doesn't exist yet)</li>
-                <li>Schema change</li>
-            </ol>
-
-            <h3>Acceptance Criteria: Must Be Verifiable</h3>
-
-            <p>Each criterion must be something Ralph can CHECK, not something vague.</p>
-
-            <p>Good criteria (verifiable):</p>
-            <ul>
-                <li>"Add status column to tasks table with default 'pending'"</li>
-                <li>"Filter dropdown has options: All, Active, Completed"</li>
-                <li>"Clicking delete shows confirmation dialog"</li>
-                <li>"Typecheck passes"</li>
-            </ul>
-
-            <p>Bad criteria (vague):</p>
-            <ul>
-                <li>"Works correctly"</li>
-                <li>"User can do X easily"</li>
-                <li>"Good UX"</li>
-                <li>"Handles edge cases"</li>
-            </ul>
-
-            <p><strong>Always include:</strong> "Typecheck passes" as a final criterion for every story.</p>
-
-            <h2>The Progress Log</h2>
-
-            <p>After each iteration, Ralph appends to <code>progress.txt</code> with:</p>
-
-            <pre><code>## [Date/Time] - [Story ID]
-- What was implemented
-- Files changed
-- **Learnings for future iterations:**
-  - Patterns discovered
-  - Gotchas encountered
-  - Useful context
----</code></pre>
-
-            <p>The learnings section is critical. It helps future iterations avoid repeating mistakes and understand the codebase better.</p>
-
-            <h3>Consolidating Patterns</h3>
-
-            <p>When Ralph discovers a <strong>reusable pattern</strong>, it gets added to a <code>## Codebase Patterns</code> section at the TOP of progress.txt:</p>
-
-            <pre><code>## Codebase Patterns
-- Use sql&lt;number&gt; template for aggregations
-- Always use IF NOT EXISTS for migrations
-- Export types from actions.ts for UI components</code></pre>
-
-            <p>Only add patterns that are general and reusable, not story-specific details. Future iterations read this section first.</p>
-
-            <h2>Browser Testing Integration</h2>
-
-            <p>For stories that change UI, verification isn't complete until visually confirmed. Ralph can use browser automation tools to:</p>
-
-            <ol>
-                <li>Navigate to the relevant page</li>
-                <li>Verify UI changes work as expected</li>
-                <li>Take screenshots for the progress log</li>
-            </ol>
-
-            <p>UI stories include "Verify in browser using dev-browser skill" in their acceptance criteria.</p>
-
-            <h2>Quality Requirements</h2>
-
-            <p>Non-negotiable rules:</p>
-
-            <ul>
-                <li><strong>ALL commits must pass quality checks</strong> (typecheck, lint, test)</li>
-                <li><strong>Do NOT commit broken code</strong></li>
-                <li><strong>Keep changes focused and minimal</strong></li>
-                <li><strong>Follow existing code patterns</strong></li>
-            </ul>
-
-            <p>These constraints keep the codebase healthy and prevent compounding technical debt.</p>
-
-            <h2>Example: Task Status Feature</h2>
-
-            <p>Here's how a feature request gets converted into Ralph's format:</p>
-
-            <h3>Original PRD (Markdown)</h3>
-
-            <pre><code># Task Status Feature
-
-Add ability to mark tasks with different statuses.
-
-## Requirements
-- Toggle between pending/in-progress/done on task list
-- Filter list by status
-- Show status badge on each task
-- Persist status in database</code></pre>
-
-            <h3>Converted to prd.json</h3>
+            <h2>prd.json Format</h2>
 
             <pre><code>{
   "project": "TaskApp",
   "branchName": "ralph/task-status",
-  "description": "Task Status Feature - Track task progress",
   "userStories": [
     {
       "id": "US-001",
       "title": "Add status field to tasks table",
-      "description": "Store task status in database",
       "acceptanceCriteria": [
         "Add status column: 'pending'|'in_progress'|'done'",
-        "Generate and run migration successfully",
+        "Migration runs successfully",
         "Typecheck passes"
       ],
       "priority": 1,
@@ -258,74 +79,68 @@ Add ability to mark tasks with different statuses.
     {
       "id": "US-002",
       "title": "Display status badge on task cards",
-      "description": "Show status at a glance",
       "acceptanceCriteria": [
-        "Each task card shows colored status badge",
-        "Badge colors: gray=pending, blue=in_progress, green=done",
-        "Typecheck passes",
-        "Verify in browser"
+        "Colored badge: gray=pending, blue=in_progress, green=done",
+        "Typecheck passes"
       ],
       "priority": 2,
-      "passes": false
-    },
-    {
-      "id": "US-003",
-      "title": "Add status toggle to task list rows",
-      "description": "Change task status directly from list",
-      "acceptanceCriteria": [
-        "Each row has status dropdown or toggle",
-        "Changing status saves immediately",
-        "UI updates without page refresh",
-        "Typecheck passes",
-        "Verify in browser"
-      ],
-      "priority": 3,
-      "passes": false
-    },
-    {
-      "id": "US-004",
-      "title": "Filter tasks by status",
-      "description": "Filter list to see only certain statuses",
-      "acceptanceCriteria": [
-        "Filter dropdown: All|Pending|In Progress|Done",
-        "Filter persists in URL params",
-        "Typecheck passes",
-        "Verify in browser"
-      ],
-      "priority": 4,
       "passes": false
     }
   ]
 }</code></pre>
 
-            <p>Notice how one feature becomes four focused stories, each completable in one iteration, ordered by dependency.</p>
+            <h2>Story Sizing</h2>
 
-            <h2>When Ralph Completes</h2>
+            <p>Each story must fit in <strong>one context window</strong>. If you can't describe the change in 2-3 sentences, split it.</p>
 
-            <p>After completing a user story, Ralph checks if ALL stories have <code>passes: true</code>. If so, it replies with:</p>
+            <table>
+                <tr><th>Right-sized</th><th>Too big (split these)</th></tr>
+                <tr><td>Add a DB column + migration</td><td>"Build the dashboard"</td></tr>
+                <tr><td>Add a UI component to existing page</td><td>"Add authentication"</td></tr>
+                <tr><td>Add a filter dropdown</td><td>"Refactor the API"</td></tr>
+            </table>
 
-            <pre><code>&lt;promise&gt;COMPLETE&lt;/promise&gt;</code></pre>
+            <p>Order by dependency: schema → backend → UI → aggregation views.</p>
 
-            <p>This signals that the entire feature is done. All acceptance criteria met, all quality checks passed.</p>
+            <h2>Acceptance Criteria</h2>
 
-            <h2>Why It Works</h2>
+            <p>Must be verifiable by the agent, not vague.</p>
 
-            <p>The Ralph Loop succeeds where other autonomous patterns fail because:</p>
+            <pre><code>// Good
+"Add status column with default 'pending'"
+"Filter dropdown has options: All, Active, Completed"
+"Typecheck passes"
+
+// Bad
+"Works correctly"
+"Good UX"
+"Handles edge cases"</code></pre>
+
+            <p>Always include "Typecheck passes" as the final criterion.</p>
+
+            <h2>Progress Log</h2>
+
+            <pre><code>## Codebase Patterns        ← top of progress.txt, reusable across iterations
+- Use sql template for aggregations
+- Always use IF NOT EXISTS for migrations
+
+## 2026-03-15 - US-001       ← appended after each iteration
+- Added status column to tasks table
+- Files: db/migrations/004_status.sql, src/schema.ts
+- Learning: drizzle needs explicit push after generate</code></pre>
+
+            <p>Patterns go at the top. Future iterations read them first.</p>
+
+            <h2>Tradeoffs</h2>
 
             <ul>
-                <li><strong>Small iterations</strong> keep context manageable and failures contained</li>
-                <li><strong>Fresh context</strong> prevents degradation across iterations</li>
-                <li><strong>Verification gates</strong> catch issues immediately, not at the end</li>
-                <li><strong>Structured work orders</strong> (prd.json) eliminate ambiguity</li>
-                <li><strong>Progress logging</strong> builds institutional knowledge</li>
-                <li><strong>Quality requirements</strong> prevent broken code from spreading</li>
+                <li><strong>Pro:</strong> Fresh context every loop prevents degradation over long features</li>
+                <li><strong>Pro:</strong> Each commit is verified and passing before moving on</li>
+                <li><strong>Con:</strong> Overhead per iteration (re-reading specs, context loading)</li>
+                <li><strong>Con:</strong> Cross-cutting changes that touch many files are awkward to split</li>
             </ul>
 
-            <p>The pattern is simple enough to implement anywhere but structured enough to produce reliable results.</p>
-
-            <h2>Use It With Anything</h2>
-
-            <p>Ralph is a standalone execution pattern. It works with any spec-driven approach: feed it a PRD from <a href="bmad.html">BMAD</a>, plans from <a href="gsd.html">GSD</a>, or specs from any other framework. All it needs is a structured task list and clear acceptance criteria.</p>
+            <p>Ralph works with any spec source: <a href="bmad.html">BMAD</a>, <a href="gsd.html">GSD</a>, or your own format. All it needs is a structured task list with clear acceptance criteria.</p>
 
         </section>
 

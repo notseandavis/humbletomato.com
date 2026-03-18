@@ -28,16 +28,29 @@ class HearsayApp {
     async init() {
         console.log('🎙️ Initializing Hearsay...');
         
+        // Init debug immediately so we can see errors
+        this._debugLines = [];
+        this._chunksProcessed = 0;
+        this._segmentsCreated = 0;
+
         try {
-            // Initialize storage first
+            this.debugLog('Starting init...');
+
+            // Initialize storage
             this.storageManager = new StorageManager();
             await this.storageManager.init();
+            this.debugLog('Storage OK');
             
             // Initialize services
             this.transcriptionEngine = new TranscriptionEngine();
             this.speakerIdentifier = new SpeakerIdentifier();
             this.translationService = new TranslationService();
             this.exportManager = new ExportManager();
+            this.debugLog('Services OK');
+
+            // Detect transcription mode early
+            this.transcriptionEngine.detectMode();
+            this.debugLog('Transcription mode: ' + this.transcriptionEngine.mode);
             
             // Initialize recording engine
             this.recordingEngine = new RecordingEngine({
@@ -45,28 +58,29 @@ class HearsayApp {
                 onRecordingStart: this.handleRecordingStart.bind(this),
                 onRecordingStop: this.handleRecordingStop.bind(this)
             });
+            this.debugLog('Recording engine OK');
             
             // Initialize UI
             this.uiManager = new UIManager(this);
             this.uiManager.init();
+            this.debugLog('UI OK');
             
             // Set up event listeners
             this.setupEventListeners();
+            this.debugLog('Events OK');
             
             // Load settings
             this.loadSettings();
+            this.debugLog('Settings OK');
             
-            // Init debug panel
-            this._debugLines = [];
-            this._chunksProcessed = 0;
-            this._segmentsCreated = 0;
-            this.debugLog('Hearsay initialized');
+            this.debugLog('✅ Ready!');
             this.updateDebugInfo();
             
             console.log('✅ Hearsay initialized successfully');
         } catch (error) {
             console.error('❌ Failed to initialize Hearsay:', error);
-            this.debugLog('INIT ERROR: ' + error.message);
+            this.debugLog('❌ INIT ERROR: ' + error.message);
+            this.updateDebugInfo();
             this.uiManager?.showToast('Failed to initialize app', 'error');
         }
     }

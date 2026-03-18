@@ -94,6 +94,19 @@
 
             <p>Writing the spec forces you to resolve every cell. If "Payment + State" doesn't resolve cleanly, you've found a gap between the business requirements and the architecture before any code is generated. The spec is a validation checkpoint.</p>
 
+            <h2>Don't Scope the Context</h2>
+
+            <p>Engineers instinctively isolate. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise." Good instinct for writing code. Wrong instinct for composing context.</p>
+
+            <p>The agent building the cart needs to see the auth model (whose cart?), the payment flow (checkout handoff), the inventory rules (stock validation). Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong></p>
+
+            <div class="callout">
+                <p><span class="callout-label">Scoped context:</span><span class="callout-detail"> "Build the cart service. Here's the cart spec." Cart works in isolation. Breaks the moment it touches auth, payments, inventory.</span></p>
+                <p><span class="callout-label">Full system context:</span><span class="callout-detail"> "Build the cart service. Here's the cart spec, the auth model, the payment flow, the inventory rules." Cart integrates correctly on first generation.</span></p>
+            </div>
+
+            <p>Scoping context is just <a href="abstraction-paradox.html">abstraction</a> applied to the context window. It fails for the same reason: you're hiding information the agent will eventually need.</p>
+
             <h2>What Matrix Doesn't Cover</h2>
 
             <p>Matrix organizes context. It doesn't prescribe execution patterns (<a href="ralph-wiggum.html">Ralph Loop</a>), multi-agent coordination, or how to evolve live systems (<a href="continuous-evolution.html">Continuous Evolution</a>).</p>

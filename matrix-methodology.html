@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matrix Methodology - Humble Tomato</title>
-    <meta name="description" content="The Context Matrix: how PRD, architecture, and spec templates compose a context window that resolves implementation like a diffusion model.">
+    <meta name="description" content="The Context Matrix: how specs, architecture, and business requirements compose a context window that resolves implementation.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -46,7 +46,7 @@
 
         <header class="page-header">
             <h1>Matrix Methodology</h1>
-            <p class="subtitle">Three inputs. One context window. Implementation resolves like a diffusion model.</p>
+            <p class="subtitle">Three inputs. One context window. Implementation resolves from the intersection of spec and architecture.</p>
         </header>
 
         <section class="content">
@@ -55,13 +55,19 @@
 
             <p>Matrix is a framework for composing the context window. It assumes you can one-shot any task if the context is right. The question: what inputs produce predictable code?</p>
 
-            <p>Three inputs form a literal matrix:</p>
+            <p>Three inputs:</p>
+
+            <ul>
+                <li><strong>Spec</strong> (rows) — the resolved implementation decisions. What to build and how each piece connects.</li>
+                <li><strong>Architecture</strong> (columns) — the platform patterns. Auth strategy, API conventions, state management, infrastructure.</li>
+                <li><strong>Business Requirements</strong> — the raw business context. Included in full so the agent understands <em>why</em> each spec decision was made.</li>
+            </ul>
 
             <pre><code>                          Architecture (columns)
                     ┌───────────┬───────────┬───────────┐
                     │   Auth    │    API    │   State   │
          ┌──────────┼───────────┼───────────┼───────────┤
-  PRD    │  Login   │  OAuth2 + │  POST     │  Session  │
+  Spec   │  Login   │  OAuth2 + │  POST     │  Session  │
  (rows)  │          │  JWT      │  /login   │  store    │
          ├──────────┼───────────┼───────────┼───────────┤
          │  Cart    │  User     │  CRUD     │  Redis    │
@@ -69,31 +75,29 @@
          ├──────────┼───────────┼───────────┼───────────┤
          │  Payment │  PCI      │  POST     │  Tx log   │
          │          │  tokenize │  /pay     │  + saga   │
-         └──────────┴───────────┴───────────┴───────────┘</code></pre>
+         └──────────┴───────────┴───────────┴───────────┘
 
-            <p>Each cell is a <strong>resolution point</strong>. PRD row (what the business wants) meets architecture column (how this platform builds things). The cell contains the resolved implementation decision.</p>
+  + Business Requirements (full document, for context)</code></pre>
 
-            <p>The spec template is the <strong>function</strong> that fills each cell. It takes (business requirement, technical pattern) and outputs the specific implementation choice. "Login" + "Auth patterns" = "OAuth2 with JWT rotation." "Cart" + "State management" = "Redis-cached, user-scoped."</p>
+            <p>Each cell is a <strong>resolution point</strong>. Spec row (what to build) meets architecture column (how this platform builds things). The cell contains the resolved implementation decision.</p>
+
+            <p>The business requirements aren't in the matrix itself — they sit alongside it. The agent sees both the resolved spec and the raw business intent, so it understands not just <em>what</em> to implement but <em>why</em>. This preserves full context without forcing the agent to re-derive decisions that the spec already resolves.</p>
 
             <h2>Simultaneous Resolution</h2>
 
-            <p>Here's where it gets interesting. In a diffusion model, the entire image resolves simultaneously. The eyes know about the nose. The background knows about the foreground. Every pixel is constrained by every other pixel in the same denoising step.</p>
+            <p>All three inputs sit in one context window. When the agent resolves "Login + Auth," it already sees "Payment + Auth" in the same context. The auth decisions are <em>consistent</em> across the entire matrix because they resolve together, not in isolation.</p>
 
-            <p>The context matrix works the same way. All three inputs sit in one context window. When the agent resolves "Login + Auth," it already sees "Payment + Auth" in the same context. The auth decisions are <em>consistent</em> across the entire matrix because they resolve together, not in isolation.</p>
-
-            <pre><code>Diffusion model:    noise  →  →  →  coherent image
-                    (all pixels resolve together)
-
-Context matrix:     PRD + Architecture + Spec Template  →  coherent implementation
+            <pre><code>Context matrix:     Spec + Architecture + Business Requirements
+                    →  coherent implementation
                     (all resolution points resolve together)</code></pre>
 
             <p>This is why one-shot works when the context is right. The agent isn't resolving cells sequentially. It's resolving the entire implementation surface at once, with every decision constrained by every other decision in the same window.</p>
 
-            <h2>The Spec Template as Resolution Function</h2>
+            <h2>The Spec as Resolution Function</h2>
 
-            <p>The spec template maps abstract business intent to concrete implementation. It resolves each cell:</p>
+            <p>The spec maps abstract business intent to concrete implementation. It resolves each cell:</p>
 
-            <pre><code># Spec Template (abbreviated)
+            <pre><code># Spec (abbreviated)
 
 ## Authentication
 - Strategy: OAuth2 + JWT (from Architecture/auth-patterns.md)
@@ -110,9 +114,7 @@ Context matrix:     PRD + Architecture + Spec Template  →  coherent implementa
 - Flow: POST /api/payments → saga with compensating transactions
 - Audit: Immutable transaction log, append-only</code></pre>
 
-            <p>Each section is a row of resolved cells. The spec template adds information that didn't exist in either source: the <em>specific</em> resolution of abstract intent into concrete decisions. Writing it forces you to see where the PRD and architecture don't connect. If a cell doesn't resolve cleanly, you've caught a problem before any code is generated.</p>
-
-            <p>The PRD is also fed directly to the agent alongside the spec. The agent sees both raw business intent and the resolved mapping. Maximum information, minimum loss (see <a href="telephone-game.html">The Telephone Game</a>).</p>
+            <p>Each section is a row of resolved cells. Writing the spec forces you to see where the business requirements and architecture don't connect. If a cell doesn't resolve cleanly, you've caught a problem before any code is generated.</p>
 
             <h2>Templates Compound</h2>
 
@@ -121,7 +123,6 @@ Context matrix:     PRD + Architecture + Spec Template  →  coherent implementa
             <h2>What Matrix Doesn't Cover</h2>
 
             <p>Matrix composes the context. It doesn't prescribe what happens when a task exceeds one window (that's the <a href="ralph-wiggum.html">Ralph Loop</a>), how to coordinate multiple agents (left to the practitioner), or how to evolve live systems (see <a href="continuous-evolution.html">Continuous Evolution</a>).</p>
-
 
             <h2>Strengths</h2>
 
@@ -132,8 +133,8 @@ Context matrix:     PRD + Architecture + Spec Template  →  coherent implementa
                 <tbody>
                     <tr><td>Simultaneous resolution</td><td>All decisions resolve in one context window. Auth knows about state knows about API. Consistency emerges from shared context, not coordination.</td></tr>
                     <tr><td>Template compounding</td><td>Better column patterns improve every future row. Investment in architecture templates pays compound interest.</td></tr>
-                    <tr><td>Information-theoretic foundation</td><td>Raw PRD + architecture fed directly to agent avoids lossy intermediate synthesis. Fewer transformations = less signal loss.</td></tr>
-                    <tr><td>Validation checkpoint</td><td>Writing the spec template surfaces gaps before code generation. If a cell doesn't resolve, the inputs don't connect.</td></tr>
+                    <tr><td>Full context preservation</td><td>Raw business requirements + architecture fed directly to agent alongside the spec. Fewer transformations = less signal loss (see <a href="telephone-game.html">The Telephone Game</a>).</td></tr>
+                    <tr><td>Validation checkpoint</td><td>Writing the spec surfaces gaps before code generation. If a cell doesn't resolve, the inputs don't connect.</td></tr>
                 </tbody>
             </table>
 
@@ -145,7 +146,7 @@ Context matrix:     PRD + Architecture + Spec Template  →  coherent implementa
                 </thead>
                 <tbody>
                     <tr><td>Template investment</td><td>Column quality determines output quality. Building good architecture templates requires deep platform knowledge and significant upfront effort.</td></tr>
-                    <tr><td>Context window ceiling</td><td>PRD + architecture + spec must fit in one window. Large matrices with many rows and columns hit this limit. Complex enterprise systems may not fit.</td></tr>
+                    <tr><td>Context window ceiling</td><td>Spec + architecture + business requirements must fit in one window. Large systems with many rows and columns hit this limit.</td></tr>
                     <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same inputs can produce different resolutions across runs.</td></tr>
                     <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe multi-agent coordination.</td></tr>
                     <tr><td>Spec writing is a skill</td><td>Filling the matrix requires someone who understands both the business rows and the architecture columns. That person is rare.</td></tr>

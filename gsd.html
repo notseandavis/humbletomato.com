@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSD (Get Shit Done) — Humble Tomato</title>
-    <meta name="description" content="Context rot solved. Fresh sub-agent contexts per task mean task 50 has the same quality as task 1.">
+    <meta name="description" content="Context engineering for AI coding. Fresh sub-agent contexts prevent quality degradation across tasks.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -41,152 +41,77 @@
         <header class="page-header">
             <div class="breadcrumb">Compare</div>
             <h1>GSD (Get Shit Done)</h1>
-            <p class="subtitle">Context rot solved. Fresh sub-agent contexts per task mean task 50 has the same quality as task 1.</p>
+            <p class="subtitle">A meta-prompting and context engineering system that solves quality degradation by giving each task a fresh 200K token context window.</p>
         </header>
 
         <section class="content">
 
-            <p><strong>Source:</strong> <a href="https://github.com/gsd-build/get-shit-done">GitHub</a> (11.9K+ stars) · <a href="https://gsd.build">gsd.build</a> · Created by <a href="https://github.com/glittercowboy">Lex Christopherson</a></p>
+            <p><strong>Source:</strong> <a href="https://github.com/gsd-build/get-shit-done">GitHub</a> · <a href="https://gsd.build">gsd.build</a> · Created by <a href="https://github.com/glittercowboy">Lex Christopherson</a></p>
 
-            <h2>The Core Problem: Context Rot</h2>
+            <h2>The Problem: Context Rot</h2>
 
-            <p>Quality degrades as context fills. Task 1 gets clean instructions and 200K tokens to work with. Task 50 gets instructions buried under 49 previous conversations and maybe 20K tokens left.</p>
+            <p>AI quality degrades as the context window fills. At 0-30% context, output is thorough and comprehensive. Past 50%, the model starts rushing and cutting corners. Past 70%, hallucinations and forgotten requirements appear. Task 50 gets worse output than task 1 from the same model.</p>
 
-            <p>Same agent, worse results. Not because the model got dumber, but because the signal-to-noise ratio collapsed.</p>
+            <p>GSD's solution: spawn a fresh sub-agent for each task. Every task gets a clean 200K token window with only what it needs. No conversation history baggage.</p>
 
-            <h2>The Solution: Fresh Contexts</h2>
+            <h2>What It Actually Is</h2>
 
-            <p>Each task spawns a sub-agent with a clean 200K token window. Task 50 gets the same pristine environment as task 1.</p>
+            <p>GSD v1 is ~50 markdown files: 29 slash commands, 12 agent definitions, and 2 hooks. No proprietary runtime. Everything runs on native Claude Code features. A Node.js CLI helper handles deterministic logic (file existence checks, config loading) so the LLM focuses on reasoning, not bookkeeping.</p>
 
-            <p>The trick: each sub-agent gets exactly what it needs (task definition, architecture context, relevant specs) without dragging along the entire chat history.</p>
+            <p>GSD v2 is a standalone TypeScript CLI that programmatically controls agent sessions instead of relying on the LLM to follow prompt instructions. It adds crash recovery, stuck detection, cost tracking, and git worktree isolation.</p>
 
-            <h2>How It Works</h2>
+            <h2>The Four-Command Workflow</h2>
 
-            <p>Four commands. That's it.</p>
+            <pre><code>/gsd:new-project    # Deep interview + parallel research agents
+/gsd:discuss-phase  # Capture preferences for gray areas
+/gsd:build          # Atomic plans, wave parallelism, fresh agents
+/gsd:verify         # Goal-backward: "is it TRUE?" not "was it done?"</code></pre>
 
-            <pre><code>/gsd:new-project
-/gsd:discuss-phase
-/gsd:build
-/gsd:verify</code></pre>
+            <h3>New Project</h3>
 
-            <h3>1. /gsd:new-project</h3>
+            <p>Interviews you about what you're building while spawning four parallel research agents: stack, features, architecture, and pitfalls. Each investigates independently, then a synthesizer merges their findings.</p>
 
-            <p>Interviews you about what you're building. Not surface-level questions. Deep ones.</p>
+            <p>Outputs: <code>PROJECT.md</code>, <code>REQUIREMENTS.md</code>, <code>ROADMAP.md</code>, <code>STATE.md</code></p>
 
-            <p>Spawns parallel research agents to investigate technical choices. While you're explaining your idea, background agents are checking framework docs, API patterns, deployment options.</p>
+            <h3>Discuss Phase</h3>
 
-            <p>Outputs four files:</p>
+            <p>The most underrated feature. Before planning, GSD identifies gray areas specific to what you're building (layout choices for visual features, error handling for APIs, structure for content systems) and asks targeted questions. Your answers go into <code>CONTEXT.md</code> and every subsequent agent gets them.</p>
 
-            <ul>
-                <li><strong>PROJECT.md</strong> — The what and why</li>
-                <li><strong>REQUIREMENTS.md</strong> — What success looks like</li>
-                <li><strong>ROADMAP.md</strong> — Phases, not tasks</li>
-                <li><strong>STATE.md</strong> — Current status (starts empty)</li>
-            </ul>
+            <p>Skipping this is technically optional but is the #1 source of misaligned output. Plans inherit assumptions that CONTEXT.md would have prevented.</p>
 
-            <h3>2. /gsd:discuss-phase</h3>
+            <h3>Build</h3>
 
-            <p>Before planning, capture preferences for gray areas.</p>
+            <p>Creates atomic <code>PLAN.md</code> files, each containing 2-3 tasks that fit in ~50% of a context window. Plans run in waves: independent tasks run in parallel, dependent tasks wait for their wave.</p>
 
-            <p>Example: "For error handling, do you want fail-fast or graceful degradation?"</p>
+            <p>Plans are prompts. Not documents that become prompts. The sub-agent reads <code>PLAN.md</code> directly as its executable instruction. No summarization or interpretation layer. Plan quality directly determines execution quality.</p>
 
-            <p>These decisions go into context. Agents won't ask again. No more "I'll use approach X unless you prefer Y" waffling in every task.</p>
+            <p>Plans use XML structure optimized for Claude's training:</p>
 
-            <h3>3. /gsd:build</h3>
+            <pre><code>&lt;task type="auto"&gt;
+  &lt;name&gt;Create login endpoint&lt;/name&gt;
+  &lt;files&gt;src/app/api/auth/login/route.ts&lt;/files&gt;
+  &lt;action&gt;Use jose for JWT. Validate against users table.&lt;/action&gt;
+  &lt;verify&gt;curl POST localhost:3000/api/auth/login returns 200&lt;/verify&gt;
+&lt;/task&gt;</code></pre>
 
-            <p>Creates atomic PLAN.md files. Each plan:</p>
+            <p>Each plan produces an atomic git commit. Each task gets its own clean agent session.</p>
 
-            <ul>
-                <li>Contains 2-3 tasks max</li>
-                <li>Fits in ~50% of context window</li>
-                <li>Gets a fresh sub-agent</li>
-                <li>Produces atomic git commits</li>
-            </ul>
+            <h3>Verify</h3>
 
-            <p>Plans run in waves. Wave 1 tasks can run in parallel (no dependencies). Wave 2 waits for Wave 1 completion. And so on.</p>
+            <p>Goal-backward verification checks whether goals are TRUE, not whether tasks were completed. "Can a user sign up with email?" not "Does the signup route exist?" If verification fails, new plans are created rather than retrying the same tasks.</p>
 
-            <p>The parallelism is real. If you have 6 tasks in a wave and processing power to spare, all 6 run simultaneously.</p>
-
-            <h3>4. /gsd:verify</h3>
-
-            <p>Goal-backward verification. Not "did you do the tasks?" but "is the goal true?"</p>
-
-            <p>Example goal: "Users can sign up with email and password."</p>
-
-            <p>Bad verification: Check that signup route exists, password hashing is implemented, database table created.</p>
-
-            <p>Good verification: Actually run the signup flow. Create a user. Verify the user can log in.</p>
-
-            <p>If verification fails, re-plan. Don't just retry the same tasks.</p>
-
-            <h2>Plans ARE Prompts</h2>
-
-            <p>This is subtle but important: PLAN.md isn't a document that gets turned into a prompt. PLAN.md <em>is</em> the prompt.</p>
-
-            <p>The sub-agent reads PLAN.md directly. No summarization layer. No interpretation step. What you write in the plan is what the agent executes.</p>
-
-            <p>This means:</p>
-
-            <ul>
-                <li>Be specific in plans</li>
-                <li>Include code examples if needed</li>
-                <li>Reference exact file paths</li>
-                <li>State acceptance criteria clearly</li>
-            </ul>
-
-            <p>The plan quality directly determines execution quality.</p>
-
-            <h2>State Tracking</h2>
-
-            <p>STATE.md updates after every task. Contains:</p>
-
-            <ul>
-                <li>What's built</li>
-                <li>What's in progress</li>
-                <li>What's blocked</li>
-                <li>Open questions</li>
-            </ul>
-
-            <p>When a sub-agent spawns, it gets STATE.md in its context. It knows what already exists. It doesn't re-implement things or make conflicting changes.</p>
-
-            <h2>Philosophy</h2>
-
-            <p>"I don't write code. Claude Code does."</p>
-
-            <p>Lex calls this anti-enterprise. Not in the sense of anti-corporate, but anti-complexity-in-workflow. The workflow is four commands. The complexity is hidden inside the system.</p>
-
-            <p>This is for solo builders. People who want to ship, not manage processes.</p>
-
-            <h2>Compatible Tools</h2>
-
-            <p>Works with Claude Code, OpenCode, Gemini CLI, Codex, Copilot, Antigravity. Anything that can spawn sub-agents and work from markdown prompts.</p>
-
-            <h2>What It's Good At</h2>
+            <h2>Strengths</h2>
 
             <table>
                 <thead>
-                    <tr>
-                        <th>Strength</th>
-                        <th>Why</th>
-                    </tr>
+                    <tr><th>Strength</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Context management</td>
-                        <td>Fresh windows per task, no degradation</td>
-                    </tr>
-                    <tr>
-                        <td>Simple UX</td>
-                        <td>Four commands, clean mental model</td>
-                    </tr>
-                    <tr>
-                        <td>Solo builders</td>
-                        <td>Battle-tested by people shipping real products alone</td>
-                    </tr>
-                    <tr>
-                        <td>Speed</td>
-                        <td>Wave-based parallelism when dependencies allow</td>
-                    </tr>
+                    <tr><td>Context engineering</td><td>Fresh 200K windows per task. No degradation from first to last.</td></tr>
+                    <tr><td>Simple workflow</td><td>Four commands. Complexity is in the system, not the interface.</td></tr>
+                    <tr><td>Wave parallelism</td><td>Independent tasks run simultaneously. Works best with vertical slice decomposition.</td></tr>
+                    <tr><td>Plan checker</td><td>Plans pass verification (up to 3 iterations) before execution. Checks scope, dependencies, conflicts.</td></tr>
+                    <tr><td>Honest creator</td><td>v2 README openly acknowledges v1's limitations. No context control, no crash recovery, no observability.</td></tr>
                 </tbody>
             </table>
 
@@ -194,62 +119,44 @@
 
             <table>
                 <thead>
-                    <tr>
-                        <th>Limitation</th>
-                        <th>Impact</th>
-                    </tr>
+                    <tr><th>Limitation</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Team coordination</td>
-                        <td>Less structure for multi-person projects</td>
-                    </tr>
-                    <tr>
-                        <td>Planning depth</td>
-                        <td>Quality depends on interview responses</td>
-                    </tr>
-                    <tr>
-                        <td>Tooling opinions</td>
-                        <td>Optimized for specific CLI tools</td>
-                    </tr>
-                    <tr>
-                        <td>Upfront thinking</td>
-                        <td>Requires good answers during new-project phase</td>
-                    </tr>
+                    <tr><td>Token hungry</td><td>Full workflow burns through Pro plan limits fast. Multi-agent spawning is expensive.</td></tr>
+                    <tr><td>Greenfield bias</td><td>Large brownfield codebases with deep dependency chains can exceed what a single task comprehends.</td></tr>
+                    <tr><td>Planning quality varies</td><td>Quality depends on the discuss phase. Skip it and plans inherit bad assumptions.</td></tr>
+                    <tr><td>Solo-oriented</td><td>Less structure for multi-person coordination than frameworks like <a href="bmad.html">BMAD</a>.</td></tr>
+                    <tr><td>MCP incompatibility</td><td>Custom sub-agents can't use MCP servers (Claude Code limitation, not GSD's fault).</td></tr>
                 </tbody>
             </table>
 
             <h2>When to Use GSD</h2>
 
-            <p>You're building solo or with a small team. You want agents to handle implementation while you focus on product decisions. You value simplicity in workflow over comprehensive structure.</p>
-
-            <p>You're comfortable with the tools it integrates with. You want something that works out of the box without configuration.</p>
+            <p>Solo or small team. Greenfield or small-to-medium project. You want agents to handle implementation while you focus on product decisions. You value simplicity over comprehensive structure.</p>
 
             <h2>When to Look Elsewhere</h2>
 
-            <p>You need heavyweight project management structure. You have a large team that needs role separation. You want extensive templates and workflows for every phase. You need support for non-technical stakeholders in the loop.</p>
-
-            <p>In those cases, consider <a href="bmad.html">BMAD</a> or similar methods that trade simplicity for comprehensive lifecycle coverage.</p>
+            <p>Large brownfield codebases. Tightly coupled systems that don't decompose into independent tasks. Teams needing role separation and audit trails. Quick fixes (though <code>/gsd:quick</code> exists for ad-hoc tasks).</p>
 
         </section>
 
         <nav class="page-nav">
             <a href="continuous-evolution.html" class="page-nav-prev">
                 <span class="page-nav-label">Previous</span>
-                <span class="page-nav-title">← Continuous Evolution</span>
+                <span class="page-nav-title">&larr; Continuous Evolution</span>
             </a>
             <a href="bmad.html" class="page-nav-next">
                 <span class="page-nav-label">Next</span>
-                <span class="page-nav-title">BMAD →</span>
+                <span class="page-nav-title">BMAD &rarr;</span>
             </a>
         </nav>
 
     </div>
 
     <footer>
-        <div class="footer-line">Built by <strong>RS</strong> 🤖 — Practicing what we preach</div>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 - Practicing what we preach</div>
         <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script>

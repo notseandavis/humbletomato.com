@@ -51,59 +51,51 @@
 
         <section class="content">
 
-            <h2>The Mental Model</h2>
-
-            <p>A traditional compiler takes precise source code and produces deterministic output. Same input, same binary, every time. The contract is exact: you write valid syntax, you get correct machine code.</p>
-
-            <p>An LLM does the same job — takes a specification and produces code — but the contract is fuzzy. The input is natural language. The output is probabilistic. Same prompt, different run, slightly different code.</p>
-
             <pre><code>Traditional compiler:
-  source code → deterministic → binary
+  source code  -->  deterministic  -->  binary
   Precise input. Exact output. Every time.
 
-Fuzzy compiler:
-  natural language spec → probabilistic → source code
+Fuzzy compiler (LLM):
+  natural language spec  -->  probabilistic  -->  source code
   Ambiguous input. Approximate output. Usually.</code></pre>
 
-            <h2>What Changes</h2>
+            <h2>Same Job, Different Contract</h2>
 
-            <p>When you accept that you're writing source code for a fuzzy compiler, everything about how you write specs changes.</p>
+            <p>A C compiler rejects ambiguity. It throws a syntax error. You fix it.</p>
 
-            <p>A traditional compiler rejects ambiguity — it throws a syntax error. A fuzzy compiler <em>resolves</em> ambiguity — it picks an interpretation and keeps going. It never tells you it guessed. It just builds what it thinks you meant.</p>
+            <p>An LLM <em>resolves</em> ambiguity. It picks an interpretation and keeps going. It never tells you it guessed.</p>
 
-            <pre><code>Traditional compiler:
-  "int x = ???"  →  ERROR: expected expression
+            <pre><code>Traditional:
+  "int x = ???"    -->  ERROR: expected expression
 
-Fuzzy compiler:
-  "handle auth"  →  *builds session-cookie auth*
-                     (you wanted JWT)
-                     (it didn't ask)</code></pre>
+Fuzzy:
+  "handle auth"    -->  *builds session-cookie auth*
+                        (you wanted JWT)
+                        (it didn't ask)</code></pre>
 
-            <p>Every ambiguity in your spec is a branch point where the compiler might go a different direction than you intended. The more ambiguity, the more branches, the further the output drifts from what you actually wanted.</p>
+            <p>Every ambiguity in your spec is a branch point. More ambiguity, more branches, more drift from what you wanted.</p>
 
-            <h2>Compiler Errors Look Different</h2>
+            <h2>Errors Are Silent</h2>
 
-            <p>Traditional compilers fail loudly — red text, line numbers, clear errors. You fix the syntax, recompile, move on.</p>
+            <p>Traditional compilers fail loud: red text, line numbers. Fuzzy compilers fail silent: the code runs, tests pass, ships to production.</p>
 
-            <p>Fuzzy compilers fail silently. The code compiles. It runs. It even looks right. But it made assumptions you didn't intend, chose patterns you didn't want, and resolved ambiguity in directions you didn't expect. The "errors" are semantic, not syntactic.</p>
-
-            <pre><code>Traditional compiler error:
+            <pre><code>Traditional error:
   Line 42: undefined reference to 'processPayment'
-  → Fix: define the function
+  Fix: define the function
 
-Fuzzy compiler "error":
-  Code works. Tests pass. Ships to production.
-  Three weeks later: "Why does checkout fail 
-  when the cart has mixed currencies?"
-  → The spec never mentioned multi-currency.
-  → The compiler assumed single-currency.
-  → Nobody noticed.</code></pre>
+Fuzzy "error":
+  Code works. Tests pass. Ships.
+  Three weeks later: "Why does checkout fail
+  with mixed currencies?"
+  The spec never mentioned multi-currency.
+  The compiler assumed single-currency.
+  Nobody noticed.</code></pre>
 
-            <h2>Writing Better Source Code</h2>
+            <h2>The Implication</h2>
 
-            <p>If the LLM is your compiler, your spec is your source code. The quality of your spec determines the quality of your compilation — not as a nice-to-have, but as a <a href="code-diffusion-model.html">conservation law</a>.</p>
+            <p>Your spec is source code. The quality of your spec determines the quality of your output, not as a nice-to-have but as a <a href="code-diffusion-model.html">conservation law</a>.</p>
 
-            <p>You wouldn't write half a function and expect the C compiler to figure out the rest. Don't write half a spec and expect the fuzzy compiler to guess correctly.</p>
+            <p>You wouldn't write half a function and expect <code>gcc</code> to figure out the rest. Don't write half a spec and expect the fuzzy compiler to guess correctly.</p>
 
         </section>
 

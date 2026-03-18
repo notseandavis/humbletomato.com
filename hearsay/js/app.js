@@ -56,9 +56,17 @@ class HearsayApp {
             // Load settings
             this.loadSettings();
             
+            // Init debug panel
+            this._debugLines = [];
+            this._chunksProcessed = 0;
+            this._segmentsCreated = 0;
+            this.debugLog('Hearsay initialized');
+            this.updateDebugInfo();
+            
             console.log('✅ Hearsay initialized successfully');
         } catch (error) {
             console.error('❌ Failed to initialize Hearsay:', error);
+            this.debugLog('INIT ERROR: ' + error.message);
             this.uiManager?.showToast('Failed to initialize app', 'error');
         }
     }
@@ -121,6 +129,7 @@ class HearsayApp {
 
             // Load Whisper model if not loaded (first recording only)
             if (this.transcriptionEngine.isEnabled() && !this.transcriptionEngine.isModelLoaded) {
+                this.debugLog('Loading transcription model...');
                 this.uiManager.showToast('Loading speech recognition model...', 'info');
                 
                 this.transcriptionEngine.onProgress = (progress) => {
@@ -128,10 +137,12 @@ class HearsayApp {
                     if (statusEl) {
                         statusEl.textContent = `Loading model: ${progress.percent}%`;
                     }
+                    this.debugLog(`Model download: ${progress.percent}% (${progress.file})`);
                 };
 
                 await this.transcriptionEngine.loadModel('base.en');
                 this.transcriptionEngine.onProgress = null;
+                this.debugLog(`Model loaded! Mode: ${this.transcriptionEngine.mode}`);
                 this.uiManager.showToast('Model loaded! Starting recording...', 'success');
             }
             
@@ -159,9 +170,15 @@ class HearsayApp {
             await this.recordingEngine.startRecording();
             
             this.isRecording = true;
+            this._chunksProcessed = 0;
+            this._segmentsCreated = 0;
+            this.debugLog('Recording started');
+            this.updateDebugInfo();
             console.log('🎙️ Recording started');
         } catch (error) {
             console.error('❌ Failed to start recording:', error);
+            this.debugLog('START ERROR: ' + error.message);
+            this.updateDebugInfo();
             this.uiManager.showToast('Failed to start recording: ' + error.message, 'error');
         }
     }
@@ -190,6 +207,8 @@ class HearsayApp {
             
             this.isRecording = false;
             this.currentMeeting = null;
+            this.debugLog(`Recording stopped. ${this._segmentsCreated} segments captured.`);
+            this.updateDebugInfo();
             
             console.log('✅ Recording stopped');
         } catch (error) {
@@ -206,7 +225,9 @@ class HearsayApp {
             // Transcribe audio
             if (this.transcriptionEngine.isEnabled()) {
                 this._transcribing = true;
-                console.log(`🎤 Processing chunk at ${timestamp.toFixed(1)}s (${audioData.length} samples)`);
+                this._chunksProcessed = (this._chunksProcessed || 0) + 1;
+                this.updateDebugInfo();
+                this.debugLog(`Chunk #${this._chunksProcessed} at ${timestamp.toFixed(1)}s (${audioData.length} samples)`);
                 
                 const transcriptSegment = await this.transcriptionEngine.transcribe(audioData, timestamp);
                 
@@ -234,12 +255,15 @@ class HearsayApp {
                     this.currentMeeting.segments.push(transcriptSegment);
                     
                     // Update UI
+                    this._segmentsCreated = (this._segmentsCreated || 0) + 1;
                     this.uiManager.addTranscriptSegment(transcriptSegment);
-                    console.log(`📝 Segment added: "${transcriptSegment.text}"`);
+                    this.debugLog(`📝 "${transcriptSegment.text.substring(0, 50)}${transcriptSegment.text.length > 50 ? '...' : ''}"`);
                 }
             }
         } catch (error) {
             this._transcribing = false;
+            this.debugLog('ERROR: ' + error.message);
+            this.updateDebugInfo();
             console.error('❌ Error processing audio data:', error);
         }
     }
@@ -318,6 +342,43 @@ class HearsayApp {
         }
     }
 }
+
+    debugLog(msg) {
+        const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
+        const line = `[${ts}] ${msg}`;
+        this._debugLines = this._debugLines || [];
+        this._debugLines.push(line);
+        if (this._debugLines.length > 20) this._debugLines.shift();
+        
+        const logEl = document.getElementById('debug-log');
+        if (logEl) {
+            logEl.innerHTML = this._debugLines.map(l => `<div>${l}</div>`).join('');
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        console.log('🐛 ' + msg);
+    }
+
+    updateDebugInfo() {
+        const el = document.getElementById('debug-info');
+        if (!el) return;
+
+        const mode = this.transcriptionEngine?.mode || 'detecting...';
+        const modelLoaded = this.transcriptionEngine?.isModelLoaded ? '✅' : '⏳';
+        const recording = this.isRecording ? '🔴 REC' : '⚪ IDLE';
+        const ua = /iPhone/.test(navigator.userAgent) ? 'iPhone' : 
+                   /iPad/.test(navigator.userAgent) ? 'iPad' :
+                   /Android/.test(navigator.userAgent) ? 'Android' : 'Desktop';
+        const browser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) ? 'Safari' :
+                        /Chrome/.test(navigator.userAgent) ? 'Chrome' :
+                        /Firefox/.test(navigator.userAgent) ? 'Firefox' : 'Other';
+        const webSpeech = ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) ? '✅' : '❌';
+
+        el.innerHTML = [
+            `${recording} | Mode: <b>${mode}</b> ${modelLoaded}`,
+            `Device: ${ua}/${browser} | WebSpeech: ${webSpeech}`,
+            `Chunks: ${this._chunksProcessed || 0} | Segments: ${this._segmentsCreated || 0}`
+        ].join('<br>');
+    }
 
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {

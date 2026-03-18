@@ -86,23 +86,21 @@
 
             <h3>The Spec Template as Validation Point</h3>
 
-            <p>The spec template is where product and engineering meet. It maps business requirements to specific implementation choices. For example, using Spring Boot and AWS:</p>
+            <p>The spec template is where product and engineering meet. It resolves business requirements into implementation-level detail:</p>
 
-            <table>
-                <thead>
-                    <tr><th>Product requirement</th><th>Resolves to</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>"User enters address"</td><td>REST controller with <code>@Valid</code> request body, Thymeleaf form with client-side validation</td></tr>
-                    <tr><td>"System validates address"</td><td><code>@Async</code> service method, SQS message consumer with retry policy</td></tr>
-                    <tr><td>"Save to case"</td><td>JPA entity extending <code>BaseEntity</code>, Spring Data repository, <code>ApplicationEvent</code> published on save</td></tr>
-                    <tr><td>"Support personal and business"</td><td>Strategy pattern with <code>CustomerType</code> enum, conditional bean wiring via <code>@Profile</code></td></tr>
-                </tbody>
-            </table>
+            <ul>
+                <li><strong>API endpoints</strong> — exact routes, methods, request/response shapes</li>
+                <li><strong>Form fields</strong> — field types, validation rules, conditional visibility</li>
+                <li><strong>Data types</strong> — entities, relationships, constraints, migrations</li>
+                <li><strong>Security permissions</strong> — role-based access, what each user persona can see and do</li>
+                <li><strong>Configuration</strong> — feature flags, environment-specific settings, integration parameters</li>
+            </ul>
 
-            <p>This isn't just formatting. Writing the spec template forces you to connect the dots between concepts from different documents and see how they resolve together. If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code.</p>
+            <p>For example, a business requirement like "Support personal and business customers" resolves in the spec template to: Strategy pattern with <code>CustomerType</code> enum, conditional bean wiring via <code>@Profile</code>, separate form validation rules per type, different permission sets for each.</p>
 
-            <p>The spec template is a human adding information that didn't exist in either the PRD or the architecture doc alone: the specific mapping between abstract intent and concrete implementation. It's not theoretically necessary (you could feed raw documents directly), but it's a validation checkpoint that pays for itself. See <a href="telephone-game.html">The Telephone Game</a> for why this distinction matters.</p>
+            <p>Writing the spec template forces you to connect the dots between the PRD and architecture and see how they resolve together. If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code.</p>
+
+            <p>The spec template adds information that didn't exist in either source document alone: the specific resolution of abstract business intent into concrete implementation decisions. It's not theoretically necessary (you could feed raw documents directly), but it's a validation checkpoint that pays for itself. See <a href="telephone-game.html">The Telephone Game</a> for why this distinction matters.</p>
 
             <h2>Templates as Control Knobs</h2>
 

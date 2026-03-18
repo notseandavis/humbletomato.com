@@ -118,6 +118,22 @@ class HearsayApp {
         try {
             // Request microphone permission
             await this.recordingEngine.requestPermission();
+
+            // Load Whisper model if not loaded (first recording only)
+            if (this.transcriptionEngine.isEnabled() && !this.transcriptionEngine.isModelLoaded) {
+                this.uiManager.showToast('Loading speech recognition model...', 'info');
+                
+                this.transcriptionEngine.onProgress = (progress) => {
+                    const statusEl = document.querySelector('.status-text');
+                    if (statusEl) {
+                        statusEl.textContent = `Loading model: ${progress.percent}%`;
+                    }
+                };
+
+                await this.transcriptionEngine.loadModel('tiny.en');
+                this.transcriptionEngine.onProgress = null;
+                this.uiManager.showToast('Model loaded! Starting recording...', 'success');
+            }
             
             // Create new meeting
             this.currentMeeting = {

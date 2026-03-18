@@ -1,14 +1,22 @@
 /**
- * TranscriptionEngine - Mock transcription with architecture for Whisper.wasm integration
- * Real implementation would use whisper-web (whisper.cpp compiled to WebAssembly)
+ * TranscriptionEngine - Real browser-based transcription using Transformers.js (Whisper)
+ * Runs entirely client-side via ONNX/WASM. No backend needed.
  */
 
 export class TranscriptionEngine {
     constructor() {
         this._enabled = true;
-        this.model = null;
+        this.pipeline = null;
         this.isModelLoaded = false;
-        this.mockMode = true; // Set to false when real Whisper model is integrated
+        this.isLoading = false;
+        this.modelId = 'onnx-community/whisper-tiny.en';
+        // Options: 
+        //   'onnx-community/whisper-tiny.en'  (~40MB, fastest, English only)
+        //   'onnx-community/whisper-base.en'  (~75MB, better accuracy, English only)
+        //   'onnx-community/whisper-tiny'     (~40MB, multilingual)
+        //   'onnx-community/whisper-base'     (~75MB, multilingual)
+        //   'onnx-community/whisper-small'    (~250MB, best quality)
+        this.onProgress = null; // callback for loading progress
     }
 
     isEnabled() {
@@ -23,42 +31,59 @@ export class TranscriptionEngine {
         // Reset any state for new recording
     }
 
-    async loadModel(modelSize = 'base') {
-        if (this.isModelLoaded) return;
+    async loadModel(modelSize = 'tiny.en') {
+        if (this.isModelLoaded || this.isLoading) return;
+        this.isLoading = true;
 
-        console.log(`📦 Loading Whisper model: ${modelSize}`);
-        console.log('⚠️ Mock mode active - integrate whisper-web for real transcription');
-        
-        /**
-         * INTEGRATION GUIDE: Whisper.wasm
-         * 
-         * 1. Add whisper-web dependency:
-         *    https://github.com/xenova/whisper-web
-         * 
-         * 2. Download Whisper model files:
-         *    - ggml-base.bin (142MB, recommended)
-         *    - ggml-tiny.bin (75MB, faster but less accurate)
-         *    - ggml-small.bin (466MB, best quality)
-         * 
-         * 3. Initialize Whisper:
-         *    import { WhisperModel } from './lib/whisper-web/index.js';
-         *    this.model = await WhisperModel.load({
-         *        model: 'base',
-         *        quantized: true
-         *    });
-         * 
-         * 4. Replace mockTranscribe() with real transcription:
-         *    const result = await this.model.transcribe(audioData, {
-         *        language: 'en',
-         *        task: 'transcribe'
-         *    });
-         */
+        const modelMap = {
+            'tiny.en': 'onnx-community/whisper-tiny.en',
+            'base.en': 'onnx-community/whisper-base.en',
+            'tiny': 'onnx-community/whisper-tiny',
+            'base': 'onnx-community/whisper-base',
+            'small': 'onnx-community/whisper-small',
+        };
 
-        // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        this.modelId = modelMap[modelSize] || modelMap['tiny.en'];
+
+        console.log(`📦 Loading Whisper model: ${this.modelId}`);
         
-        this.isModelLoaded = true;
-        console.log('✅ Model loaded (mock mode)');
+        try {
+            // Dynamic import of Transformers.js from CDN
+            const { pipeline } = await import(
+                'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3'
+            );
+
+            this.pipeline = await pipeline(
+                'automatic-speech-recognition',
+                this.modelId,
+                {
+                    dtype: 'q8',  // quantized for speed
+                    device: 'wasm',
+                    progress_callback: (progress) => {
+                        if (progress.status === 'progress' && this.onProgress) {
+                            this.onProgress({
+                                loaded: progress.loaded,
+                                total: progress.total,
+                                percent: Math.round((progress.loaded / progress.total) * 100),
+                                file: progress.file
+                            });
+                        }
+                        if (progress.status === 'progress') {
+                            const pct = Math.round((progress.loaded / progress.total) * 100);
+                            console.log(`📦 Loading ${progress.file}: ${pct}%`);
+                        }
+                    }
+                }
+            );
+
+            this.isModelLoaded = true;
+            this.isLoading = false;
+            console.log('✅ Whisper model loaded successfully');
+        } catch (error) {
+            this.isLoading = false;
+            console.error('❌ Failed to load Whisper model:', error);
+            throw error;
+        }
     }
 
     async transcribe(audioData, timestamp) {
@@ -69,94 +94,69 @@ export class TranscriptionEngine {
             await this.loadModel();
         }
 
-        if (this.mockMode) {
-            return await this.mockTranscribe(audioData, timestamp);
-        } else {
-            return await this.realTranscribe(audioData, timestamp);
-        }
-    }
-
-    async mockTranscribe(audioData, timestamp) {
-        // Simulate processing delay
-        await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
-
-        // Generate mock transcription based on audio level
-        const level = this.calculateAudioLevel(audioData);
-        
-        if (level < 0.01) {
-            // Silence, skip
-            return null;
-        }
-
-        // Sample phrases for mock transcription
-        const phrases = [
-            "Let's discuss the project roadmap for next quarter.",
-            "I think we should focus on user experience first.",
-            "The deadline is approaching, we need to prioritize tasks.",
-            "Can you share the latest analytics data?",
-            "Great point! I agree with that approach.",
-            "We should schedule a follow-up meeting next week.",
-            "Has everyone reviewed the documentation?",
-            "I'll send out a summary after this meeting.",
-            "What are the main blockers we're facing?",
-            "Let's break this down into smaller milestones."
-        ];
-
-        const text = phrases[Math.floor(Math.random() * phrases.length)];
-        const confidence = 0.75 + Math.random() * 0.23; // 0.75-0.98
-        const duration = audioData.length / 16000; // Assuming 16kHz
-
-        return {
-            id: crypto.randomUUID(),
-            startTime: timestamp,
-            endTime: timestamp + duration,
-            duration: duration,
-            text: text,
-            confidence: confidence,
-            isPartial: false,
-            translatedText: null,
-            speakerId: null
-        };
+        return await this.realTranscribe(audioData, timestamp);
     }
 
     async realTranscribe(audioData, timestamp) {
-        /**
-         * REAL IMPLEMENTATION with Whisper.wasm
-         * 
-         * try {
-         *     const startProcess = Date.now();
-         *     
-         *     // Convert Float32Array to format expected by Whisper
-         *     const result = await this.model.transcribe(audioData, {
-         *         language: 'en',
-         *         task: 'transcribe',
-         *         timestamps: true
-         *     });
-         *     
-         *     const processingTime = Date.now() - startProcess;
-         *     const duration = audioData.length / 16000;
-         *     const realtimeFactor = processingTime / (duration * 1000);
-         *     
-         *     console.log(`✅ Transcribed: ${realtimeFactor.toFixed(1)}x realtime`);
-         *     
-         *     return {
-         *         id: crypto.randomUUID(),
-         *         startTime: timestamp,
-         *         endTime: timestamp + duration,
-         *         duration: duration,
-         *         text: result.text.trim(),
-         *         confidence: result.confidence || 0.9,
-         *         isPartial: false,
-         *         translatedText: null,
-         *         speakerId: null
-         *     };
-         * } catch (error) {
-         *     console.error('Transcription error:', error);
-         *     return null;
-         * }
-         */
-        
-        throw new Error('Real transcription not yet implemented - integrate Whisper.wasm');
+        if (!this.pipeline) return null;
+
+        try {
+            const startProcess = Date.now();
+            const duration = audioData.length / 16000;
+
+            // Check audio level - skip silence
+            const level = this.calculateAudioLevel(audioData);
+            if (level < 0.01) {
+                return null;
+            }
+
+            // Transformers.js pipeline accepts Float32Array directly (expects 16kHz)
+            const result = await this.pipeline(audioData, {
+                language: 'english',
+                task: 'transcribe',
+                chunk_length_s: 30,
+                stride_length_s: 5,
+                return_timestamps: false,
+            });
+
+            const processingTime = Date.now() - startProcess;
+            const realtimeFactor = (processingTime / 1000) / duration;
+
+            const text = result.text.trim();
+
+            // Skip empty or noise-only results
+            if (!text || text === '.' || text === '...' || text.length < 2) {
+                return null;
+            }
+
+            // Filter common Whisper hallucinations on silence/noise
+            const hallucinations = [
+                'thank you', 'thanks for watching', 'subscribe',
+                'you', 'bye', 'the end', 'silence',
+                '♪', '🎵', '[MUSIC]', '(music)',
+            ];
+            if (hallucinations.some(h => text.toLowerCase().replace(/[.!?,]/g, '') === h)) {
+                console.log(`🔇 Filtered hallucination: "${text}"`);
+                return null;
+            }
+
+            console.log(`✅ Transcribed (${realtimeFactor.toFixed(1)}x RT): "${text}"`);
+
+            return {
+                id: crypto.randomUUID(),
+                startTime: timestamp,
+                endTime: timestamp + duration,
+                duration: duration,
+                text: text,
+                confidence: 0.9, // Whisper doesn't return per-segment confidence easily
+                isPartial: false,
+                translatedText: null,
+                speakerId: null
+            };
+        } catch (error) {
+            console.error('Transcription error:', error);
+            return null;
+        }
     }
 
     calculateAudioLevel(audioData) {
@@ -168,11 +168,11 @@ export class TranscriptionEngine {
     }
 
     async unloadModel() {
-        if (this.model) {
-            // Clean up model resources
-            this.model = null;
+        if (this.pipeline) {
+            this.pipeline = null;
         }
         this.isModelLoaded = false;
+        this.isLoading = false;
         console.log('🗑️ Model unloaded');
     }
 }

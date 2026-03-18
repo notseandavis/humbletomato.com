@@ -100,6 +100,12 @@ Path B: You don't understand the abstraction
 
             <h2>What This Means for AI Code Generation</h2>
 
+            <p>Here's where it gets interesting. An LLM already knows how Spring works. It knows Jackson deserialization, HikariCP connection pooling, JVM garbage collection. That knowledge is baked into the weights from training. You never need to teach it the abstracted layers.</p>
+
+            <p>So what does the context window actually need? Not general knowledge (already free). The <strong>specific decisions for this system.</strong> "Use OAuth2 with JWT rotation." "Redis-backed sessions, 15min TTL." "Stripe tokenization, never raw card data." The LLM knows <em>how</em> to implement all of those. It needs to know <em>which ones you chose.</em></p>
+
+            <p>Abstracting in the context window is exactly backwards. General knowledge costs zero tokens. Specific decisions are the only thing that costs tokens. Hiding specifics behind abstractions removes the only information the LLM actually needs from you.</p>
+
             <p>Consider the <a href="matrix-methodology.html">Context Matrix</a>. Three columns: Auth, API, State. You might think: "I'll collapse those into one 'Backend' column. The agent can figure out the details."</p>
 
             <pre><code># Abstracted (less context)

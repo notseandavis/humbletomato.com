@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What the Model Already Knows - Humble Tomato</title>
+    <meta name="description" content="The LLM already knows how to code. In every language. With every framework. Your job isn't to teach it — it's to tell it what to build.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-section-label">Understand</li>
+                <li><a href="spec-driven-development.html">Spec-Driven Development</a></li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
+                <li><a href="solution-space.html">The Solution Space</a></li>
+                <li><a href="telephone-game.html">The Telephone Game</a></li>
+                <li><a href="abstraction-paradox.html">The Abstraction Paradox</a></li>
+                <li class="nav-section-label">Approach Library</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li class="nav-section-label">Thought Experiments</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
+                <li><a href="code-diffusion-model.html">Code Diffusion Model</a></li>
+                <li><a href="fuzzy-compiler.html">Fuzzy Compiler</a></li>
+                <li class="nav-section-label">Concepts</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>What the Model Already Knows</h1>
+            <p class="subtitle">You don't need to teach it how to code. You need to tell it what to build.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>The Baseline Is Massive</h2>
+
+            <p>The model already knows how to write C. And Java. And JavaScript, Python, Rust, Go, Ruby, TypeScript, Kotlin, Swift. It knows assembly. It knows binary encoding. It's read more code than any human ever will.</p>
+
+            <p>But it's not just languages. It knows:</p>
+
+            <ul>
+                <li>How to build a REST API, a GraphQL schema, a WebSocket server</li>
+                <li>How to structure a React app, a Vue app, an Angular app</li>
+                <li>How to design a relational schema, a document store, a cache layer</li>
+                <li>How to write a CLI tool, a daemon, a browser extension</li>
+                <li>How to handle auth, sessions, encryption, rate limiting</li>
+                <li>How to lay out a dashboard, a form, a checkout flow</li>
+                <li>How UX patterns work — navigation, feedback, error states, accessibility</li>
+                <li>How to write tests, CI pipelines, Dockerfiles, Kubernetes manifests</li>
+            </ul>
+
+            <p>All of this is free. It's baked into the weights from training. You never need to explain any of it.</p>
+
+            <h2>What It Doesn't Know</h2>
+
+            <p>What the model doesn't know is what <strong>you</strong> want. That's the only missing piece.</p>
+
+            <pre><code>Already in the model:
+  ✓ How to implement OAuth2 with JWT
+  ✓ How to implement OAuth2 with sessions
+  ✓ How to implement OAuth2 with PKCE
+  ✓ How to implement SAML
+  ✓ How to implement API keys
+  ✓ ... hundreds more auth patterns
+
+Not in the model:
+  ✗ Which one YOUR system uses</code></pre>
+
+            <p>The model can build anything. It just doesn't know which thing to build. That's what your spec provides — not the <em>how</em>, but the <em>what</em> and the <em>which</em>.</p>
+
+            <h2>The Implication</h2>
+
+            <p>Your spec doesn't need to explain how pagination works, or how to structure a React component, or how to write a SQL migration. The model already knows all of that better than most engineers do.</p>
+
+            <p>Your spec needs to say: paginate with cursor-based pagination, 25 items per page, sorted by created date descending. The implementation knowledge is free. The decisions are what cost you.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 — Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

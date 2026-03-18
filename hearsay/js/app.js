@@ -150,6 +150,11 @@ class HearsayApp {
             this.speakerIdentifier.reset();
             this.transcriptionEngine.reset();
             
+            // Start Web Speech listening if in that mode
+            if (this.transcriptionEngine.mode === 'webspeech') {
+                this.transcriptionEngine.startListening();
+            }
+
             // Start recording
             await this.recordingEngine.startRecording();
             
@@ -163,6 +168,11 @@ class HearsayApp {
 
     async stopRecording() {
         try {
+            // Stop Web Speech listening
+            if (this.transcriptionEngine.mode === 'webspeech') {
+                this.transcriptionEngine.stopListening();
+            }
+
             // Stop recording
             const audioBlob = await this.recordingEngine.stopRecording();
             

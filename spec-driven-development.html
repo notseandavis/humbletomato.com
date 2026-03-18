@@ -51,16 +51,12 @@
 
         <section class="content">
 
-            <h2>One Spec, Two Implementations</h2>
-
-            <p>A simple user story:</p>
-
-            <pre><code># User Profile
+            <pre><code># User Profile spec
 - Show user profile with name, email, join date
 - Format join date as "Member since MMM YYYY"
 - If no email, show "No email on file"</code></pre>
 
-            <p>Give this to an agent with a React architecture:</p>
+            <p>Give this spec to an agent targeting React:</p>
 
             <pre><code>function UserProfile({ user }) {
   const joinDate = new Date(user.joinedAt)
@@ -77,7 +73,7 @@
   );
 }</code></pre>
 
-            <p>Same spec, Vue architecture:</p>
+            <p>Same spec, Vue:</p>
 
             <pre><code>&lt;template&gt;
   &lt;div&gt;
@@ -100,29 +96,33 @@ export default {
 }
 &lt;/script&gt;</code></pre>
 
-            <p>Same spec. Different output. The specification describes <strong>what</strong> the software does. The architecture context determines <strong>how</strong> it's built. The spec is portable across frameworks, languages, and teams.</p>
+            <p>Same spec, different output. The spec defines <strong>what</strong>. Architecture determines <strong>how</strong>. The spec is portable across frameworks, languages, and teams.</p>
 
-            <h2>Why This Matters</h2>
-
-            <p>Without a spec, the agent makes decisions for you. It picks a date format. It decides what to show when email is missing. It chooses a component structure. Every decision it makes is one you didn't review.</p>
-
-            <p>With a spec, those decisions are explicit. The agent's job becomes translation — from intent to implementation — not invention.</p>
+            <h2>With and Without a Spec</h2>
 
             <pre><code>Without spec:  "Build a user profile page"
-→ Agent invents requirements + implements them
-→ You debug both the requirements AND the code
+  → Agent invents requirements + implements them
+  → You debug both the requirements AND the code
 
 With spec:     "Build this user profile page" + spec
-→ Agent implements your requirements
-→ You debug only the code</code></pre>
+  → Agent implements your requirements
+  → You debug only the code</code></pre>
+
+            <p>Without a spec, the agent picks a date format, decides what to show when email is missing, chooses component structure. Every decision it makes is one you didn't review.</p>
+
+            <p>With a spec, the agent translates intent to implementation. It doesn't invent.</p>
 
             <h2>The Spec Is the Product</h2>
 
-            <p>In spec-driven development, the specification is the durable artifact. Code is generated, tested, and regenerated. Frameworks change. Languages change. The spec persists.</p>
+            <p>Code gets generated, tested, regenerated. Frameworks change. Languages change. The spec persists. It's the source of truth; code is compiled output.</p>
 
-            <p>This inverts the traditional relationship. Code used to be the source of truth, with docs trailing behind (or missing entirely). Now the spec is the source of truth, and code is a compiled output.</p>
+            <p>Fred Brooks called this <a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">essential vs. accidental complexity</a>. AI handles accidental complexity (boilerplate, syntax, framework wiring). Essential complexity (what the system actually does) stays with you. That's what specs capture.</p>
 
-            <p>Fred Brooks called this the distinction between <a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">essential and accidental complexity</a>. AI eliminates accidental complexity — the boilerplate, the syntax, the framework wiring. Essential complexity — what the system actually does — remains. That's what specs capture.</p>
+            <h2>Tradeoffs</h2>
+
+            <p>Writing specs takes time upfront. For throwaway prototypes or one-off scripts, just prompting is faster. Specs pay off when code will be maintained, regenerated, or handed to different agents/frameworks over time.</p>
+
+            <p>Specs can also become stale if you edit generated code directly without updating the spec. Treat the spec as the thing you maintain, not the code.</p>
 
         </section>
 

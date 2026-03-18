@@ -46,29 +46,20 @@
 
         <section class="content">
 
-            <h2>How it works</h2>
+            <h2>What Matrix Is</h2>
 
-            <p>The Matrix Methodology treats specifications like DNA. Just as DNA encodes instructions that produce proteins when expressed in the right cellular environment, specifications encode product intent that produces working software when processed by AI agents in the right development environment.</p>
+            <p>Matrix is a framework for thinking about <strong>what goes into the context window</strong>. It assumes you can one-shot any task if the context is right. The question it answers: what combination of specifications, architecture patterns, and templates produces predictable code from an AI agent?</p>
 
-            <p>The key: <strong>clean, complete inputs produce predictable outputs.</strong> When you constrain the solution space with well-structured specs and architecture patterns, agent-generated code becomes deterministic.</p>
+            <p>The key insight: <strong>clean, complete inputs produce predictable outputs.</strong> When you constrain the solution space with well-structured specs and architecture patterns, agent-generated code becomes deterministic.</p>
+
+            <p>Matrix does not prescribe how to handle tasks that exceed one context window. That's what the <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> is for. Matrix composes the context. Ralph iterates when one shot isn't enough.</p>
 
             <h2>Why This Works Now</h2>
 
-            <p>Several technological factors have converged to make this viable:</p>
-
-            <h3>Model Capability Leap</h3>
-            <p>Modern AI models can reason about code at a deep level. They understand why patterns exist, not just what they look like. They can trace cause-and-effect when debugging, make architectural trade-offs, and self-correct when encountering errors.</p>
-
-            <h3>CLI Execution</h3>
-            <p>Agents can now run commands in real development environments. They build projects, run tests, check service health, query databases, and search codebases. This transforms agents from code generators into interactive developers.</p>
-
-            <h3>Iterative Loop with Fresh Context</h3>
-            <p>The <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> is critical: <strong>Read fix_plan.md → Do ONE task → Verify → Update → Repeat</strong></p>
-
-            <p>Each iteration starts with fresh context - just the specs, architecture, and current task. This prevents context degradation that happens in long "vibe coding" sessions where quality degrades as the session drags on.</p>
+            <p>Modern AI models reason about code at a deep level. They understand why patterns exist, trace cause-and-effect when debugging, and self-correct when encountering errors. Agents can now run commands in real development environments: build, test, query databases, search codebases. This transforms them from code generators into interactive developers.</p>
 
             <h3>Supervision Pattern</h3>
-            <p>A supervisory agent monitors the execution loop with different context than the worker. While the worker focuses on ticking checkboxes, the supervisor has access to platform documentation, reference implementations, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
+            <p>A supervisory agent monitors execution with different context than the worker. While the worker focuses on the current task, the supervisor has access to platform documentation, reference implementations, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
 
             <h2>The Context Matrix</h2>
 

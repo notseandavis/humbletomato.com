@@ -46,28 +46,19 @@
 
         <section class="content">
 
-            <h2>The Core Pattern</h2>
+            <h2>The Problem Ralph Solves</h2>
 
-            <p>The Ralph Wiggum Loop (named after Ralph from The Simpsons) is a simple but powerful execution pattern for autonomous agents:</p>
+            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> assumes you can one-shot any task if the context is right. But real features don't fit in one context window. A login system needs schema changes, middleware, UI components, and session handling. No single prompt covers all of that well.</p>
+
+            <p>Ralph is the mitigation for context window limitations. It breaks work into tasks that each fit in one context window, then iterates with fresh context until the feature is complete.</p>
+
+            <h2>The Core Pattern</h2>
 
             <p><strong>Read fix_plan → Do ONE task → Verify → Update → Report → Repeat</strong></p>
 
             <p>Each iteration is small, focused, and verifiable. The agent commits verified changes rather than generating monolithically. When something breaks, the new issue becomes a blocker in the next loop.</p>
 
-            <h2>Why Fresh Context Matters</h2>
-
-            <p>The critical insight: <strong>each iteration starts with fresh context.</strong></p>
-
-            <p>Every loop begins clean with just the specs, architecture docs, and current task. It doesn't accumulate cruft from previous iterations. This avoids the context degradation problem in "vibe coding" POC sessions:</p>
-
-            <ul>
-                <li>Context fills up with failed attempts and dead ends</li>
-                <li>Model starts confusing old approaches with current ones</li>
-                <li>Quality degrades as the session drags on</li>
-                <li>You end up with spaghetti code and inconsistent patterns</li>
-            </ul>
-
-            <p>The loop resets this. Every iteration is like a fresh developer picking up where the last one left off, guided by the plan document.</p>
+            <p>The critical insight: <strong>each iteration starts with fresh context.</strong> Every loop begins clean with just the specs, architecture docs, and current task. No accumulated cruft from previous iterations. This avoids the context degradation that kills long "vibe coding" sessions.</p>
 
             <h2>The Execution Flow</h2>
 
@@ -326,26 +317,13 @@ Add ability to mark tasks with different statuses.
 
             <p>The pattern is simple enough to implement anywhere but structured enough to produce reliable results.</p>
 
-            <h2>Integration with Matrix Methodology</h2>
+            <h2>Relationship to Matrix Methodology</h2>
 
-            <p>Ralph is the execution engine for the <a href="matrix-methodology.html">Matrix Methodology</a>. The Matrix provides:</p>
+            <p><a href="matrix-methodology.html">Matrix</a> answers: what goes into the context window? (PRD + architecture templates = constrained solution space.)</p>
 
-            <ul>
-                <li>Structured specifications (PRD, architecture docs, templates)</li>
-                <li>Supervision patterns (a separate agent monitoring the worker's progress)</li>
-                <li>Daily iteration cycles (R0, R1, R2 → RC → FINAL)</li>
-            </ul>
+            <p>Ralph answers: what happens when one context window isn't enough? (Break work into one-shot tasks, iterate with fresh context each pass.)</p>
 
-            <p>Ralph provides:</p>
-
-            <ul>
-                <li>The execution loop (autonomous task completion)</li>
-                <li>Fresh context per iteration</li>
-                <li>Verification and quality gates</li>
-                <li>Progress tracking and institutional learning</li>
-            </ul>
-
-            <p>Together, they form a complete system for AI-driven development.</p>
+            <p>Matrix composes the context. Ralph handles the iteration. They're complementary but separate ideas. You can use Ralph's execution pattern with any spec-driven approach, not just Matrix.</p>
 
         </section>
 

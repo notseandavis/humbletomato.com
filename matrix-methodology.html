@@ -60,9 +60,15 @@
 
             <p>This isn't something you can hand off to an AI. The business domain knowledge is the whole point of the row. Without it, the AI fills in reasonable-sounding defaults that miss your actual requirements.</p>
 
+            <h2>It splits the concerns</h2>
+
+            <p>The matrix separates business domain from technical domain cleanly. One role owns the rows (business requirements, domain knowledge). Another role owns the columns (architecture, platform decisions). These are roles, not people. One person might fill both, or a BA and an architect might work in parallel.</p>
+
+            <p>Neither role needs to fully understand the other's domain. The BA doesn't need to know Redis vs Postgres. The architect doesn't need to know payment compliance rules. The matrix is where their work meets.</p>
+
             <h2>The skill is in filling the cells</h2>
 
-            <p>Filling the matrix requires someone who understands both sides: the business rows and the architecture columns. That person maps "user logs in" (business) to "OAuth2 + JWT with Redis session store" (architecture). That mapping is the spec.</p>
+            <p>Where the rows and columns intersect, someone maps "user logs in" (business) to "OAuth2 + JWT with Redis session store" (architecture). That mapping is the spec.</p>
 
             <p>This is a skill. It's the same skill a good tech lead has always had: translating business intent into technical decisions. The matrix just makes it explicit and feedable to an AI.</p>
 

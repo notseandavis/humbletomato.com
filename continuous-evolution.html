@@ -52,474 +52,105 @@
 
         <section class="content">
 
-            <h2>The Problem</h2>
+            <pre><code># Greenfield: agent builds from complete spec
+Spec → Agent → System
 
-            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> works beautifully for greenfield development. Regenerate from specs daily, iterate fast, learn quickly.</p>
+# Evolution: agent builds from the delta
+Spec(v1) → Spec(v2) → Diff → Agent → Targeted Changes</code></pre>
 
-            <p>But what happens when you have:</p>
+            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That stops working when you have paying customers, production data, and API contracts you can't break.</p>
 
-            <ul>
-                <li>Paying customers using the system</li>
-                <li>Production data that can't be recreated</li>
-                <li>API contracts with external consumers</li>
-                <li>In-progress business workflows</li>
-                <li>Compliance and audit requirements</li>
-            </ul>
+            <p>The fix: same spec-driven approach, but the agent works from the <strong>diff between spec versions</strong>, not the whole spec.</p>
 
-            <p>The naive answer — "just regenerate everything" — fails immediately. You can't drop production databases. You can't break API contracts. You can't invalidate in-flight workflows.</p>
+            <h2>Expand-Migrate-Contract</h2>
 
-            <h2>Work from the diff, not the whole</h2>
+            <p>The safe pattern for structural database changes:</p>
 
-            <p><strong>The spec is still the source of truth, but the agent works from the diff, not the whole.</strong></p>
+            <pre><code># Phase 1: Expand — add new alongside old
+ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
+# Code writes to BOTH columns, reads from old
 
-            <p>In greenfield mode, the agent generates from a complete spec. The spec describes the entire system; the agent builds the entire system.</p>
+# Phase 2: Migrate — backfill and switch
+UPDATE users SET email_v2 = normalize(email);
+# Code reads from new, still writes to both
 
-            <p>In evolution mode, the agent generates from a <em>spec delta</em>. The canonical spec still describes the entire system, but the agent's work order is the difference between version N and version N+1.</p>
+# Phase 3: Contract — remove old (one-way door)
+ALTER TABLE users DROP COLUMN email;
+# Rollback no longer possible</code></pre>
 
-            <pre><code>Greenfield:  Spec → Agent → System
-Evolution:   Spec(N) → Spec(N+1) → Diff → Agent → Targeted Changes</code></pre>
+            <p>This is slow by design. In greenfield you sprint. In evolution you walk.</p>
 
-            <h2>What Gets Diffed</h2>
+            <h2>Versioned Workflow State</h2>
 
-            <p>The spec isn't one document — it's a constellation. Each produces its own diff:</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Spec Layer</th>
-                        <th>Diff Produces</th>
-                        <th>Agent Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>PRD</td>
-                        <td>Feature delta</td>
-                        <td>New/modified code paths</td>
-                    </tr>
-                    <tr>
-                        <td>Data Model</td>
-                        <td>Entity changes</td>
-                        <td>Migration scripts + code changes</td>
-                    </tr>
-                    <tr>
-                        <td>API Contract</td>
-                        <td>Endpoint changes</td>
-                        <td>Versioned endpoints, compatibility layer</td>
-                    </tr>
-                    <tr>
-                        <td>Templates</td>
-                        <td>Structure changes</td>
-                        <td>Code reorganization (rare, high-risk)</td>
-                    </tr>
-                    <tr>
-                        <td>Integrations</td>
-                        <td>Connection changes</td>
-                        <td>New adapters, deprecated old ones</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h2>Database Migrations: The Hard Part</h2>
-
-            <p>In greenfield, agents generate schemas. In evolution, agents generate <em>migrations</em> — and migrations have properties that schemas don't:</p>
-
-            <ul>
-                <li><strong>Order matters</strong> — Migration A must run before B</li>
-                <li><strong>Data preservation</strong> — Existing rows must survive</li>
-                <li><strong>Rollback possibility</strong> — Some changes are reversible, some aren't</li>
-                <li><strong>Runtime impact</strong> — Some migrations lock tables, some don't</li>
-            </ul>
-
-            <h3>Migration Classification</h3>
-
-            <p>The agent must classify each change:</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Risk</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Additive</td>
-                        <td>New column, nullable</td>
-                        <td>Safe, no data migration</td>
-                    </tr>
-                    <tr>
-                        <td>Additive with default</td>
-                        <td>New column, non-null</td>
-                        <td>Safe if default is sensible</td>
-                    </tr>
-                    <tr>
-                        <td>Structural</td>
-                        <td>Relationship change</td>
-                        <td>Requires data migration script</td>
-                    </tr>
-                    <tr>
-                        <td>Destructive</td>
-                        <td>Column removal</td>
-                        <td>Requires approval + archival</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>The Three-Phase Migration Pattern</h3>
-
-            <p>For structural changes, use expand-migrate-contract:</p>
-
-            <p><strong>Phase 1: Expand</strong></p>
-            <ul>
-                <li>Add new columns/tables alongside old ones</li>
-                <li>Code writes to both old and new</li>
-                <li>Code reads from old (authoritative)</li>
-            </ul>
-
-            <p><strong>Phase 2: Migrate</strong></p>
-            <ul>
-                <li>Backfill script populates new structure from old</li>
-                <li>Validation confirms data integrity</li>
-                <li>Code switches to read from new (authoritative)</li>
-                <li>Code still writes to both</li>
-            </ul>
-
-            <p><strong>Phase 3: Contract</strong></p>
-            <ul>
-                <li>Remove old columns/tables</li>
-                <li>Code only uses new structure</li>
-                <li>Rollback no longer possible — one-way door</li>
-            </ul>
-
-            <p>This is slow by design. In greenfield, you sprint. In evolution, you walk carefully.</p>
-
-            <h3>What Agents Must Never Do</h3>
-
-            <ul>
-                <li>Never generate DROP without explicit instruction</li>
-                <li>Never assume data loss is acceptable</li>
-                <li>Never generate migrations that lock production tables without flagging it</li>
-                <li>Never skip the rollback script for reversible changes</li>
-            </ul>
-
-            <p>These constraints belong in architecture templates, enforced by validation.</p>
-
-            <h2>API Contract Evolution</h2>
-
-            <p>In greenfield, APIs are generated fresh. In evolution, APIs are promises to consumers. Breaking them breaks trust — and possibly production.</p>
-
-            <h3>Change Classification</h3>
-
-            <p><strong>Non-breaking (ship freely):</strong></p>
-            <ul>
-                <li>New optional fields in responses</li>
-                <li>New optional parameters in requests</li>
-                <li>New endpoints entirely</li>
-                <li>Performance improvements (same contract, faster)</li>
-            </ul>
-
-            <p><strong>Breaking (requires versioning):</strong></p>
-            <ul>
-                <li>Removed fields from responses</li>
-                <li>New required parameters in requests</li>
-                <li>Changed field types</li>
-                <li>Changed semantics (same field, different meaning)</li>
-            </ul>
-
-            <h3>Versioning Strategies</h3>
-
-            <p><strong>URL Versioning:</strong> <code>/api/v1/users</code> → <code>/api/v2/users</code></p>
-            <ul>
-                <li>Explicit, easy to understand</li>
-                <li>Consumers must update URLs</li>
-                <li>Agent generates new version + deprecation warning on old</li>
-            </ul>
-
-            <p><strong>Header Versioning:</strong> <code>Accept: application/vnd.company.v2+json</code></p>
-            <ul>
-                <li>Same URL, version in headers</li>
-                <li>More elegant, harder to debug</li>
-                <li>Agent generates content negotiation layer</li>
-            </ul>
-
-            <p><strong>Additive Versioning:</strong> Never break, only add</p>
-            <ul>
-                <li>New fields are optional, old fields stay forever</li>
-                <li>Simplest consumer experience</li>
-                <li>Creates bloat over time</li>
-                <li>Agent adds new fields, never removes</li>
-            </ul>
-
-            <h3>The Deprecation Pattern</h3>
-
-            <p>When a breaking change is needed, the agent generates:</p>
-
-            <ol>
-                <li>New endpoint/version with updated contract</li>
-                <li>Compatibility layer translating old → new (where possible)</li>
-                <li>Deprecation notice in old endpoint responses</li>
-                <li>Sunset timeline in documentation</li>
-                <li>Migration guide for consumers</li>
-            </ol>
-
-            <p>The old endpoint doesn't disappear until the sunset date passes, usage metrics show zero traffic (or acceptable loss), and a human approves removal.</p>
-
-            <h2>Workflow State Management</h2>
-
-            <h3>The Straddler Problem</h3>
-
-            <p>User starts a multi-step workflow on Monday. You deploy a change on Tuesday. User tries to complete on Wednesday.</p>
-
-            <p>Their session state assumes the old world. Your code assumes the new world. Things break.</p>
-
-            <h3>Versioned State Machines</h3>
-
-            <p>Every persisted workflow should include its schema version:</p>
+            <p>User starts a workflow Monday. You deploy Tuesday. They resume Wednesday. Their state assumes the old world.</p>
 
             <pre><code>{
   "workflow_id": "abc123",
   "schema_version": "2024.01.15",
   "current_step": "awaiting_approval",
   "data": { ... }
-}</code></pre>
+}
 
-            <p>When code loads a workflow:</p>
+# On load: check schema_version
+# Match → proceed
+# Mismatch → migrate state, or route to old code path</code></pre>
 
-            <ol>
-                <li>Check schema version against current version</li>
-                <li>If match: proceed normally</li>
-                <li>If mismatch: run state migration or graceful handling</li>
-            </ol>
-
-            <h3>State Migration Strategies</h3>
-
-            <p><strong>Option A: Migrate on Load</strong></p>
-            <ul>
-                <li>Old workflow loaded</li>
-                <li>Migration function transforms state to new schema</li>
-                <li>Save migrated state, proceed with new code</li>
-                <li>Works when: Transformation is deterministic and lossless</li>
-            </ul>
-
-            <p><strong>Option B: Dual Code Paths</strong></p>
-            <ul>
-                <li>Detect schema version at load</li>
-                <li>Route to old code path or new code path</li>
-                <li>Old workflows complete under old rules</li>
-                <li>Works when: Migration is complex or lossy</li>
-            </ul>
-
-            <p><strong>Option C: Force Restart</strong></p>
-            <ul>
-                <li>Old workflow can't continue</li>
-                <li>User notified, workflow reset to beginning</li>
-                <li>Compensation/apology if appropriate</li>
-                <li>Works when: All else fails (use sparingly)</li>
-            </ul>
-
-            <h2>Spec Versioning</h2>
-
-            <p>Specs need semantic versioning, but the semantics are different from code:</p>
-
-            <pre><code>SPEC_VERSION = MAJOR.MINOR.PATCH
-
-MAJOR: Breaking changes to data model or core concepts
-MINOR: New features, non-breaking additions
-PATCH: Clarifications, bug fixes in spec language</code></pre>
-
-            <p>The spec version isn't the software version — it's the contract version. Multiple software releases might implement the same spec version.</p>
-
-            <h3>Release Artifacts</h3>
-
-            <p>Each release should include:</p>
-
-            <pre><code>release-2.4.0/
-├── SPEC.md                    # Full spec at this version
-├── SPEC_DIFF.md               # Diff from previous version
-├── MIGRATION/
-│   ├── database/              # SQL migrations
-│   ├── data/                  # Data migration scripts
-│   └── state/                 # Workflow state migrations
-├── CHANGELOG.md               # Human-readable changes
-├── ROLLBACK.md                # How to undo (if possible)
-└── DEPLOY.md                  # Deployment sequence</code></pre>
-
-            <h2>Rollback Strategy</h2>
-
-            <p>Rollback is not symmetric with deployment. Data changes make some rollbacks impossible.</p>
-
-            <h3>Rollback Classification</h3>
-
-            <p><strong>Level 1: Fully Reversible</strong></p>
-            <ul>
-                <li>Rollback = deploy previous version</li>
-                <li>No data changes</li>
-                <li>Agent generates forward and rollback migrations</li>
-            </ul>
-
-            <p><strong>Level 2: Requires Data Restore</strong></p>
-            <ul>
-                <li>Rollback = previous version + restore data from backup</li>
-                <li>Downtime while restore runs</li>
-                <li>Agent generates backup requirements in DEPLOY.md</li>
-            </ul>
-
-            <p><strong>Level 3: Forward Only</strong></p>
-            <ul>
-                <li>Rollback not possible (or cost-prohibitive)</li>
-                <li>Must fix forward</li>
-                <li>Agent flags this explicitly, requires additional approval</li>
-            </ul>
-
-            <h3>Feature Flags as Rollback Substitute</h3>
-
-            <p>For Level 2 and 3 changes, generate feature flags:</p>
+            <h2>Feature Flags as Rollback</h2>
 
             <pre><code>if feature_flags.is_enabled("new_email_system"):
-    # New code path
+    send_via_new_provider(msg)
 else:
-    # Old code path preserved</code></pre>
+    send_via_legacy(msg)  # old path preserved</code></pre>
 
-            <p>This isn't rollback — both paths are deployed. But it lets you disable new functionality without redeploying.</p>
+            <p>Not true rollback. Both paths are deployed. But you can disable new behavior without redeploying. Tradeoff: both paths need maintenance until the flag is removed.</p>
 
-            <p>The tradeoff: code complexity. Both paths must be maintained until the flag is removed.</p>
+            <h2>Release Artifacts</h2>
 
-            <h2>Greenfield vs Evolution Mode</h2>
+            <pre><code>release-2.4.0/
+├── SPEC.md          # Full spec at this version
+├── SPEC_DIFF.md     # Diff from previous version
+├── MIGRATION/
+│   ├── database/    # SQL migrations
+│   ├── data/        # Data migration scripts
+│   └── state/       # Workflow state migrations
+├── ROLLBACK.md      # How to undo (if possible)
+└── DEPLOY.md        # Deployment sequence</code></pre>
 
-            <p>The agent needs to know which mode it's operating in. This changes behavior:</p>
+            <h2>Migration Risk Levels</h2>
 
             <table>
                 <thead>
-                    <tr>
-                        <th>Aspect</th>
-                        <th>Greenfield</th>
-                        <th>Evolution</th>
-                    </tr>
+                    <tr><th>Type</th><th>Example</th><th>Risk</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Input</td>
-                        <td>Full spec</td>
-                        <td>Spec diff</td>
-                    </tr>
-                    <tr>
-                        <td>Optimize for</td>
-                        <td>Speed, completeness</td>
-                        <td>Safety, precision</td>
-                    </tr>
-                    <tr>
-                        <td>Validation</td>
-                        <td>Does output match spec?</td>
-                        <td>Does output match diff AND preserve existing behavior?</td>
-                    </tr>
-                    <tr>
-                        <td>Wrong output</td>
-                        <td>Regenerate</td>
-                        <td>Might break production</td>
-                    </tr>
-                    <tr>
-                        <td>Database</td>
-                        <td>Reset and retry</td>
-                        <td>Data loss is catastrophic</td>
-                    </tr>
-                    <tr>
-                        <td>Speed vs Safety</td>
-                        <td>Speed</td>
-                        <td>Safety</td>
-                    </tr>
+                    <tr><td>Additive</td><td>New nullable column</td><td>Safe, ship freely</td></tr>
+                    <tr><td>Additive + default</td><td>New non-null column</td><td>Safe if default is sensible</td></tr>
+                    <tr><td>Structural</td><td>Relationship change</td><td>Needs expand-migrate-contract</td></tr>
+                    <tr><td>Destructive</td><td>Column removal</td><td>Needs approval + archival</td></tr>
                 </tbody>
             </table>
 
-            <h3>When Does the Transition Happen?</h3>
+            <h2>Failure Modes</h2>
 
-            <p>A project shifts from greenfield to evolution when:</p>
+            <p><strong>Spec drift:</strong> Hotfixes shipped without updating specs. Reality and spec diverge. Fix: validate spec matches implementation before computing diffs. Never ignore drift.</p>
 
-            <ul>
-                <li>First customer is using the system</li>
-                <li>First data exists that can't be recreated</li>
-                <li>First external integration is live</li>
-            </ul>
+            <p><strong>Partial migration:</strong> Migration fails halfway. System matches neither old nor new spec. Fix: all migrations must be transactional or resumable. Generate both "continue forward" and "roll back to start" scripts.</p>
 
-            <p>Before this point: regenerate freely. After: diffs only.</p>
+            <p><strong>Cascade misses:</strong> Agent changes component A but misses that B depends on A. Fix: architecture templates capture dependencies. Integration tests exercise boundaries.</p>
 
-            <h2>New Failure Modes</h2>
-
-            <p>Evolution introduces failure modes that don't exist in greenfield:</p>
-
-            <h3>Spec Drift</h3>
-
-            <p><strong>Problem:</strong> Reality diverges from spec. Hotfixes shipped without updating specs. Manual database changes.</p>
-
-            <p><strong>Detection:</strong> Before computing diffs, validate current spec matches current implementation.</p>
-
-            <p><strong>Recovery:</strong> Update spec to match reality OR generate changes to make reality match spec. Never ignore drift.</p>
-
-            <h3>Partial Migration</h3>
-
-            <p><strong>Problem:</strong> Migration runs halfway and fails. System is in a state matching neither old nor new spec.</p>
-
-            <p><strong>Prevention:</strong> All migrations must be transactional (all-or-nothing) or resumable (can pick up where they left off).</p>
-
-            <p><strong>Recovery:</strong> Agent generates both "continue forward" and "roll back to start" scripts.</p>
-
-            <h3>Cascade Misses</h3>
-
-            <p><strong>Problem:</strong> Agent changes component A per the diff but misses that component B depends on A and also needs changes.</p>
-
-            <p><strong>Prevention:</strong> Architecture templates capture dependencies. Diff computation includes transitive dependencies.</p>
-
-            <p><strong>Detection:</strong> Integration tests that exercise component boundaries.</p>
-
-            <h2>Operationalizing Evolution</h2>
-
-            <h3>Minimum Viable Evolution Workflow</h3>
-
-            <ol>
-                <li><strong>Spec lives in version control</strong> — Every change is a commit</li>
-                <li><strong>Diff is computed automatically</strong> — CI generates diff from git</li>
-                <li><strong>Agent prompt includes diff</strong> — Standard template for evolution</li>
-                <li><strong>Migration is first-class</strong> — Dedicated section in every change set</li>
-                <li><strong>Human reviews migrations</strong> — Hard gate before deployment</li>
-                <li><strong>Rollback is documented</strong> — Part of release artifact</li>
-            </ol>
-
-            <h3>Tools Agents Need</h3>
+            <h2>Rules for Agents in Evolution Mode</h2>
 
             <ul>
-                <li><strong>Schema diff tool</strong> — Compare data models structurally</li>
-                <li><strong>API diff tool</strong> — Compare OpenAPI/GraphQL specs</li>
-                <li><strong>Codebase search</strong> — Find all usages of changed elements</li>
-                <li><strong>Test database</strong> — Run migrations safely before production</li>
-                <li><strong>Feature flag system</strong> — Enable gradual rollout</li>
+                <li>Never generate DROP without explicit human instruction</li>
+                <li>Never assume data loss is acceptable</li>
+                <li>Never skip rollback scripts for reversible changes</li>
+                <li>Flag any migration that locks production tables</li>
+                <li>Preservation is the default: anything not in the diff stays unchanged</li>
             </ul>
 
-            <h2>Principles</h2>
+            <p>A project shifts from greenfield to evolution at the first real user, first irreplaceable data, or first live integration. Before that: regenerate freely. After: diffs only.</p>
 
-            <ol>
-                <li><strong>The diff is the work order.</strong> Don't let the agent wander.</li>
-                <li><strong>Preservation is the default.</strong> Anything not in the diff should remain unchanged.</li>
-                <li><strong>Migrations are code.</strong> They deserve the same review, testing, and versioning.</li>
-                <li><strong>Breaking changes are expensive.</strong> Price accordingly.</li>
-                <li><strong>Rollback is a first-class feature.</strong> Know how to unship before shipping.</li>
-                <li><strong>Drift is debt.</strong> Pay it down regularly.</li>
-                <li><strong>Agent is conservative; human is decisive.</strong> In evolution mode, agents flag risks and wait for decisions.</li>
-            </ol>
-
-            <h2>Summary</h2>
-
-            <p>Matrix Methodology works for greenfield. Continuous Evolution extends it to live products.</p>
-
-            <p>The key insight: <strong>work from the diff, not the whole.</strong> The canonical spec is still complete, but the agent's work order is the delta between versions.</p>
-
-            <p>This requires versioned specs, first-class migration handling, API versioning, state versioning, explicit rollback classification, modified prompts and validation, and awareness of new failure modes.</p>
-
-            <p>It's more complex than greenfield. That complexity is necessary — you're managing a living system with real users and real data. The goal isn't to eliminate complexity but to structure it so agents can handle routine parts while humans make decisions that matter.</p>
-
-            <p>The agent becomes less of a builder and more of an evolver. Same methodology, different mode.</p>
-
-            <p><a href="https://www.hyrumslaw.com/">Hyrum's Law</a> warns that with enough users, every observable behavior becomes a depended-on behavior. <a href="https://en.wikipedia.org/wiki/John_Gall_(author)#Gall's_law">Gall's Law</a> says a complex system that works evolved from a simple system that worked. Both point the same direction: you evolve live systems carefully, from diffs, not by regenerating from scratch.</p>
+            <p><a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on behavior. <a href="https://en.wikipedia.org/wiki/John_Gall_(author)#Gall's_law">Gall's Law</a>: complex systems that work evolved from simple systems that worked. Both say the same thing: evolve live systems from diffs, not regeneration.</p>
 
         </section>
 

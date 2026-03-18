@@ -46,28 +46,10 @@
 
         <header class="page-header">
             <h1>The Abstraction Paradox</h1>
-            <p class="subtitle">If you understand the abstraction well enough to use it correctly, you didn't abstract anything.</p>
+            <p class="subtitle">If the agent eventually needs to understand what's behind the abstraction, you didn't actually abstract anything.</p>
         </header>
 
         <section class="content">
-
-            <h2>The Setup</h2>
-
-            <p>You have a system with three layers:</p>
-
-            <pre><code>┌─────────────────────────┐
-│   Application Logic     │  ← You write this
-├─────────────────────────┤
-│   Framework (Spring)    │  ← "Abstracted away"
-├─────────────────────────┤
-│   Runtime (JVM / OS)    │  ← "Abstracted away"
-└─────────────────────────┘</code></pre>
-
-            <p>The promise: you only need to think about the top layer. The framework handles the middle. The runtime handles the bottom. Complexity is hidden behind clean interfaces.</p>
-
-            <h2>The Paradox</h2>
-
-            <p>Write a simple REST controller:</p>
 
             <pre><code>@RestController
 public class OrderController {
@@ -77,93 +59,50 @@ public class OrderController {
     }
 }</code></pre>
 
-            <p>This works until it doesn't. Then you need to know:</p>
+            <p>Five lines. Spring "abstracts away" JSON deserialization, transaction management, connection pooling, thread handling. You don't need to think about any of that.</p>
 
-            <ul>
-                <li>How Spring deserializes JSON (Jackson defaults, property naming, null handling)</li>
-                <li>How transaction boundaries work (@Transactional propagation, isolation levels)</li>
-                <li>How the connection pool behaves under load (HikariCP sizing, timeout behavior)</li>
-                <li>How the JVM manages memory when order volume spikes (GC pauses, heap pressure)</li>
-            </ul>
+            <p>Until the first production incident. Then you need to know Jackson's null handling, @Transactional propagation levels, HikariCP timeout behavior, and GC pause characteristics. Every "abstracted" layer becomes something you must understand.</p>
 
-            <p>Each "abstracted" layer is now something you must understand to debug, tune, or scale. You haven't abstracted it. You've deferred understanding it until the cost of not understanding it is highest.</p>
+            <h2>The Paradox</h2>
 
-            <h2>The Two Outcomes</h2>
-
-            <pre><code>Path A: You understand the abstraction
-  → You carry the full mental model
-  → The "abstraction" is just an API over knowledge you already have
+            <pre><code>Path A: You understand what's behind it
+  → The abstraction is just an API over knowledge you already carry
   → Nothing was actually hidden
 
-Path B: You don't understand the abstraction
+Path B: You don't understand what's behind it
   → You can't debug failures that cross the boundary
-  → You can't make informed architectural decisions
-  → You produce code that works in demos and breaks in production</code></pre>
+  → Code works in demos, breaks in production</code></pre>
 
-            <p>There is no Path C where you productively ignore the abstraction and everything works. Spolsky called this the <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/">Law of Leaky Abstractions</a>. The paradox goes further: even when the abstraction doesn't leak, you still need to understand what's behind it to use it well.</p>
+            <p>There is no Path C where you productively ignore the abstraction and everything works. Spolsky called this the <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/">Law of Leaky Abstractions</a>. The paradox goes further: even when the abstraction doesn't leak, you still need to understand it to use it well.</p>
 
-            <h2>What This Means for AI Code Generation</h2>
+            <h2>For Agents, It's Worse</h2>
 
-            <p>Here's where it gets interesting. An LLM already knows how Spring works. It knows Jackson deserialization, HikariCP connection pooling, JVM garbage collection. That knowledge is baked into the weights from training. You never need to teach it the abstracted layers.</p>
+            <p>An LLM already knows Spring, Jackson, HikariCP. Standard abstractions are free. But <strong>your</strong> abstractions don't exist in the weights:</p>
 
-            <p>So what does the context window actually need? Not general knowledge (already free). The <strong>specific decisions for this system.</strong> "Use OAuth2 with JWT rotation." "Redis-backed sessions, 15min TTL." "Stripe tokenization, never raw card data." The LLM knows <em>how</em> to implement all of those. It needs to know <em>which ones you chose.</em></p>
-
-            <p>But there's a harder case. <strong>Your</strong> abstractions — your custom service layer, your internal SDK, your domain-specific patterns — don't exist in the weights at all. They're not in the training data. They exist only in your codebase. If they're not in the context window, they don't exist for the agent. Period.</p>
-
-            <pre><code># Standard abstraction (in the weights)
+            <pre><code>// In the training data — agent knows exactly what this does
 @Transactional
 public Order createOrder(Order order) { ... }
-# LLM knows exactly what @Transactional does. No context needed.
 
-# Your abstraction (NOT in the weights)  
-orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);
-# LLM has no idea what this does. Will hallucinate something plausible and wrong.</code></pre>
+// NOT in the training data — agent will hallucinate
+orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
 
-            <p>Standard abstractions are already understood — free. Your custom abstractions exist nowhere except your code. Hiding them behind a vague description is the worst of both worlds: the agent can't fall back on training knowledge, and you've removed the only source of truth.</p>
+            <p>Your custom service layer, your internal SDK, your domain patterns. If they're not in the context window, they don't exist for the agent. Hiding them behind a vague description is the worst of both worlds: the agent can't fall back on training knowledge, and you've removed the only source of truth.</p>
 
-            <p>Consider the <a href="matrix-methodology.html">Context Matrix</a>. Three columns: Auth, API, State. You might think: "I'll collapse those into one 'Backend' column. The agent can figure out the details."</p>
-
-            <pre><code># Abstracted (less context)
+            <pre><code># Abstracted context
 ## Backend
-- Handle login
-- Handle cart
+- Handle authentication
+- Handle cart operations
 - Handle payments
 
-# Full matrix (more context)
-## Auth          ## API           ## State
-- OAuth2+JWT     - POST /login    - Session store
-- User-scoped    - CRUD /cart/*   - Redis cache
-- PCI tokenize   - POST /pay      - Tx log + saga</code></pre>
+# Actual context the agent needs
+## Auth            ## API             ## State
+- OAuth2 + JWT     - POST /login      - Redis sessions
+- User-scoped      - CRUD /cart/*     - Cache layer
+- PCI tokenized    - POST /pay        - Saga + tx log</code></pre>
 
-            <p>The abstracted version removes information the agent needs. Login + Auth resolves differently than Login + State. Cart + API resolves differently than Payment + API. Every cell in the matrix produces a different implementation decision. Collapsing columns doesn't simplify the problem. It hides the information needed to solve it.</p>
+            <p>Every cell produces a different implementation decision. Collapsing them doesn't simplify the problem. It hides the information needed to solve it.</p>
 
-            <p>The agent needs the same understanding a human architect needs. Abstractions that hide complexity from humans hide it from agents too. And agents, like junior developers on Path B, will produce code that compiles and fails in production.</p>
-
-            <h2>The Scoping Instinct</h2>
-
-            <p>Engineers are trained to isolate. Encapsulate. Reduce scope. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise. More focused."</p>
-
-            <p>Good instinct for writing code. Wrong instinct for composing context.</p>
-
-            <p>The agent building the cart needs to see the auth model, the payment flow, the inventory rules. Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong> How the cart scopes to a user depends on how auth works. How checkout hands off depends on how payments work. How "add to cart" validates depends on how inventory works.</p>
-
-            <pre><code># Scoped context (engineer's instinct)
-"Build the cart service. Here's the cart spec."
-→ Cart works perfectly in isolation.
-→ Breaks the moment it touches auth, payments, inventory.
-
-# Full system context
-"Build the cart service. Here's the cart spec,
- the auth model, the payment flow, the inventory rules."
-→ Cart integrates correctly on first generation.</code></pre>
-
-            <p>Scoping context is just another form of abstraction. You're hiding the rest of the system behind a boundary and hoping the agent doesn't need it. It always does.</p>
-
-            <h2>The Uncomfortable Truth</h2>
-
-            <p>Abstraction doesn't reduce complexity. It relocates it. From "things you deal with now" to "things that ambush you later." The total complexity of the system is conserved.</p>
-
-            <p>You don't get to build a component. You build a component <em>within a system</em>, or you debug the system the agent imagined around it.</p>
+            <p>Abstraction doesn't reduce complexity. It relocates it. From "things you deal with now" to "things that ambush you later." For humans and agents alike, the total complexity is conserved.</p>
 
         </section>
 

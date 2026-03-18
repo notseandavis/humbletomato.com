@@ -50,49 +50,49 @@
 
         <section class="content">
 
-            <h2>The Baseline Is Massive</h2>
+            <pre><code># What the model knows (before you say anything)
 
-            <p>The model already knows how to write C. And Java. And JavaScript, Python, Rust, Go, Ruby, TypeScript, Kotlin, Swift. It knows assembly. It knows binary encoding. It's read more code than any human ever will.</p>
+"Build me a REST API with OAuth2"
+→ It already knows Express, FastAPI, Spring Boot, Gin, Rails...
+→ It already knows JWT, sessions, PKCE, SAML, API keys...
+→ It already knows PostgreSQL, MongoDB, Redis, DynamoDB...
 
-            <p>But it's not just languages. It knows:</p>
+# What it doesn't know
 
-            <ul>
-                <li>How to build a REST API, a GraphQL schema, a WebSocket server</li>
-                <li>How to structure a React app, a Vue app, an Angular app</li>
-                <li>How to design a relational schema, a document store, a cache layer</li>
-                <li>How to write a CLI tool, a daemon, a browser extension</li>
-                <li>How to handle auth, sessions, encryption, rate limiting</li>
-                <li>How to lay out a dashboard, a form, a checkout flow</li>
-                <li>How UX patterns work — navigation, feedback, error states, accessibility</li>
-                <li>How to write tests, CI pipelines, Dockerfiles, Kubernetes manifests</li>
-            </ul>
+→ Which framework YOUR project uses
+→ Which auth pattern YOUR system needs
+→ Which database YOUR team chose</code></pre>
 
-            <p>All of this is free. It's baked into the weights from training. You never need to explain any of it.</p>
+            <h2>The Gap Is Decisions, Not Knowledge</h2>
 
-            <p>Peter Naur argued in <a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a> that the real program lives in the programmer's mind, not the code. The code is just one expression of a deeper mental model. With LLMs, that theory — decades of programming knowledge across every paradigm — is now embedded in the weights.</p>
+            <pre><code># ❌ Wasted spec lines (the model already knows this)
+"Pagination divides results into pages for performance.
+Use LIMIT and OFFSET in SQL queries."
 
-            <h2>What It Doesn't Know</h2>
+# ✅ What your spec actually needs to say
+Paginate with cursor-based pagination.
+25 items per page, sorted by created_at DESC.
+Return next_cursor in response body.</code></pre>
 
-            <p>What the model doesn't know is what <strong>you</strong> want. That's the only missing piece.</p>
+            <p>The model has read more code than any human ever will. REST APIs, React apps, CI pipelines, Dockerfiles, Kubernetes manifests, auth flows, database schemas. All baked into the weights.</p>
 
-            <pre><code>Already in the model:
-  ✓ How to implement OAuth2 with JWT
-  ✓ How to implement OAuth2 with sessions
-  ✓ How to implement OAuth2 with PKCE
-  ✓ How to implement SAML
-  ✓ How to implement API keys
-  ✓ ... hundreds more auth patterns
+            <p>Your job isn't teaching it to code. Your job is making decisions.</p>
 
-Not in the model:
-  ✗ Which one YOUR system uses</code></pre>
+            <h2>What This Means for Specs</h2>
 
-            <p>The model can build anything. It just doesn't know which thing to build. That's what your spec provides — not the <em>how</em>, but the <em>what</em> and the <em>which</em>.</p>
+            <pre><code># Don't explain HOW (it knows)
+"To create a WebSocket connection, use the ws library
+and handle the 'connection' event..."
 
-            <h2>The Implication</h2>
+# Specify WHAT and WHICH (it doesn't know)
+WebSocket server on /ws.
+Authenticate via JWT in the first message.
+Broadcast to room members only.
+Heartbeat every 30s, disconnect after 3 missed.</code></pre>
 
-            <p>Your spec doesn't need to explain how pagination works, or how to structure a React component, or how to write a SQL migration. The model already knows all of that better than most engineers do.</p>
+            <p>Every line of spec should be a decision, not a tutorial. If you're explaining how a technology works, delete that line.</p>
 
-            <p>Your spec needs to say: paginate with cursor-based pagination, 25 items per page, sorted by created date descending. The implementation knowledge is free. The decisions are what cost you.</p>
+            <p>Peter Naur argued in <a href="https://pages.cs.wisc.edu/~remzi/Naur.pdf">Programming as Theory Building</a> that the real program lives in the programmer's mind, not the code. LLMs now carry that theory across every paradigm. What's missing is your specific intent.</p>
 
         </section>
 

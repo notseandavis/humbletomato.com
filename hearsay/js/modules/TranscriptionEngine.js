@@ -24,7 +24,7 @@ export class TranscriptionEngine {
         this._segmentBuffer = [];
         
         // Adaptive threshold tracking
-        this.ambientNoiseLevel = 0.01;
+        this.ambientNoiseLevel = 0.002;
         this.noiseSamples = [];
         this.maxNoiseSamples = 50;
         
@@ -77,7 +77,7 @@ export class TranscriptionEngine {
         return this.mode;
     }
 
-    async loadModel(modelSize = 'base.en') {
+    async loadModel(modelSize = 'small.en') {
         const mode = this.detectMode();
 
         if (mode === 'webspeech') {
@@ -509,7 +509,7 @@ export class TranscriptionEngine {
             const median = sorted[Math.floor(sorted.length / 2)];
             
             // Adaptive threshold is 3x the median noise level
-            this.ambientNoiseLevel = Math.max(0.005, Math.min(0.05, median * 3));
+            this.ambientNoiseLevel = Math.max(0.001, Math.min(0.03, median * 2));
         }
     }
 

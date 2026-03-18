@@ -305,34 +305,191 @@ export class TranscriptionEngine {
     }
 
     /**
-     * Spectral noise gate: estimate noise floor from first 0.5s, subtract it
+     * Spectral noise reduction via frequency-domain noise profiling.
+     * Learns which frequency bins have persistent energy (fans, HVAC, hum)
+     * and surgically suppresses them while preserving speech frequencies.
      */
     applyNoiseGate(audioData, sampleRate = 16000) {
-        const noiseSampleLength = Math.min(Math.floor(sampleRate * 0.5), audioData.length);
-        
-        // Estimate noise floor from first 0.5s
-        let noiseFloorSum = 0;
-        for (let i = 0; i < noiseSampleLength; i++) {
-            noiseFloorSum += Math.abs(audioData[i]);
+        const fftSize = 512;
+        const hopSize = fftSize / 2;
+        const numFrames = Math.floor((audioData.length - fftSize) / hopSize) + 1;
+        if (numFrames < 1) return audioData;
+
+        // Hanning window
+        const window = new Float32Array(fftSize);
+        for (let i = 0; i < fftSize; i++) {
+            window[i] = 0.5 * (1 - Math.cos(2 * Math.PI * i / (fftSize - 1)));
         }
-        const noiseFloor = noiseFloorSum / noiseSampleLength;
-        
-        // Apply gate with smooth transition
-        const gateThreshold = noiseFloor * 2.0;
-        const gated = new Float32Array(audioData.length);
-        
-        for (let i = 0; i < audioData.length; i++) {
-            const abs = Math.abs(audioData[i]);
-            if (abs > gateThreshold) {
-                gated[i] = audioData[i];
+
+        const halfFFT = fftSize / 2 + 1;
+
+        // Compute magnitude spectrogram for this chunk
+        const magnitudes = [];
+        const phases = [];
+        for (let f = 0; f < numFrames; f++) {
+            const offset = f * hopSize;
+            const real = new Float32Array(fftSize);
+            const imag = new Float32Array(fftSize);
+            for (let i = 0; i < fftSize; i++) {
+                real[i] = (audioData[offset + i] || 0) * window[i];
+                imag[i] = 0;
+            }
+            this._fftInPlace(real, imag);
+            const mag = new Float32Array(halfFFT);
+            const phase = new Float32Array(halfFFT);
+            for (let i = 0; i < halfFFT; i++) {
+                mag[i] = Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
+                phase[i] = Math.atan2(imag[i], real[i]);
+            }
+            magnitudes.push(mag);
+            phases.push(phase);
+        }
+
+        // Update the running noise profile (EMA of magnitude per bin)
+        // Bins with consistently high energy relative to their variance = noise
+        if (!this._noiseProfile) {
+            // First chunk: initialize noise profile from this audio
+            this._noiseProfile = new Float32Array(halfFFT);
+            this._noiseVariance = new Float32Array(halfFFT);
+            this._noiseFrameCount = 0;
+        }
+
+        // Compute mean magnitude per bin for this chunk
+        const chunkMean = new Float32Array(halfFFT);
+        for (let i = 0; i < halfFFT; i++) {
+            let sum = 0;
+            for (let f = 0; f < numFrames; f++) sum += magnitudes[f][i];
+            chunkMean[i] = sum / numFrames;
+        }
+
+        // Compute variance per bin for this chunk (low variance = steady noise)
+        const chunkVar = new Float32Array(halfFFT);
+        for (let i = 0; i < halfFFT; i++) {
+            let sum = 0;
+            for (let f = 0; f < numFrames; f++) {
+                const diff = magnitudes[f][i] - chunkMean[i];
+                sum += diff * diff;
+            }
+            chunkVar[i] = sum / numFrames;
+        }
+
+        // Update noise profile with EMA
+        const alpha = this._noiseFrameCount < 5 ? 0.5 : 0.1; // Learn fast initially
+        for (let i = 0; i < halfFFT; i++) {
+            this._noiseProfile[i] = this._noiseProfile[i] * (1 - alpha) + chunkMean[i] * alpha;
+            this._noiseVariance[i] = this._noiseVariance[i] * (1 - alpha) + chunkVar[i] * alpha;
+        }
+        this._noiseFrameCount++;
+
+        // Determine which bins are "stationary noise" vs speech
+        // Low coefficient of variation (CV = stddev/mean) = steady = noise
+        const suppressionGain = new Float32Array(halfFFT);
+        for (let i = 0; i < halfFFT; i++) {
+            const mean = this._noiseProfile[i];
+            const stddev = Math.sqrt(this._noiseVariance[i]);
+            if (mean < 1e-8) {
+                suppressionGain[i] = 1.0; // Nothing there, leave it
+                continue;
+            }
+            const cv = stddev / mean; // Coefficient of variation
+
+            // cv < 0.3 = very steady (fan/HVAC), suppress aggressively
+            // cv 0.3-0.8 = somewhat steady, moderate suppression
+            // cv > 0.8 = dynamic (speech), don't suppress
+            if (cv < 0.3) {
+                suppressionGain[i] = 0.05; // Kill it (95% reduction)
+            } else if (cv < 0.8) {
+                // Smooth transition
+                const t = (cv - 0.3) / 0.5; // 0..1
+                suppressionGain[i] = 0.05 + t * 0.95;
             } else {
-                // Soft gate (reduce but don't eliminate)
-                const ratio = abs / gateThreshold;
-                gated[i] = audioData[i] * ratio * 0.5;
+                suppressionGain[i] = 1.0; // Leave speech alone
             }
         }
-        
-        return gated;
+
+        // Apply spectral subtraction and reconstruct via overlap-add
+        const output = new Float32Array(audioData.length);
+        const windowSum = new Float32Array(audioData.length);
+
+        for (let f = 0; f < numFrames; f++) {
+            const offset = f * hopSize;
+            // Apply suppression in frequency domain
+            const real = new Float32Array(fftSize);
+            const imag = new Float32Array(fftSize);
+            for (let i = 0; i < halfFFT; i++) {
+                const newMag = magnitudes[f][i] * suppressionGain[i];
+                real[i] = newMag * Math.cos(phases[f][i]);
+                imag[i] = newMag * Math.sin(phases[f][i]);
+            }
+            // Mirror for inverse FFT
+            for (let i = halfFFT; i < fftSize; i++) {
+                real[i] = real[fftSize - i];
+                imag[i] = -imag[fftSize - i];
+            }
+            // Inverse FFT
+            this._ifftInPlace(real, imag);
+            // Overlap-add with window
+            for (let i = 0; i < fftSize; i++) {
+                if (offset + i < output.length) {
+                    output[offset + i] += real[i] * window[i];
+                    windowSum[offset + i] += window[i] * window[i];
+                }
+            }
+        }
+
+        // Normalize by window sum
+        const result = new Float32Array(audioData.length);
+        for (let i = 0; i < audioData.length; i++) {
+            result[i] = windowSum[i] > 1e-8 ? output[i] / windowSum[i] : audioData[i];
+        }
+
+        return result;
+    }
+
+    /** Radix-2 in-place FFT */
+    _fftInPlace(real, imag) {
+        const n = real.length;
+        // Bit-reversal permutation
+        for (let i = 1, j = 0; i < n; i++) {
+            let bit = n >> 1;
+            for (; j & bit; bit >>= 1) j ^= bit;
+            j ^= bit;
+            if (i < j) {
+                [real[i], real[j]] = [real[j], real[i]];
+                [imag[i], imag[j]] = [imag[j], imag[i]];
+            }
+        }
+        // FFT butterflies
+        for (let len = 2; len <= n; len <<= 1) {
+            const halfLen = len >> 1;
+            const angle = -2 * Math.PI / len;
+            const wR = Math.cos(angle), wI = Math.sin(angle);
+            for (let i = 0; i < n; i += len) {
+                let curR = 1, curI = 0;
+                for (let j = 0; j < halfLen; j++) {
+                    const tR = curR * real[i + j + halfLen] - curI * imag[i + j + halfLen];
+                    const tI = curR * imag[i + j + halfLen] + curI * real[i + j + halfLen];
+                    real[i + j + halfLen] = real[i + j] - tR;
+                    imag[i + j + halfLen] = imag[i + j] - tI;
+                    real[i + j] += tR;
+                    imag[i + j] += tI;
+                    const newR = curR * wR - curI * wI;
+                    curI = curR * wI + curI * wR;
+                    curR = newR;
+                }
+            }
+        }
+    }
+
+    /** Inverse FFT via conjugate trick */
+    _ifftInPlace(real, imag) {
+        const n = real.length;
+        for (let i = 0; i < n; i++) imag[i] = -imag[i];
+        this._fftInPlace(real, imag);
+        for (let i = 0; i < n; i++) {
+            real[i] /= n;
+            imag[i] = -imag[i] / n;
+        }
     }
 
     /**

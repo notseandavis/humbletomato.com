@@ -16,73 +16,52 @@
 
         <header class="page-header">
             <h1>Continuous Evolution</h1>
-            <p class="subtitle">Extending spec-driven development to live products with real users, real data, and real constraints. Work from diffs, not regeneration.</p>
+            <p class="subtitle">Spec-driven development for live systems. Work from diffs, not regeneration.</p>
         </header>
 
         <section class="content">
 
-            <div class="callout">
-                <p><span class="callout-label">Greenfield:</span><span class="callout-detail"> Agent builds from complete spec. Spec → Agent → System.</span></p>
-                <p><span class="callout-label">Evolution:</span><span class="callout-detail"> Agent builds from the delta. Spec(v1) → Spec(v2) → Diff → Agent → Targeted Changes.</span></p>
-            </div>
+            <pre><code># Greenfield: build from complete spec
+Spec → Agent → System
 
-            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That stops working when you have paying customers, production data, and API contracts you can't break.</p>
+# Evolution: build from the delta
+Spec(v1) → Spec(v2) → Diff → Agent → Targeted Changes</code></pre>
 
-            <p>The fix: same spec-driven approach, but the agent works from the <strong>diff between spec versions</strong>, not the whole spec.</p>
+            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. The fix: agents work from <strong>spec version diffs</strong>, not whole specs.</p>
 
             <h2>Expand-Migrate-Contract</h2>
 
-            <p>The safe pattern for structural database changes:</p>
-
             <pre><code># Phase 1: Expand — add new alongside old
 ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
-# Code writes to BOTH columns, reads from old
+# Code writes to BOTH, reads from old
 
 # Phase 2: Migrate — backfill and switch
 UPDATE users SET email_v2 = normalize(email);
-# Code reads from new, still writes to both
+# Code reads from new, writes to both
 
 # Phase 3: Contract — remove old (one-way door)
 ALTER TABLE users DROP COLUMN email;
 # Rollback no longer possible</code></pre>
 
-            <p>This is slow by design. In greenfield you sprint. In evolution you walk.</p>
+            <p>Slow by design. Greenfield sprints, evolution walks.</p>
 
             <h2>Versioned Workflow State</h2>
-
-            <p>User starts a workflow Monday. You deploy Tuesday. They resume Wednesday. Their state assumes the old world.</p>
 
             <pre><code>{
   "workflow_id": "abc123",
   "schema_version": "2024.01.15",
-  "current_step": "awaiting_approval",
-  "data": { ... }
+  "current_step": "awaiting_approval"
 }
-
-# On load: check schema_version
-# Match → proceed
-# Mismatch → migrate state, or route to old code path</code></pre>
+# On load: check version → proceed or migrate</code></pre>
 
             <h2>Feature Flags as Rollback</h2>
 
-            <pre><code>if feature_flags.is_enabled("new_email_system"):
-    send_via_new_provider(msg)
+            <pre><code>if feature_flags.is_enabled("new_email"):
+    send_via_new(msg)
 else:
-    send_via_legacy(msg)  # old path preserved</code></pre>
+    send_via_legacy(msg)</code></pre>
 
-            <p>Not true rollback. Both paths are deployed. But you can disable new behavior without redeploying. Tradeoff: both paths need maintenance until the flag is removed.</p>
-
-            <h2>Release Artifacts</h2>
-
-            <pre><code>release-2.4.0/
-├── SPEC.md          # Full spec at this version
-├── SPEC_DIFF.md     # Diff from previous version
-├── MIGRATION/
-│   ├── database/    # SQL migrations
-│   ├── data/        # Data migration scripts
-│   └── state/       # Workflow state migrations
-├── ROLLBACK.md      # How to undo (if possible)
-└── DEPLOY.md        # Deployment sequence</code></pre>
+            <p>Not true rollback — both paths deployed. But you can disable without redeploying.</p>
 
             <h2>Migration Risk Levels</h2>
 
@@ -91,34 +70,32 @@ else:
                     <tr><th>Type</th><th>Example</th><th>Risk</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Additive</td><td>New nullable column</td><td>Safe, ship freely</td></tr>
-                    <tr><td>Additive + default</td><td>New non-null column</td><td>Safe if default is sensible</td></tr>
+                    <tr><td>Additive</td><td>New nullable column</td><td>Safe</td></tr>
                     <tr><td>Structural</td><td>Relationship change</td><td>Needs expand-migrate-contract</td></tr>
-                    <tr><td>Destructive</td><td>Column removal</td><td>Needs approval + archival</td></tr>
+                    <tr><td>Destructive</td><td>Column removal</td><td>Needs approval</td></tr>
                 </tbody>
             </table>
 
             <h2>Failure Modes</h2>
 
-            <p><strong>Spec drift:</strong> Hotfixes shipped without updating specs. Reality and spec diverge. Fix: validate spec matches implementation before computing diffs. Never ignore drift.</p>
+            <p><strong>Spec drift:</strong> Hotfixes without updating specs. Fix: validate spec matches code before diffs.</p>
 
-            <p><strong>Partial migration:</strong> Migration fails halfway. System matches neither old nor new spec. Fix: all migrations must be transactional or resumable. Generate both "continue forward" and "roll back to start" scripts.</p>
+            <p><strong>Partial migration:</strong> Migration fails halfway. Fix: transactional or resumable migrations.</p>
 
-            <p><strong>Cascade misses:</strong> Agent changes component A but misses that B depends on A. Fix: architecture templates capture dependencies. Integration tests exercise boundaries.</p>
+            <p><strong>Cascade misses:</strong> Agent changes A, misses dependent B. Fix: architecture templates capture dependencies.</p>
 
-            <h2>Rules for Agents in Evolution Mode</h2>
+            <h2>Rules for Agents</h2>
 
             <ul>
-                <li>Never generate DROP without explicit human instruction</li>
+                <li>Never DROP without explicit instruction</li>
                 <li>Never assume data loss is acceptable</li>
-                <li>Never skip rollback scripts for reversible changes</li>
-                <li>Flag any migration that locks production tables</li>
-                <li>Preservation is the default: anything not in the diff stays unchanged</li>
+                <li>Flag migrations that lock production tables</li>
+                <li>Preservation is default: anything not in diff stays unchanged</li>
             </ul>
 
-            <p>A project shifts from greenfield to evolution at the first real user, first irreplaceable data, or first live integration. Before that: regenerate freely. After: diffs only.</p>
+            <p>A project shifts from greenfield to evolution at the first real user or irreplaceable data. Before: regenerate freely. After: diffs only.</p>
 
-            <p><a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on behavior. <a href="https://en.wikipedia.org/wiki/John_Gall_(author)#Gall's_law">Gall's Law</a>: complex systems that work evolved from simple systems that worked. Both say the same thing: evolve live systems from diffs, not regeneration.</p>
+            <p><a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on. <a href="https://en.wikipedia.org/wiki/John_Gall_(author)#Gall's_law">Gall's Law</a>: complex systems that work evolved from simple systems that worked. Both say: evolve from diffs, not regeneration.</p>
 
         </section>
 

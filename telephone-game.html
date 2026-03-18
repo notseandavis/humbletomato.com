@@ -52,93 +52,62 @@
 
         <section class="content">
 
-            <h2>The Setup</h2>
+            <pre><code># Option A: Direct (less loss)
+PRD + Architecture  -->  Code Agent  -->  Code
 
-            <p>You have a PRD and an architecture doc. You want an AI agent to generate code. Two options:</p>
+# Option B: Extra step (more loss)
+PRD + Architecture  -->  Synthesis Agent  -->  "Unified Spec"  -->  Code Agent  -->  Code</code></pre>
 
-            <pre><code>Option A:  PRD + Architecture  -->  Code Agent  -->  Code
+            <p>Option B looks cleaner. You're "polishing" the inputs. But every LLM pass loses information. Option B is strictly worse.</p>
 
-Option B:  PRD + Architecture  -->  Synthesis Agent  -->  "Unified Spec"  -->  Code Agent  -->  Code</code></pre>
+            <h2>Why Each Step Loses Information</h2>
 
-            <p>Option B feels more organized. You're "cleaning up" the inputs, making them "easier for the agent." Surely a polished, unified spec produces better code than two messy documents?</p>
+            <p>Shannon's <a href="https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem">Data Processing Inequality</a>: processing can only preserve or destroy information, never create it.</p>
 
-            <p><a href="https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem">Information theory</a> says no. Option B is strictly worse. Alfred Korzybski put it differently: <a href="https://en.wikipedia.org/wiki/Map%E2%80%93territory_relation">the map is not the territory</a>. Every summary, every intermediate representation, is a map of a map — each one losing detail the next layer needed.</p>
+            <pre><code># What the synthesis agent does to your docs:
+- Summarizes sections       → detail lost
+- Paraphrases ("must" → "should")  → meaning shifted
+- Drops "irrelevant" details  → edge cases lost
+- Guesses at ambiguities     → sometimes wrong
 
-            <h2>The Telephone Game</h2>
+# Cascading drift in multi-step chains:
+PRD + Arch  -->  "Unified Spec"     (some info lost)
+            -->  "Task Breakdown"   (more lost)
+            -->  Code               (working from degraded intent)</code></pre>
 
-            <p>Remember the game? A message passes through a chain of people. Each person hears it, processes it, and passes it along. The message at the end is always degraded. Never improved.</p>
+            <p>The synthesis agent can't know what the code agent needs. It compresses based on general heuristics. Details it drops as noise might be exactly what handles an edge case downstream.</p>
 
-            <p>Every LLM call works the same way. When the synthesis agent reads your PRD and architecture doc, it:</p>
+            <h2>"But My Docs Are Messy"</h2>
 
-            <ul>
-                <li>Summarizes some sections, losing detail</li>
-                <li>Paraphrases others, shifting meaning ("must" becomes "should")</li>
-                <li>Drops things it considers "irrelevant" that matter for implementation</li>
-                <li>Resolves ambiguities by guessing, sometimes wrong</li>
-                <li>Loses positional context (which section referenced which)</li>
-            </ul>
+            <p>Modern LLMs handle messy documents fine. When you "clean up" docs through an LLM, you're not removing noise. You're removing information you can't distinguish from noise.</p>
 
-            <p>The synthesized spec contains at best the same information as the originals. Usually less. This isn't a guess. It's a mathematical law.</p>
+            <h2>When Extra Steps Help vs Hurt</h2>
 
-            <h2>The Data Processing Inequality</h2>
-
-            <p>Shannon's Data Processing Inequality states: processing cannot create information, only preserve or destroy it. If you have data X and process it into Z:</p>
-
-            <pre><code>Information in Z about the original ≤ Information in X about the original</code></pre>
-
-            <p>No amount of clever prompting changes this. The synthesis agent cannot know what the code agent will need. It compresses based on general heuristics, not downstream requirements. Details it discards as noise might be exactly what the code agent needs to handle an edge case.</p>
-
-            <h2>It Gets Worse With Each Step</h2>
-
-            <p>Each additional LLM step in a chain compounds the loss:</p>
-
-            <pre><code>Step 1:  PRD + Arch  -->  "Unified Spec"     (some information lost)
-Step 2:  "Unified Spec"  -->  "Task Breakdown"  (more lost)
-Step 3:  "Task Breakdown"  -->  Code             (even more lost)</code></pre>
-
-            <p>Research on LLM chains calls this "cascading drift." An error or omission in step 1 propagates to step 2, where it gets amplified. By step 3, the code agent is working from a degraded version of your original intent.</p>
-
-            <p>The direct path has one step. One chance for loss. Every intermediate step is another round of telephone.</p>
-
-            <h2>But What About "Cleaning Up" Messy Docs?</h2>
-
-            <p>This is the intuition that leads people astray. Messy docs feel like they need preprocessing. But modern LLMs handle messy, real-world documents better than you'd expect. They can extract what they need from imperfect inputs.</p>
-
-            <p>When you "clean up" docs through an LLM, you're not removing noise. You're removing information you can't distinguish from noise. The code agent might have used that "noise" to make a better decision.</p>
-
-            <h2>When Intermediate Steps DO Help</h2>
-
-            <p>The inequality has one exception: processing that adds genuinely new information.</p>
+            <p>The exception: steps that add genuinely new information.</p>
 
             <table>
                 <thead>
-                    <tr><th>Helps (adds information)</th><th>Hurts (loses information)</th></tr>
+                    <tr><th>Adds information (good)</th><th>Loses information (bad)</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Human resolves conflict between PRD and architecture</td><td>LLM "unifies" two documents into one</td></tr>
+                    <tr><td>Human resolves conflict between PRD and arch</td><td>LLM "unifies" two docs into one</td></tr>
                     <tr><td>Domain expert adds implicit constraints</td><td>LLM summarizes for "clarity"</td></tr>
-                    <tr><td>Generating tests (new artifact, new information)</td><td>Restructuring docs to "help the agent"</td></tr>
+                    <tr><td>Generating tests (new artifact)</td><td>Restructuring docs to "help the agent"</td></tr>
                     <tr><td>Validation that flags contradictions</td><td>Paraphrasing requirements</td></tr>
                 </tbody>
             </table>
 
-            <p>Human synthesis can add value because humans bring knowledge not in the documents. LLM synthesis can only rearrange what's already there, and it always loses something in the process.</p>
+            <p>A human writing a spec in the <a href="matrix-methodology.html">Matrix Methodology</a> adds signal: mapping "user enters address" to "REST controller with @Valid request body." That mapping didn't exist in either source doc. An LLM "unifying" documents can only rearrange what's there, losing some along the way.</p>
 
-            <h2>The Spec as Validation Point</h2>
+            <h2>The Rule</h2>
 
-            <p>This is why writing a spec in the <a href="matrix-methodology.html">Matrix Methodology</a> works despite the telephone game principle. A human writing a spec isn't compressing two documents into one. They're resolving ambiguity and adding implementation decisions — mapping "user enters address" to "REST controller with @Valid request body." That mapping didn't exist in the business requirements or the architecture. It's new information.</p>
+            <pre><code># Optimal pipeline = shortest pipeline
+Your intent  -->  Agent  -->  Output
 
-            <p>If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code. A human creating a spec adds signal. An LLM "unifying" documents loses it.</p>
+# With 200K token context windows, your docs probably fit.
+# Every extra LLM step is another round of telephone.</code></pre>
 
-            <h2>The Practical Takeaway</h2>
-
-            <p>Feed your AI agents the richest, rawest context you can. Don't preprocess "for clarity." Don't synthesize "for convenience." Every transformation step between your intent and the generated output is a round of telephone.</p>
-
-            <p>If your documents fit in the context window (and with 200K token windows, they usually do), the optimal pipeline is the shortest one:</p>
-
-            <pre><code>Your intent  -->  Agent  -->  Output</code></pre>
-
-            <p>Fewer steps. Richer context. Less telephone.</p>
+            <p>Feed agents the rawest context you can. Don't preprocess for clarity. Don't synthesize for convenience. Fewer steps, richer context, less telephone.</p>
 
         </section>
 

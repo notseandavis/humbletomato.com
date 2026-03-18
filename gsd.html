@@ -54,44 +54,28 @@
 
             <p><strong>Source:</strong> <a href="https://github.com/gsd-build/get-shit-done">GitHub</a> · <a href="https://gsd.build">gsd.build</a> · Created by <a href="https://github.com/glittercowboy">Lex Christopherson</a></p>
 
-            <h2>The Problem: Context Rot</h2>
-
-            <p>AI quality degrades as the context window fills. At 0-30% context, output is thorough and comprehensive. Past 50%, the model starts rushing and cutting corners. Past 70%, hallucinations and forgotten requirements appear. Task 50 gets worse output than task 1 from the same model.</p>
-
-            <p>GSD's solution: spawn a fresh sub-agent for each task. Every task gets a clean 200K token window with only what it needs. No conversation history baggage.</p>
-
-            <h2>What It Actually Is</h2>
-
-            <p>GSD v1 is ~50 markdown files: 29 slash commands, 12 agent definitions, and 2 hooks. No proprietary runtime. Everything runs on native Claude Code features. A Node.js CLI helper handles deterministic logic (file existence checks, config loading) so the LLM focuses on reasoning, not bookkeeping.</p>
-
-            <p>GSD v2 is a standalone TypeScript CLI that programmatically controls agent sessions instead of relying on the LLM to follow prompt instructions. It adds crash recovery, stuck detection, cost tracking, and git worktree isolation.</p>
-
-            <h2>The Four-Command Workflow</h2>
-
-            <pre><code>/gsd:new-project    # Deep interview + parallel research agents
+            <pre><code>/gsd:new-project    # Interview + 4 parallel research agents
 /gsd:discuss-phase  # Capture preferences for gray areas
-/gsd:build          # Atomic plans, wave parallelism, fresh agents
-/gsd:verify         # Goal-backward: "is it TRUE?" not "was it done?"</code></pre>
+/gsd:build          # Atomic plans → wave parallelism → fresh agents
+/gsd:verify         # "Is it TRUE?" not "Was it done?"</code></pre>
 
-            <h3>New Project</h3>
+            <h2>Core Idea</h2>
 
-            <p>Interviews you about what you're building while spawning four parallel research agents: stack, features, architecture, and pitfalls. Each investigates independently, then a synthesizer merges their findings.</p>
+            <p>AI output degrades as context fills. Task 50 gets worse results than task 1. GSD spawns a fresh sub-agent per task, so every task gets a clean 200K token window with only what it needs.</p>
 
-            <p>Outputs: <code>PROJECT.md</code>, <code>REQUIREMENTS.md</code>, <code>ROADMAP.md</code>, <code>STATE.md</code></p>
+            <h2>What's In the Box</h2>
 
-            <h3>Discuss Phase</h3>
+            <p><strong>v1:</strong> ~50 markdown files (29 slash commands, 12 agents, 2 hooks). Runs on native Claude Code. A Node.js CLI handles deterministic logic so the LLM focuses on reasoning.</p>
 
-            <p>The most underrated feature. Before planning, GSD identifies gray areas specific to what you're building (layout choices for visual features, error handling for APIs, structure for content systems) and asks targeted questions. Your answers go into <code>CONTEXT.md</code> and every subsequent agent gets them.</p>
+            <p><strong>v2:</strong> Standalone TypeScript CLI that programmatically controls agent sessions. Adds crash recovery, stuck detection, cost tracking, and git worktree isolation.</p>
 
-            <p>Skipping this is technically optional but is the #1 source of misaligned output. Plans inherit assumptions that CONTEXT.md would have prevented.</p>
+            <h2>How Each Command Works</h2>
 
-            <h3>Build</h3>
+            <p><strong>new-project</strong> interviews you while spawning 4 parallel research agents (stack, features, architecture, pitfalls). Outputs: <code>PROJECT.md</code>, <code>REQUIREMENTS.md</code>, <code>ROADMAP.md</code>, <code>STATE.md</code>.</p>
 
-            <p>Creates atomic <code>PLAN.md</code> files, each containing 2-3 tasks that fit in ~50% of a context window. Plans run in waves: independent tasks run in parallel, dependent tasks wait for their wave.</p>
+            <p><strong>discuss-phase</strong> identifies gray areas and asks targeted questions. Answers go into <code>CONTEXT.md</code>. Every subsequent agent inherits them. Skipping this is the #1 source of misaligned output.</p>
 
-            <p>Plans are prompts. Not documents that become prompts. The sub-agent reads <code>PLAN.md</code> directly as its executable instruction. No summarization or interpretation layer. Plan quality directly determines execution quality.</p>
-
-            <p>Plans use XML structure optimized for Claude's training:</p>
+            <p><strong>build</strong> creates atomic <code>PLAN.md</code> files (2-3 tasks each, ~50% context window). Independent plans run in parallel waves. Each plan is the prompt. The sub-agent reads it directly as its instruction:</p>
 
             <pre><code>&lt;task type="auto"&gt;
   &lt;name&gt;Create login endpoint&lt;/name&gt;
@@ -100,11 +84,9 @@
   &lt;verify&gt;curl POST localhost:3000/api/auth/login returns 200&lt;/verify&gt;
 &lt;/task&gt;</code></pre>
 
-            <p>Each plan produces an atomic git commit. Each task gets its own clean agent session.</p>
+            <p>Each plan = one atomic git commit, one clean agent session.</p>
 
-            <h3>Verify</h3>
-
-            <p>Goal-backward verification checks whether goals are TRUE, not whether tasks were completed. "Can a user sign up with email?" not "Does the signup route exist?" If verification fails, new plans are created rather than retrying the same tasks.</p>
+            <p><strong>verify</strong> checks goals, not task completion. "Can a user sign up with email?" not "Does the signup route exist?" Failures generate new plans instead of retrying.</p>
 
             <h2>Strengths</h2>
 
@@ -113,11 +95,10 @@
                     <tr><th>Strength</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Context engineering</td><td>Fresh 200K windows per task. No degradation from first to last.</td></tr>
-                    <tr><td>Simple workflow</td><td>Four commands. Complexity is in the system, not the interface.</td></tr>
-                    <tr><td>Wave parallelism</td><td>Independent tasks run simultaneously. Works best with vertical slice decomposition.</td></tr>
-                    <tr><td>Plan checker</td><td>Plans pass verification (up to 3 iterations) before execution. Checks scope, dependencies, conflicts.</td></tr>
-                    <tr><td>Honest creator</td><td>v2 README openly acknowledges v1's limitations. No context control, no crash recovery, no observability.</td></tr>
+                    <tr><td>Fresh context per task</td><td>200K windows. No degradation from first to last task.</td></tr>
+                    <tr><td>Four commands</td><td>Complexity is in the system, not the interface.</td></tr>
+                    <tr><td>Wave parallelism</td><td>Independent tasks run simultaneously.</td></tr>
+                    <tr><td>Plan verification</td><td>Up to 3 iterations before execution. Checks scope, deps, conflicts.</td></tr>
                 </tbody>
             </table>
 
@@ -128,21 +109,19 @@
                     <tr><th>Limitation</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Token hungry</td><td>Full workflow burns through Pro plan limits fast. Multi-agent spawning is expensive.</td></tr>
-                    <tr><td>Greenfield bias</td><td>Large brownfield codebases with deep dependency chains can exceed what a single task comprehends.</td></tr>
-                    <tr><td>Planning quality varies</td><td>Quality depends on the discuss phase. Skip it and plans inherit bad assumptions.</td></tr>
-                    <tr><td>Solo-oriented</td><td>Less structure for multi-person coordination than frameworks like <a href="bmad.html">BMAD</a>.</td></tr>
-                    <tr><td>MCP incompatibility</td><td>Custom sub-agents can't use MCP servers (Claude Code limitation, not GSD's fault).</td></tr>
+                    <tr><td>Token hungry</td><td>Multi-agent spawning burns through Pro plan limits fast.</td></tr>
+                    <tr><td>Greenfield bias</td><td>Deep dependency chains in large codebases can exceed single-task comprehension.</td></tr>
+                    <tr><td>Discuss phase is critical</td><td>Skip it and plans inherit bad assumptions.</td></tr>
+                    <tr><td>Solo-oriented</td><td>Less multi-person coordination than <a href="bmad.html">BMAD</a>.</td></tr>
+                    <tr><td>No MCP in sub-agents</td><td>Claude Code limitation, not GSD's.</td></tr>
                 </tbody>
             </table>
 
-            <h2>When to Use GSD</h2>
+            <h2>Good Fit / Bad Fit</h2>
 
-            <p>Solo or small team. Greenfield or small-to-medium project. You want agents to handle implementation while you focus on product decisions. You value simplicity over comprehensive structure.</p>
+            <p><strong>Use it:</strong> Solo/small team, greenfield, you want agents handling implementation while you make product decisions.</p>
 
-            <h2>When to Look Elsewhere</h2>
-
-            <p>Large brownfield codebases. Tightly coupled systems that don't decompose into independent tasks. Teams needing role separation and audit trails. Quick fixes (though <code>/gsd:quick</code> exists for ad-hoc tasks).</p>
+            <p><strong>Skip it:</strong> Large brownfield codebases, tightly coupled systems, teams needing role separation and audit trails.</p>
 
         </section>
 

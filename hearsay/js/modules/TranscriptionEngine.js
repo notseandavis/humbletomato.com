@@ -9,7 +9,7 @@ export class TranscriptionEngine {
         this.pipeline = null;
         this.isModelLoaded = false;
         this.isLoading = false;
-        this.modelId = 'onnx-community/whisper-tiny.en';
+        this.modelId = 'onnx-community/whisper-small';
         // Options: 
         //   'onnx-community/whisper-tiny.en'  (~40MB, fastest, English only)
         //   'onnx-community/whisper-base.en'  (~75MB, better accuracy, English only)

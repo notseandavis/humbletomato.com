@@ -130,7 +130,7 @@ class HearsayApp {
                     }
                 };
 
-                await this.transcriptionEngine.loadModel('tiny.en');
+                await this.transcriptionEngine.loadModel('small');
                 this.transcriptionEngine.onProgress = null;
                 this.uiManager.showToast('Model loaded! Starting recording...', 'success');
             }

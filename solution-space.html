@@ -51,33 +51,24 @@
 
         <section class="content">
 
-            <p>When you describe something imprecisely, you create room for different valid interpretations — multiple correct answers.</p>
+            <h2>Spec: "Sort a list"</h2>
 
-            <p>Every constraint narrows the range. Remove constraints and the solution space expands. Add them and it shrinks.</p>
+            <p>Three valid solutions:</p>
+            <pre><code># Solution A: built-in
+def sort_list(items):
+    return sorted(items)
 
-            <p>Here's what this looks like in code.</p>
-
-            <h2>Example 1: Sort a List</h2>
-
-            <h3>Spec: "Write a function that sorts a list"</h3>
-
-            <p>Valid solution A:</p>
-            <pre><code>def sort_list(items):
-    return sorted(items)</code></pre>
-
-            <p>Valid solution B:</p>
-            <pre><code>def sort_list(items):
-    # Bubble sort
+# Solution B: bubble sort
+def sort_list(items):
     n = len(items)
     for i in range(n):
         for j in range(0, n-i-1):
             if items[j] > items[j+1]:
                 items[j], items[j+1] = items[j+1], items[j]
-    return items</code></pre>
+    return items
 
-            <p>Valid solution C:</p>
-            <pre><code>def sort_list(items):
-    # Quicksort
+# Solution C: quicksort
+def sort_list(items):
     if len(items) <= 1:
         return items
     pivot = items[len(items) // 2]
@@ -86,89 +77,41 @@
     right = [x for x in items if x > pivot]
     return sort_list(left) + middle + sort_list(right)</code></pre>
 
-            <p>All three work. All three are correct. The spec didn't say which one.</p>
+            <p>All correct. The spec didn't say which one.</p>
 
-            <h3>Add constraint: "Sort in-place, O(n log n)"</h3>
+            <h3>Add constraint: "In-place, O(n log n)"</h3>
 
-            <p>Now solution A is out (not in-place). Solution B is out (O(n²)). Solution C is out (creates new lists).</p>
+            <p>A is out (not in-place). B is out (O(n²)). C is out (creates new lists). You're left with heapsort or in-place mergesort.</p>
 
-            <p>Valid solution:</p>
-            <pre><code>def sort_list(items):
-    # In-place heapsort
-    def heapify(arr, n, i):
-        largest = i
-        left = 2 * i + 1
-        right = 2 * i + 2
-        
-        if left < n and arr[left] > arr[largest]:
-            largest = left
-        if right < n and arr[right] > arr[largest]:
-            largest = right
-            
-        if largest != i:
-            arr[i], arr[largest] = arr[largest], arr[i]
-            heapify(arr, n, largest)
-    
-    n = len(items)
-    for i in range(n // 2 - 1, -1, -1):
-        heapify(items, n, i)
-    for i in range(n - 1, 0, -1):
-        items[0], items[i] = items[i], items[0]
-        heapify(items, i, 0)
-    return items</code></pre>
+            <h3>Add constraint: "Stable"</h3>
 
-            <p>The solution space shrunk from dozens to a handful. Heapsort, in-place mergesort, maybe a few others.</p>
+            <p>Heapsort is out. Only in-place mergesort remains. Each constraint eliminated implementations.</p>
 
-            <h3>Add constraint: "Stable sort"</h3>
+            <h2>Spec: "Fetch user data from API"</h2>
 
-            <p>Now heapsort is out (not stable). You're left with very few options. In-place mergesort or a specialized variant.</p>
-
-            <p>Each constraint eliminated implementations. That's the pattern.</p>
-
-            <h2>Example 2: Fetch Data</h2>
-
-            <h3>Spec: "Fetch user data from API"</h3>
-
-            <p>Valid solution A:</p>
-            <pre><code>async function getUser(id) {
+            <pre><code>// Solution A: fetch
+async function getUser(id) {
     const response = await fetch(`/api/users/${id}`);
     return response.json();
-}</code></pre>
+}
 
-            <p>Valid solution B:</p>
-            <pre><code>async function getUser(id) {
+// Solution B: axios
+async function getUser(id) {
     const response = await axios.get(`/api/users/${id}`);
     return response.data;
-}</code></pre>
+}
 
-            <p>Valid solution C:</p>
-            <pre><code>function getUser(id, callback) {
+// Solution C: XMLHttpRequest
+function getUser(id, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `/api/users/${id}`);
     xhr.onload = () => callback(JSON.parse(xhr.responseText));
     xhr.send();
 }</code></pre>
 
-            <p>Different libraries. Different patterns. All fetch data.</p>
+            <p>Different libraries, different patterns. All fetch data.</p>
 
-            <h3>Add constraint: "Handle network errors gracefully"</h3>
-
-            <pre><code>async function getUser(id) {
-    try {
-        const response = await fetch(`/api/users/${id}`);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        return response.json();
-    } catch (error) {
-        console.error('Failed to fetch user:', error);
-        return null;
-    }
-}</code></pre>
-
-            <p>Now you need error handling. The structure is more defined.</p>
-
-            <h3>Add constraint: "Retry up to 3 times with exponential backoff"</h3>
+            <h3>Add constraint: "Retry 3x with exponential backoff"</h3>
 
             <pre><code>async function getUser(id) {
     const maxRetries = 3;
@@ -177,106 +120,50 @@
     while (attempt < maxRetries) {
         try {
             const response = await fetch(`/api/users/${id}`);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return response.json();
         } catch (error) {
             attempt++;
-            if (attempt >= maxRetries) {
-                console.error('Max retries exceeded:', error);
-                return null;
-            }
-            const delay = Math.pow(2, attempt) * 1000;
-            await new Promise(resolve => setTimeout(resolve, delay));
+            if (attempt >= maxRetries) return null;
+            await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
         }
     }
 }</code></pre>
 
-            <p>The solution space collapsed. There's basically one way to do exponential backoff with three retries. You can bikeshed the details, but the structure is set.</p>
+            <p>The solution space collapsed. There's basically one way to do this. You can bikeshed the details, but the structure is set.</p>
 
-            <h2>Example 3: Store Preferences</h2>
+            <h2>Spec: "Store user theme preference"</h2>
 
-            <h3>Spec: "Store user theme preference"</h3>
+            <pre><code>// A: localStorage
+localStorage.setItem('theme', theme);
 
-            <p>Valid solution A:</p>
-            <pre><code>function saveTheme(theme) {
-    localStorage.setItem('theme', theme);
-}</code></pre>
+// B: cookie
+document.cookie = `theme=${theme}; max-age=31536000`;
 
-            <p>Valid solution B:</p>
-            <pre><code>function saveTheme(theme) {
-    document.cookie = `theme=${theme}; max-age=31536000`;
-}</code></pre>
+// C: server
+await fetch('/api/preferences', { method: 'POST', body: JSON.stringify({ theme }) });
 
-            <p>Valid solution C:</p>
-            <pre><code>async function saveTheme(theme) {
-    await fetch('/api/preferences', {
-        method: 'POST',
-        body: JSON.stringify({ theme })
-    });
-}</code></pre>
-
-            <p>Valid solution D:</p>
-            <pre><code>function saveTheme(theme) {
-    fs.writeFileSync('user-prefs.json', 
-        JSON.stringify({ theme }));
-}</code></pre>
-
-            <p>Client-side, server-side, file system. All store the preference.</p>
+// D: file system
+fs.writeFileSync('user-prefs.json', JSON.stringify({ theme }));</code></pre>
 
             <h3>Add constraint: "Persist across devices"</h3>
 
-            <p>Solutions A, B, and D are out. Only server-side storage works.</p>
-
-            <pre><code>async function saveTheme(theme) {
-    await fetch('/api/preferences', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ theme })
-    });
-}</code></pre>
+            <p>A, B, D are out. Only server-side storage works.</p>
 
             <h3>Add constraint: "Real-time sync without polling"</h3>
 
-            <pre><code>// Client
-const ws = new WebSocket('wss://api.example.com/sync');
-
-function saveTheme(theme) {
-    ws.send(JSON.stringify({ 
-        type: 'update-preference',
-        key: 'theme',
-        value: theme 
-    }));
-}
-
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    if (data.type === 'preference-updated') {
-        applyTheme(data.value);
-    }
-};</code></pre>
-
-            <p>Now you need WebSockets or Server-Sent Events. REST won't cut it. The constraint eliminated entire categories of solutions.</p>
+            <p>Now you need WebSockets or SSE. REST won't cut it. The constraint eliminated entire categories of solutions.</p>
 
             <h2>Why This Matters</h2>
 
-            <p>When you tell an AI to build something, every detail you omit expands the solution space. The AI picks one valid answer, but you might have expected a different (equally valid) one.</p>
+            <p>When you tell an AI to build something, every detail you omit expands the solution space. The AI picks one valid answer, but you might have expected a different one.</p>
 
-            <p>This isn't the AI being stupid. It's math. Fewer constraints means more valid solutions.</p>
+            <p>This isn't the AI being stupid. It's math. A system with fewer equations than unknowns has infinite solutions. A spec with fewer constraints than decisions has multiple valid implementations.</p>
 
-            <p>In linear algebra, a system with fewer equations than unknowns has infinite solutions. In code, a spec with fewer constraints than decisions has multiple valid implementations.</p>
+            <p>Vague spec → wide solution space → surprising outputs<br>
+            Precise spec → narrow solution space → predictable outputs</p>
 
-            <p>Want predictable outputs? Shrink the solution space. Add constraints until there's basically one answer left.</p>
-
-            <p>That's why spec-driven development works. Not because it makes AI smarter, but because it eliminates degrees of freedom.</p>
-
-            <h3>The Pattern</h3>
-
-            <p>Vague spec → wide solution space → surprising outputs</p>
-            <p>Precise spec → narrow solution space → predictable outputs</p>
-
-            <p>The solution space isn't a bug to fix. It's the natural consequence of incomplete information. Be intentional about which parts you nail down and which you leave open.</p>
+            <p>Spec-driven development works not because it makes AI smarter, but because it eliminates degrees of freedom. Be intentional about which parts you nail down and which you leave open.</p>
 
             <h2>Related Reading</h2>
 

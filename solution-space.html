@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Solution Space — Humble Tomato</title>
-    <meta name="description" content="How vague specifications create wide solution spaces. Progressive constraints narrow possibilities until only one answer remains.">
+    <meta name="description" content="Why vague instructions produce surprising results. Every detail you leave out multiplies the number of valid solutions an AI can build.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -16,130 +16,86 @@
 
         <section class="page-header">
             <h1>The Solution Space</h1>
-            <p class="subtitle">Vague descriptions produce multiple valid answers. Add constraints and the possibilities shrink. This is why specs matter.</p>
+            <p class="subtitle">Every detail you leave out multiplies the valid solutions. This is why specs matter.</p>
         </section>
 
         <section class="content">
 
-            <h2>Spec: "Sort a list"</h2>
+            <h2>"Build me a login page"</h2>
 
-            <p>Three valid solutions:</p>
-            <pre><code># Solution A: built-in
-def sort_list(items):
-    return sorted(items)
+            <p>Five developers. Five valid interpretations:</p>
 
-# Solution B: bubble sort
-def sort_list(items):
-    n = len(items)
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if items[j] > items[j+1]:
-                items[j], items[j+1] = items[j+1], items[j]
-    return items
+            <table>
+                <thead>
+                    <tr><th>Developer</th><th>What they build</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>A</td><td>Email + password form</td></tr>
+                    <tr><td>B</td><td>"Sign in with Google" button, nothing else</td></tr>
+                    <tr><td>C</td><td>Magic link sent to email, no password at all</td></tr>
+                    <tr><td>D</td><td>Username + password + CAPTCHA + "remember me"</td></tr>
+                    <tr><td>E</td><td>Phone number + SMS code</td></tr>
+                </tbody>
+            </table>
 
-# Solution C: quicksort
-def sort_list(items):
-    if len(items) <= 1:
-        return items
-    pivot = items[len(items) // 2]
-    left = [x for x in items if x < pivot]
-    middle = [x for x in items if x == pivot]
-    right = [x for x in items if x > pivot]
-    return sort_list(left) + middle + sort_list(right)</code></pre>
+            <p>Nobody is wrong. The instruction had five unknowns and zero constraints.</p>
 
-            <p>All correct. The spec didn't say which one.</p>
+            <h3>Add constraint: "Users log in with email and password"</h3>
 
-            <h3>Add constraint: "In-place, O(n log n)"</h3>
+            <p>B, C, E are eliminated. Two remain. Still ambiguous: does it need password reset? Rate limiting? "Remember me"?</p>
 
-            <p>A is out (not in-place). B is out (O(n²)). C is out (creates new lists). You're left with heapsort or in-place mergesort.</p>
+            <h3>Add constraint: "Include password reset. No social login. No CAPTCHA."</h3>
 
-            <h3>Add constraint: "Stable"</h3>
+            <p>Now there's essentially one solution. The spec didn't get more creative. It eliminated degrees of freedom until only one valid answer remained.</p>
 
-            <p>Heapsort is out. Only in-place mergesort remains. Each constraint eliminated implementations.</p>
+            <div class="callout">
+                <p><span class="callout-label">This is the solution space.</span><br>
+                <span class="callout-detail">The set of all valid implementations that satisfy your description. Vague description = huge space. Precise description = tiny space. That's it.</span></p>
+            </div>
 
-            <h2>Spec: "Fetch user data from API"</h2>
+            <h2>"Store the user's preference"</h2>
 
-            <pre><code>// Solution A: fetch
-async function getUser(id) {
-    const response = await fetch(`/api/users/${id}`);
-    return response.json();
-}
+            <p>Even a simple requirement hides decisions:</p>
 
-// Solution B: axios
-async function getUser(id) {
-    const response = await axios.get(`/api/users/${id}`);
-    return response.data;
-}
+            <table>
+                <thead>
+                    <tr><th>Approach</th><th>Tradeoff</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Save on device only</td><td>Fast, but lost when they switch devices</td></tr>
+                    <tr><td>Save to server</td><td>Syncs everywhere, but needs authentication</td></tr>
+                    <tr><td>Save in browser cookie</td><td>Survives restarts, but has size limits</td></tr>
+                    <tr><td>Save to a file</td><td>Works offline, but which file? Where?</td></tr>
+                </tbody>
+            </table>
 
-// Solution C: XMLHttpRequest
-function getUser(id, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/api/users/${id}`);
-    xhr.onload = () => callback(JSON.parse(xhr.responseText));
-    xhr.send();
-}</code></pre>
+            <p>Add "must sync across devices" and three options vanish. Add "in real time, without refreshing" and the remaining options narrow to one class of technology. Each constraint does the same thing: kills valid alternatives until what's left is what you actually wanted.</p>
 
-            <p>Different libraries, different patterns. All fetch data.</p>
+            <h2>Why AI makes this worse</h2>
 
-            <h3>Add constraint: "Retry 3x with exponential backoff"</h3>
+            <p>A human developer would ask: "Did you want social login?" An AI picks one and keeps going. It's not being stupid. It's doing math.</p>
 
-            <pre><code>async function getUser(id) {
-    const maxRetries = 3;
-    let attempt = 0;
-    
-    while (attempt < maxRetries) {
-        try {
-            const response = await fetch(`/api/users/${id}`);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();
-        } catch (error) {
-            attempt++;
-            if (attempt >= maxRetries) return null;
-            await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
-        }
-    }
-}</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">A system with fewer equations than unknowns has infinite solutions.</span><br>
+                <span class="callout-detail">A spec with fewer constraints than decisions has multiple valid implementations. The AI picks one. You expected a different one. Now you're debugging a misunderstanding, not a bug.</span></p>
+            </div>
 
-            <p>The solution space collapsed. There's basically one way to do this. You can bikeshed the details, but the structure is set.</p>
+            <p>This scales. A login page has maybe 5 decisions. A full application has hundreds. Every unspecified decision is a coin flip that compounds.</p>
 
-            <h2>Spec: "Store user theme preference"</h2>
+            <h2>The takeaway</h2>
 
-            <pre><code>// A: localStorage
-localStorage.setItem('theme', theme);
+            <div class="callout">
+                <p><span class="callout-label">Vague spec</span> <span class="callout-detail">= wide solution space = surprising outputs.</span></p>
+                <p><span class="callout-label">Precise spec</span> <span class="callout-detail">= narrow solution space = predictable outputs.</span></p>
+            </div>
 
-// B: cookie
-document.cookie = `theme=${theme}; max-age=31536000`;
+            <p>Spec-driven development works not because it makes AI smarter, but because it eliminates the decisions you didn't want the AI making for you. Be intentional about what you nail down and what you leave open.</p>
 
-// C: server
-await fetch('/api/preferences', { method: 'POST', body: JSON.stringify({ theme }) });
-
-// D: file system
-fs.writeFileSync('user-prefs.json', JSON.stringify({ theme }));</code></pre>
-
-            <h3>Add constraint: "Persist across devices"</h3>
-
-            <p>A, B, D are out. Only server-side storage works.</p>
-
-            <h3>Add constraint: "Real-time sync without polling"</h3>
-
-            <p>Now you need WebSockets or SSE. REST won't cut it. The constraint eliminated entire categories of solutions.</p>
-
-            <h2>Why This Matters</h2>
-
-            <p>When you tell an AI to build something, every detail you omit expands the solution space. The AI picks one valid answer, but you might have expected a different one.</p>
-
-            <p>This isn't the AI being stupid. It's math. A system with fewer equations than unknowns has infinite solutions. A spec with fewer constraints than decisions has multiple valid implementations.</p>
-
-            <p>Vague spec → wide solution space → surprising outputs<br>
-            Precise spec → narrow solution space → predictable outputs</p>
-
-            <p>Spec-driven development works not because it makes AI smarter, but because it eliminates degrees of freedom. Be intentional about which parts you nail down and which you leave open.</p>
-
-            <h2>Related Reading</h2>
+            <h2>Related</h2>
 
             <ul>
-                <li><a href="vibe-coding-vs-spec-driven.html">Vibe Coding vs Spec-Driven</a> — When to use each approach</li>
-                <li><a href="specs-as-dna.html">Specs as DNA</a> — Why specifications are like genetic code</li>
+                <li><a href="spec-driven-development.html">Spec-Driven Development</a> — The spec is the product</li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe Coding vs Spec-Driven</a> — When each approach fits</li>
                 <li><a href="matrix-methodology.html">Matrix Methodology</a> — How to write specs that constrain effectively</li>
             </ul>
 
@@ -148,7 +104,7 @@ fs.writeFileSync('user-prefs.json', JSON.stringify({ theme }));</code></pre>
     </div>
 
     <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

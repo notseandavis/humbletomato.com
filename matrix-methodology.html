@@ -85,13 +85,13 @@
 
             <p>The PRD describes <em>what</em> to build. The architecture docs describe <em>how</em> to build it. Together, they constrain the solution space enough that output becomes deterministic.</p>
 
-            <h3>PRD as Translation Layer</h3>
+            <h3>The Spec Template as Validation Point</h3>
 
-            <p>The PRD translates generic product requirements into framework-specific implementation concepts. For example, using Spring Boot and AWS:</p>
+            <p>The spec template is where product and engineering meet. It maps unstructured context (product requirements, architecture decisions) to specific implementation choices. For example, using Spring Boot and AWS:</p>
 
             <table>
                 <thead>
-                    <tr><th>Product requirement</th><th>Translates to</th></tr>
+                    <tr><th>Product requirement</th><th>Resolves to</th></tr>
                 </thead>
                 <tbody>
                     <tr><td>"User enters address"</td><td>REST controller with <code>@Valid</code> request body, Thymeleaf form with client-side validation</td></tr>
@@ -101,11 +101,13 @@
                 </tbody>
             </table>
 
-            <p>This translation is where product and engineering meet. The PRD template guides teams to provide requirements at the right level of detail for the agent to generate working code, not just boilerplate.</p>
+            <p>This isn't just formatting. Writing the spec template forces you to connect the dots between concepts from different documents and see how they resolve together. If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code.</p>
 
-            <h2>Dialing In Output</h2>
+            <p>The spec template is a human adding information that didn't exist in either the PRD or the architecture doc alone: the specific mapping between abstract intent and concrete implementation. It's not theoretically necessary (you could feed raw documents directly), but it's a validation checkpoint that pays for itself. See <a href="telephone-game.html">The Telephone Game</a> for why this distinction matters.</p>
 
-            <p>Templates are control knobs. Want different error handling? Update the error-codes template. Want different API structure? Update the client-apis template. Change the template, change the output across all future generations.</p>
+            <h2>Templates as Control Knobs</h2>
+
+            <p>Architecture templates control the shape of generated code. Want different error handling? Update the error-codes template. Want different API structure? Update the client-apis template. Change the template, change the output across all future generations.</p>
 
             <p>This compounds. Better templates improve every subsequent capability. The 10th capability generates faster and cleaner than the 1st.</p>
 

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conservation of Complexity - Humble Tomato</title>
+    <meta name="description" content="A thought experiment: your specs must be as detailed as the system is complex. You can't shortcut the information needed to build what you want.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-section-label">Understand</li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
+                <li><a href="solution-space.html">The Solution Space</a></li>
+                <li><a href="telephone-game.html">The Telephone Game</a></li>
+                <li><a href="abstraction-paradox.html">The Abstraction Paradox</a></li>
+                <li class="nav-section-label">Approach Library</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li class="nav-section-label">Thought Experiments</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
+                <li><a href="complexity-conservation.html" class="active">Conservation of Complexity</a></li>
+                <li class="nav-section-label">Concepts</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Conservation of Complexity</h1>
+            <p class="subtitle">Your specs must be as detailed as the system is complex. There is no shortcut.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>The Diffusion Model</h2>
+
+            <p>A diffusion model generates images by resolving noise into coherent output. Give it "a photo" and you get something blurry and generic. Give it "a barista pouring latte art in a sunlit cafe, morning light through steam, shallow depth of field" and you get something specific and detailed.</p>
+
+            <p>The output can't contain more information than the input. A vague prompt produces a vague image. A detailed prompt produces a detailed image. The complexity of the result is bounded by the information you provide.</p>
+
+            <pre><code>Prompt: "a website"
+Output: Generic template. Looks like a website. Doesn't look like YOUR website.
+
+Prompt: "e-commerce platform, OAuth2 auth, Redis-cached cart,
+         Stripe payments, saga-based order processing,
+         role-based access for customers vs merchants"
+Output: Specific implementation. Looks like what you described.</code></pre>
+
+            <h2>You Have to Build the Whole System</h2>
+
+            <p>Here's the trap. You're building the cart service. You think: "I'll focus the context on cart logic. Keep it simple."</p>
+
+            <p>But the cart service needs to know:</p>
+
+            <ul>
+                <li><strong>Auth</strong> — whose cart is this? How are users scoped? JWT subject claim? Session cookie?</li>
+                <li><strong>Inventory</strong> — can you add out-of-stock items? When do you check availability?</li>
+                <li><strong>Payments</strong> — how does checkout hand off? What's the cart-to-order transition?</li>
+                <li><strong>State</strong> — Redis for speed? Postgres for durability? Both? Cache invalidation strategy?</li>
+                <li><strong>Pricing</strong> — discounts applied at cart level or checkout? Coupon validation happens where?</li>
+            </ul>
+
+            <p>Every "other" system touches the cart. You can't restrict the context to just cart logic because cart logic doesn't exist in isolation. The boundaries between components are load-bearing walls, not decorative trim.</p>
+
+            <pre><code>What you think you're building:
+┌──────────┐
+│   Cart   │
+└──────────┘
+
+What you're actually building:
+┌──────────┬──────────┬──────────┬──────────┐
+│   Auth   │   Cart   │ Inventory│ Payments │
+├──────────┼──────────┼──────────┼──────────┤
+│ JWT      │ Add/     │ Stock    │ Checkout │
+│ scoping  │ Remove   │ check    │ handoff  │
+├──────────┼──────────┼──────────┼──────────┤
+│ Session  │ Pricing  │ Reserve  │ Cart →   │
+│ binding  │ rules    │ logic    │ Order    │
+└──────────┴──────────┴──────────┴──────────┘</code></pre>
+
+            <p>A diffusion model can't render just the nose without knowing where the eyes are. Every pixel resolves relative to every other pixel. The system is the unit of generation, not the component.</p>
+
+            <h2>Conservation Law</h2>
+
+            <p>Complexity is conserved. You can move it around — from code to specs, from specs to architecture docs, from architecture docs to tribal knowledge. But you can't destroy it.</p>
+
+            <pre><code>Simple spec    → Agent guesses → Complex debugging
+Detailed spec  → Agent resolves → Working system
+                                  
+The work is the same. The question is when you do it:
+before generation (in the spec) or after (in debugging).</code></pre>
+
+            <p>When your spec says "handle authentication," you haven't saved any work. You've moved it from "writing the spec" to "debugging why the agent used session cookies when you needed JWT." The complexity showed up anyway. It just showed up at the worst possible time.</p>
+
+            <h2>The Engineer's Wrong Instinct</h2>
+
+            <p>Engineers are trained to isolate. Encapsulate. Reduce scope. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise. More focused."</p>
+
+            <p>Good instinct for writing code. Wrong instinct for composing context.</p>
+
+            <p>The agent building the cart needs to see the auth model, the payment flow, the inventory rules. Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong> How the cart scopes to a user depends on how auth works. How checkout hands off depends on how payments work. How "add to cart" validates depends on how inventory works.</p>
+
+            <pre><code># Scoped context (engineer's instinct)
+"Build the cart service. Here's the cart spec."
+→ Cart works perfectly in isolation.
+→ Breaks the moment it touches auth, payments, inventory.
+
+# Full system context
+"Build the cart service. Here's the cart spec,
+ the auth model, the payment flow, the inventory rules."
+→ Cart integrates correctly on first generation.</code></pre>
+
+            <p>The <a href="matrix-methodology.html">Context Matrix</a> is built around this idea. Every row needs every column. You can't give the agent one row in isolation and expect it to resolve correctly, because each cell is constrained by the cells around it.</p>
+
+            <p>You don't get to build a component. You build a component <em>within a system</em>, or you debug the system the agent imagined around it.</p>
+
+        </section>
+
+        <nav class="page-nav">
+            <a href="specs-as-dna.html" class="page-nav-prev">
+                <span class="page-nav-label">Previous</span>
+                <span class="page-nav-title">← Specs as DNA</span>
+            </a>
+            <a href="continuous-evolution.html" class="page-nav-next">
+                <span class="page-nav-label">Next</span>
+                <span class="page-nav-title">Continuous Evolution →</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 - Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

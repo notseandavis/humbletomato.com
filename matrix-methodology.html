@@ -278,6 +278,47 @@
                 <li><strong>Start rough, sharpen through execution.</strong> An L0 spec that runs today teaches more than an L3 spec that ships next month.</li>
             </ol>
 
+            <h2>Strengths</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Strength</th><th>Detail</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Template compounding</td><td>Better templates improve every future generation. The 10th capability builds faster than the 1st.</td></tr>
+                    <tr><td>Daily iteration</td><td>Rejection is cheap. Agent rebuilds from updated specs in hours, not weeks. No sunk cost psychology.</td></tr>
+                    <tr><td>Spec quality levels</td><td>Start at L0 (bullet points) and let R0 tell you what's missing. Don't wait for perfect specs.</td></tr>
+                    <tr><td>Supervision pattern</td><td>Separate supervisor context catches errors the worker misses. Different context, different blindspots.</td></tr>
+                    <tr><td>Information-theoretic foundation</td><td>Feeding raw PRD + architecture directly to the agent avoids lossy intermediate synthesis steps.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Tradeoffs</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Limitation</th><th>Detail</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Template investment</td><td>The methodology is only as good as your architecture templates. Building good templates requires deep platform knowledge and significant upfront effort.</td></tr>
+                    <tr><td>Spec writing is hard</td><td>"Clean inputs produce predictable outputs" assumes you can write clean inputs. Translating product intent into framework-specific PRDs is a skill most teams don't have.</td></tr>
+                    <tr><td>Greenfield assumption</td><td>Daily regeneration works for new systems. Live products with real data, API consumers, and in-flight workflows need <a href="continuous-evolution.html">Continuous Evolution</a>, which adds significant complexity.</td></tr>
+                    <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same spec can produce different implementations across runs.</td></tr>
+                    <tr><td>Context window limits</td><td>PRD + architecture + templates must fit in one context window. Complex enterprise systems with large template libraries hit this ceiling.</td></tr>
+                    <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe how to coordinate multiple agents. The <a href="ralph-wiggum.html">Ralph Loop</a> handles execution, but multi-agent orchestration is left to the practitioner.</td></tr>
+                    <tr><td>Supervision overhead</td><td>The supervisor pattern requires maintaining separate context for the supervisor agent. Good for quality, expensive in tokens.</td></tr>
+                    <tr><td>Role shift resistance</td><td>"PMs become builders" and "Engineers become architects" sounds clean but requires organizational change that most enterprises resist.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>When to Use Matrix</h2>
+
+            <p>You have deep platform knowledge and can invest in architecture templates. You're building on a known framework (Spring Boot, Next.js, Rails) where patterns are well-established. You want daily iteration with product in the loop. You value spec quality over workflow automation.</p>
+
+            <h2>When to Look Elsewhere</h2>
+
+            <p>You want turnkey orchestration out of the box (<a href="gsd.html">GSD</a>). You need structured agent role separation (<a href="bmad.html">BMAD</a>). You don't have the platform expertise to build good templates. You're doing exploratory work where the architecture isn't settled yet.</p>
+
             <h2>What This Is Not</h2>
 
             <p><strong>Not waterfall with faster typing.</strong> The speed of code generation is wasted if inputs don't iterate at the same pace.</p>
@@ -293,6 +334,8 @@
             <p>Explore the <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> to understand autonomous execution patterns.</p>
 
             <p>For teams working with live products, see <a href="continuous-evolution.html">Continuous Evolution</a> for diff-based development and safe evolution patterns.</p>
+
+            <p>Compare with other approaches: <a href="gsd.html">GSD</a> for turnkey context engineering, <a href="bmad.html">BMAD</a> for full agile lifecycle simulation.</p>
 
         </section>
 

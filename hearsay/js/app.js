@@ -130,7 +130,7 @@ class HearsayApp {
                     }
                 };
 
-                await this.transcriptionEngine.loadModel('small');
+                await this.transcriptionEngine.loadModel('base.en');
                 this.transcriptionEngine.onProgress = null;
                 this.uiManager.showToast('Model loaded! Starting recording...', 'success');
             }
@@ -190,16 +190,22 @@ class HearsayApp {
 
     async handleAudioData(audioData, timestamp) {
         if (!this.currentMeeting) return;
+        if (this._transcribing) return; // Skip if still processing previous chunk
 
         try {
             // Transcribe audio
             if (this.transcriptionEngine.isEnabled()) {
+                this._transcribing = true;
+                console.log(`🎤 Processing chunk at ${timestamp.toFixed(1)}s (${audioData.length} samples)`);
+                
                 const transcriptSegment = await this.transcriptionEngine.transcribe(audioData, timestamp);
                 
+                this._transcribing = false;
+
                 if (transcriptSegment) {
                     // Identify speaker
                     if (this.speakerIdentifier.isEnabled()) {
-                        const speakerId = await this.speakerIdentifier.identifySpeaker(
+                        const speakerId = this.speakerIdentifier.identifySpeaker(
                             audioData,
                             timestamp,
                             transcriptSegment.duration
@@ -219,9 +225,11 @@ class HearsayApp {
                     
                     // Update UI
                     this.uiManager.addTranscriptSegment(transcriptSegment);
+                    console.log(`📝 Segment added: "${transcriptSegment.text}"`);
                 }
             }
         } catch (error) {
+            this._transcribing = false;
             console.error('❌ Error processing audio data:', error);
         }
     }

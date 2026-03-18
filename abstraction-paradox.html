@@ -104,7 +104,18 @@ Path B: You don't understand the abstraction
 
             <p>So what does the context window actually need? Not general knowledge (already free). The <strong>specific decisions for this system.</strong> "Use OAuth2 with JWT rotation." "Redis-backed sessions, 15min TTL." "Stripe tokenization, never raw card data." The LLM knows <em>how</em> to implement all of those. It needs to know <em>which ones you chose.</em></p>
 
-            <p>Abstracting in the context window is exactly backwards. General knowledge costs zero tokens. Specific decisions are the only thing that costs tokens. Hiding specifics behind abstractions removes the only information the LLM actually needs from you.</p>
+            <p>But there's a harder case. <strong>Your</strong> abstractions — your custom service layer, your internal SDK, your domain-specific patterns — don't exist in the weights at all. They're not in the training data. They exist only in your codebase. If they're not in the context window, they don't exist for the agent. Period.</p>
+
+            <pre><code># Standard abstraction (in the weights)
+@Transactional
+public Order createOrder(Order order) { ... }
+# LLM knows exactly what @Transactional does. No context needed.
+
+# Your abstraction (NOT in the weights)  
+orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);
+# LLM has no idea what this does. Will hallucinate something plausible and wrong.</code></pre>
+
+            <p>Standard abstractions are already understood — free. Your custom abstractions exist nowhere except your code. Hiding them behind a vague description is the worst of both worlds: the agent can't fall back on training knowledge, and you've removed the only source of truth.</p>
 
             <p>Consider the <a href="matrix-methodology.html">Context Matrix</a>. Three columns: Auth, API, State. You might think: "I'll collapse those into one 'Backend' column. The agent can figure out the details."</p>
 

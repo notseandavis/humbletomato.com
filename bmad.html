@@ -52,75 +52,64 @@
 
         <section class="content">
 
-            <p><strong>Source:</strong> <a href="https://github.com/bmad-code-org/BMAD-METHOD">GitHub</a> · <a href="https://docs.bmad-method.org">Docs</a> · Open source, no paywalls</p>
+            <p><strong>Source:</strong> <a href="https://github.com/bmad-code-org/BMAD-METHOD">GitHub</a> · <a href="https://docs.bmad-method.org">Docs</a> · Open source</p>
 
-            <h2>What It Actually Is</h2>
+            <pre><code>npx bmad-method install
 
-            <p>BMAD installs markdown and YAML files into your project that define AI personas, workflows, and templates. Not a runtime, not a SaaS, not a plugin. It's context engineering: structured files that shape how LLMs behave during development.</p>
+# Creates:
+# _bmad/          → agents, workflows, config (framework)
+# _bmad-output/   → PRD, architecture, stories (your artifacts)</code></pre>
 
-            <p>Installation creates two folders: <code>_bmad/</code> (framework: agents, workflows, config) and <code>_bmad-output/</code> (generated artifacts: PRD, architecture, stories).</p>
+            <p>BMAD installs markdown and YAML files that define AI personas, workflows, and templates. Not a runtime or SaaS. Structured files that shape how LLMs behave during development. Works with Claude Code, Cursor, and Codex CLI.</p>
 
-            <pre><code>npx bmad-method install</code></pre>
+            <h2>How It Flows</h2>
 
-            <p>Works with Claude Code, Cursor, and Codex CLI.</p>
+            <p>Each phase produces documents that become context for the next agent. Every handoff is a fresh chat session. Continuity lives in files, not conversation history.</p>
 
-            <h2>The Core Innovation: Document-as-Context Handoffs</h2>
+            <pre><code>Analyst   → product-brief.md
+PM        → PRD.md            (reads product-brief)
+Architect → architecture.md   (reads PRD)
+PM        → epics/*.md        (reads PRD + architecture)
+SM        → story files       (reads epics)
+Developer → working code      (reads story + architecture)</code></pre>
 
-            <p>Each development phase produces markdown documents that become structured context for the next phase's agents. The Analyst creates a product brief that the PM reads when writing the PRD. The Architect reads the PRD when designing the system. The Developer reads the architecture doc when implementing stories.</p>
-
-            <pre><code>Analyst  -> product-brief.md
-PM       -> PRD.md (reads product-brief)
-Architect -> architecture.md (reads PRD)
-PM       -> epics/*.md (reads PRD + architecture)
-SM       -> story files (reads epics)
-Developer -> working code (reads story + architecture)</code></pre>
-
-            <p>Each handoff is a fresh chat session. All continuity lives in the files, not conversation history. This prevents context window pollution but means agents can't learn from mistakes within a session.</p>
-
-            <h2>Agent Personas</h2>
-
-            <p>Each agent is a markdown file with YAML frontmatter defining its role, persona, commands, and dependencies. Agents are scoped to specific context, not given everything:</p>
+            <h2>Agents</h2>
 
             <table>
                 <thead>
                     <tr><th>Agent</th><th>Role</th><th>Context Loaded</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Analyst ("Mary")</td><td>Requirements, research, brainstorming</td><td>Existing briefs</td></tr>
-                    <tr><td>PM ("John")</td><td>PRD, epics, product strategy</td><td>Product brief, existing PRD</td></tr>
-                    <tr><td>Architect</td><td>System design, ADRs, tech decisions</td><td>PRD, project-context.md</td></tr>
-                    <tr><td>Developer ("James")</td><td>Implementation, code review</td><td>Story file, architecture, project-context</td></tr>
-                    <tr><td>Scrum Master</td><td>Sprint planning, story creation</td><td>PRD, architecture, epics</td></tr>
-                    <tr><td>QA</td><td>Test strategy, quality assessment</td><td>Stories, architecture</td></tr>
-                    <tr><td>UX Expert</td><td>UX specs, interface design</td><td>PRD</td></tr>
-                    <tr><td>BMad Orchestrator</td><td>Coordinates workflows, can transform into other agents</td><td>All</td></tr>
+                    <tr><td>Analyst ("Mary")</td><td>Requirements, research</td><td>Existing briefs</td></tr>
+                    <tr><td>PM ("John")</td><td>PRD, epics, strategy</td><td>Product brief</td></tr>
+                    <tr><td>Architect</td><td>System design, ADRs</td><td>PRD, project-context</td></tr>
+                    <tr><td>Developer ("James")</td><td>Implementation</td><td>Story, architecture</td></tr>
+                    <tr><td>Scrum Master</td><td>Sprint planning</td><td>PRD, architecture, epics</td></tr>
+                    <tr><td>QA</td><td>Test strategy</td><td>Stories, architecture</td></tr>
+                    <tr><td>Orchestrator</td><td>Coordinates all</td><td>Everything</td></tr>
                 </tbody>
             </table>
 
-            <h2>Three Planning Tracks</h2>
-
-            <p>BMAD offers three levels of ceremony. You pick the track; the system doesn't auto-detect.</p>
+            <h2>Planning Tracks</h2>
 
             <table>
                 <thead>
                     <tr><th>Track</th><th>For</th><th>Artifacts</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Quick Flow</td><td>Bug fixes, simple features</td><td>Tech-spec only</td></tr>
+                    <tr><td>Quick Flow</td><td>Bug fixes, small features</td><td>Tech-spec only</td></tr>
                     <tr><td>BMad Method</td><td>Products, platforms</td><td>PRD + Architecture + UX</td></tr>
-                    <tr><td>Enterprise</td><td>Compliance, multi-tenant</td><td>Full spec suite + security + DevOps</td></tr>
+                    <tr><td>Enterprise</td><td>Compliance, multi-tenant</td><td>Full spec suite + security</td></tr>
                 </tbody>
             </table>
 
-            <p>The <code>bmad-help</code> skill recommends a track based on your description, but the choice is manual. "Scale-adaptive intelligence" is the marketing term for having three predefined tracks available.</p>
-
             <h2>Party Mode</h2>
 
-            <p>Multiple agent personas collaborate in one session. The BMad Orchestrator decides which persona responds to each message. Useful for brainstorming and surfacing tradeoffs from different perspectives.</p>
+            <p>Multiple agent personas in one session. The Orchestrator picks which persona responds. Useful for brainstorming tradeoffs from different perspectives.</p>
 
-            <p>Under the hood, this is a single LLM role-playing multiple characters, not independent agents with separate reasoning. It works because LLMs are good at maintaining character consistency. Don't confuse it with actual multi-agent systems.</p>
+            <p>Under the hood: one LLM role-playing multiple characters, not independent agents with separate reasoning.</p>
 
-            <h2>Module Ecosystem</h2>
+            <h2>Modules</h2>
 
             <table>
                 <thead>
@@ -128,45 +117,18 @@ Developer -> working code (reads story + architecture)</code></pre>
                 </thead>
                 <tbody>
                     <tr><td><a href="https://github.com/bmad-code-org/BMAD-METHOD">BMM (Core)</a></td><td>Base methodology, 4-phase lifecycle</td></tr>
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-builder">BMB (Builder)</a></td><td>Create custom agents and workflows</td></tr>
+                    <tr><td><a href="https://github.com/bmad-code-org/bmad-builder">BMB (Builder)</a></td><td>Create custom agents/workflows</td></tr>
                     <tr><td><a href="https://github.com/bmad-code-org/bmad-method-test-architecture-enterprise">TEA (Test Architect)</a></td><td>Risk-based test strategy</td></tr>
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-game-dev-studio">BMGD (Game Dev)</a></td><td>Unity, Unreal, Godot workflows</td></tr>
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite">CIS (Creative)</a></td><td>Innovation and design thinking</td></tr>
-                </tbody>
-            </table>
-
-            <p>Modules install via npm, merging agents and workflows into <code>_bmad/</code>. Install what you need, skip what you don't.</p>
-
-            <h2>Strengths</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Strength</th><th>Detail</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Structured handoffs</td><td>Document-as-context model ensures agents always have relevant, scoped input.</td></tr>
-                    <tr><td>Comprehensive lifecycle</td><td>Discovery through deployment. ~20 core workflows across 4 phases.</td></tr>
-                    <tr><td>Modular</td><td>Add test architecture, game dev, or creative modules as needed.</td></tr>
-                    <tr><td>Team-friendly</td><td>Role separation maps to real team structures. Audit trails via artifacts.</td></tr>
-                    <tr><td>Analyst agent</td><td>Requirements elicitation techniques described as "one of the best personal findings in recent years" by a real user.</td></tr>
+                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-game-dev-studio">BMGD (Game Dev)</a></td><td>Unity, Unreal, Godot</td></tr>
+                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite">CIS (Creative)</a></td><td>Design thinking workflows</td></tr>
                 </tbody>
             </table>
 
             <h2>Tradeoffs</h2>
 
-            <table>
-                <thead>
-                    <tr><th>Limitation</th><th>Detail</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Ceremony overhead</td><td>Full BMAD flow for a simple feature adds hours of planning that may not improve the outcome.</td></tr>
-                    <tr><td>Hallucination compounding</td><td>Each agent builds on the previous agent's output. Errors in the PRD propagate to architecture, stories, and code.</td></tr>
-                    <tr><td>Greenfield bias</td><td>Assumes clean-slate architecture creation. Brownfield projects need manual workarounds.</td></tr>
-                    <tr><td>No parallelism</td><td>Agent handoffs are inherently sequential. No wave-based parallel execution like <a href="gsd.html">GSD</a>.</td></tr>
-                    <tr><td>Learning curve</td><td>12+ agents, ~20 workflows, multiple modules. Quick Flow exists but feels like an afterthought.</td></tr>
-                    <tr><td>PO validation gap</td><td>Product Owner validation produces a report but no agent references it. Creates a workflow dead-end.</td></tr>
-                </tbody>
-            </table>
+            <p><strong>Strengths:</strong> Structured document handoffs keep agents scoped. Full lifecycle coverage (~20 workflows). Modular. Analyst agent is genuinely good at requirements elicitation.</p>
+
+            <p><strong>Weaknesses:</strong> Full flow adds hours of ceremony that may not help simple features. Errors compound (bad PRD → bad architecture → bad code). Greenfield bias; brownfield needs workarounds. Sequential only, no parallel execution like <a href="gsd.html">GSD</a>. 12+ agents and ~20 workflows create a steep learning curve.</p>
 
             <h2>BMAD vs GSD</h2>
 
@@ -175,22 +137,19 @@ Developer -> working code (reads story + architecture)</code></pre>
                     <tr><th>Dimension</th><th>BMAD</th><th>GSD</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Approach</td><td>Full agile lifecycle simulation</td><td>Hidden complexity, four commands</td></tr>
-                    <tr><td>Context strategy</td><td>Documents as handoffs between phases</td><td>Fresh 200K windows per task</td></tr>
-                    <tr><td>Parallelism</td><td>Sequential agent handoffs</td><td>Wave-based parallel execution</td></tr>
-                    <tr><td>Artifacts</td><td>Human-readable specs (PRD, architecture)</td><td>Git commits</td></tr>
-                    <tr><td>Human role</td><td>Active participant in each phase</td><td>Define intent, then delegate</td></tr>
-                    <tr><td>Best for</td><td>Complex greenfield, teams, unclear requirements</td><td>Solo builders, clear vision, ship fast</td></tr>
+                    <tr><td>Approach</td><td>Full agile lifecycle</td><td>Four commands</td></tr>
+                    <tr><td>Context</td><td>Documents as handoffs</td><td>Fresh 200K windows</td></tr>
+                    <tr><td>Parallelism</td><td>Sequential</td><td>Wave-based parallel</td></tr>
+                    <tr><td>Human role</td><td>Active each phase</td><td>Define intent, delegate</td></tr>
+                    <tr><td>Best for</td><td>Complex greenfield, teams</td><td>Solo, clear vision, ship fast</td></tr>
                 </tbody>
             </table>
 
-            <h2>When to Use BMAD</h2>
+            <h2>When to Use</h2>
 
-            <p>Complex greenfield project where you don't yet know exactly what to build. You need the planning discipline to figure it out. You have (or simulate) a team and want structured role separation. You need audit trails for enterprise environments.</p>
+            <p><strong>Use BMAD:</strong> Complex greenfield where you don't know what to build yet. Team structures (real or simulated). Enterprise audit trails needed.</p>
 
-            <h2>When to Look Elsewhere</h2>
-
-            <p>Solo developer who already knows what they want. Bug fixes or small features (use Quick Flow at minimum, or <a href="gsd.html">GSD</a>). Brownfield projects needing surgical changes. You want speed over comprehensive documentation.</p>
+            <p><strong>Skip it:</strong> Solo dev who knows what they want. Bug fixes. Brownfield projects. Speed over documentation.</p>
 
         </section>
 

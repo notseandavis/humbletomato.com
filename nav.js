@@ -9,7 +9,7 @@
         { href: 'telephone-game.html', label: 'The Telephone Game' },
         { href: 'abstraction-paradox.html', label: 'The Abstraction Paradox' },
         { section: 'Approach Library' },
-        { href: 'matrix-methodology.html', label: 'The Matrix' },
+        { href: 'matrix-methodology.html', label: 'Context Matrix' },
         { href: 'ralph-wiggum.html', label: 'Ralph Loop' },
         { href: 'gsd.html', label: 'GSD' },
         { href: 'bmad.html', label: 'BMAD' },

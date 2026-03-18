@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-Driven Development - Humble Tomato</title>
+    <meta name="description" content="What spec-driven development actually means: specifications as the source of truth that AI agents compile into working software.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-section-label">Understand</li>
+                <li><a href="spec-driven-development.html" class="active">Spec-Driven Development</a></li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
+                <li><a href="solution-space.html">The Solution Space</a></li>
+                <li><a href="telephone-game.html">The Telephone Game</a></li>
+                <li><a href="abstraction-paradox.html">The Abstraction Paradox</a></li>
+                <li class="nav-section-label">Approach Library</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li class="nav-section-label">Thought Experiments</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
+                <li><a href="code-diffusion-model.html">Code Diffusion Model</a></li>
+                <li><a href="fuzzy-compiler.html">Fuzzy Compiler</a></li>
+                <li class="nav-section-label">Concepts</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Spec-Driven Development</h1>
+            <p class="subtitle">Specifications aren't documentation. They're the source of truth that agents use to generate working code.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>One Spec, Two Implementations</h2>
+
+            <p>A simple user story:</p>
+
+            <pre><code># User Profile
+- Show user profile with name, email, join date
+- Format join date as "Member since MMM YYYY"
+- If no email, show "No email on file"</code></pre>
+
+            <p>Give this to an agent with a React architecture:</p>
+
+            <pre><code>function UserProfile({ user }) {
+  const joinDate = new Date(user.joinedAt)
+    .toLocaleDateString('en-US', { 
+      month: 'short', year: 'numeric' 
+    });
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
+      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+            <p>Same spec, Vue architecture:</p>
+
+            <pre><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
+    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  computed: {
+    formattedJoinDate() {
+      return new Date(this.user.joinedAt)
+        .toLocaleDateString('en-US', { 
+          month: 'short', year: 'numeric' 
+        });
+    }
+  }
+}
+&lt;/script&gt;</code></pre>
+
+            <p>Same spec. Different output. The specification describes <strong>what</strong> the software does. The architecture context determines <strong>how</strong> it's built. The spec is portable across frameworks, languages, and teams.</p>
+
+            <h2>Why This Matters</h2>
+
+            <p>Without a spec, the agent makes decisions for you. It picks a date format. It decides what to show when email is missing. It chooses a component structure. Every decision it makes is one you didn't review.</p>
+
+            <p>With a spec, those decisions are explicit. The agent's job becomes translation — from intent to implementation — not invention.</p>
+
+            <pre><code>Without spec:  "Build a user profile page"
+→ Agent invents requirements + implements them
+→ You debug both the requirements AND the code
+
+With spec:     "Build this user profile page" + spec
+→ Agent implements your requirements
+→ You debug only the code</code></pre>
+
+            <h2>The Spec Is the Product</h2>
+
+            <p>In spec-driven development, the specification is the durable artifact. Code is generated, tested, and regenerated. Frameworks change. Languages change. The spec persists.</p>
+
+            <p>This inverts the traditional relationship. Code used to be the source of truth, with docs trailing behind (or missing entirely). Now the spec is the source of truth, and code is a compiled output.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 — Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

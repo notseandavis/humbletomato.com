@@ -255,13 +255,18 @@ export class TranscriptionEngine {
             const level = this.calculateAudioLevel(audioData);
             if (level < 0.01) return null;
 
-            const result = await this.pipeline(audioData, {
-                language: 'english',
-                task: 'transcribe',
+            // English-only models (.en) don't accept language/task params
+            const isEnglishOnly = this.modelId.endsWith('.en');
+            const pipelineOptions = {
                 chunk_length_s: 30,
                 stride_length_s: 5,
                 return_timestamps: false,
-            });
+            };
+            if (!isEnglishOnly) {
+                pipelineOptions.language = 'english';
+                pipelineOptions.task = 'transcribe';
+            }
+            const result = await this.pipeline(audioData, pipelineOptions);
 
             const processingTime = Date.now() - startProcess;
             const realtimeFactor = (processingTime / 1000) / duration;

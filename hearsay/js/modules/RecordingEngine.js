@@ -3,6 +3,47 @@
  * Equivalent to iOS RecordingEngine.swift
  */
 
+// Test mode: ?fakemic in URL creates a synthetic audio stream (440Hz tone)
+// so the app can be tested without a real microphone.
+const FAKE_MIC = new URLSearchParams(window.location.search).has('fakemic');
+if (FAKE_MIC) console.log('[FAKE MIC] Test mode enabled via ?fakemic');
+
+async function createFakeStream() {
+    const ctx = new AudioContext({ sampleRate: 48000 });
+    const dest = ctx.createMediaStreamDestination();
+
+    // Try loading test-speech.wav for realistic audio, fall back to 440Hz tone
+    try {
+        const response = await fetch('test-speech.wav');
+        if (response.ok) {
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+            const source = ctx.createBufferSource();
+            source.buffer = audioBuffer;
+            source.loop = true; // Loop the speech for continuous testing
+            source.connect(dest);
+            source.start();
+            console.log('[FAKE MIC] Using test-speech.wav (' + audioBuffer.duration.toFixed(1) + 's, looping)');
+            dest._keepAlive = { ctx, source };
+            return dest.stream;
+        }
+    } catch (e) {
+        console.log('[FAKE MIC] Could not load test-speech.wav, using 440Hz tone:', e.message);
+    }
+
+    // Fallback: 440Hz tone
+    const osc = ctx.createOscillator();
+    osc.frequency.value = 440;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.3;
+    osc.connect(gain);
+    gain.connect(dest);
+    osc.start();
+    console.log('[FAKE MIC] Using 440Hz tone (no test-speech.wav found)');
+    dest._keepAlive = { ctx, osc, gain };
+    return dest.stream;
+}
+
 export class RecordingEngine {
     constructor(callbacks = {}) {
         this.callbacks = callbacks;
@@ -29,6 +70,10 @@ export class RecordingEngine {
     }
 
     async requestPermission() {
+        if (FAKE_MIC) {
+            console.log('[FAKE MIC] Skipping permission (test mode)');
+            return true;
+        }
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
@@ -56,15 +101,19 @@ export class RecordingEngine {
                 sampleRate: 48000 // High quality, will be downsampled for Whisper
             });
 
-            // Get microphone stream
-            this.mediaStream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true,
-                    sampleRate: 48000
-                }
-            });
+            // Get microphone stream (or fake stream in test mode)
+            if (FAKE_MIC) {
+                this.mediaStream = await createFakeStream();
+            } else {
+                this.mediaStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true,
+                        sampleRate: 48000
+                    }
+                });
+            }
 
             // Create source node
             this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);

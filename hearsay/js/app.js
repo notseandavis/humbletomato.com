@@ -355,7 +355,6 @@ class HearsayApp {
             }
         }
     }
-}
 
     debugLog(msg) {
         const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
@@ -393,6 +392,7 @@ class HearsayApp {
             `Chunks: ${this._chunksProcessed || 0} | Segments: ${this._segmentsCreated || 0}`
         ].join('<br>');
     }
+}
 
 // Initialize app when DOM is ready
 if (document.readyState === 'loading') {

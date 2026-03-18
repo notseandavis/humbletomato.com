@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matrix Methodology - Humble Tomato</title>
-    <meta name="description" content="The foundational approach to spec-driven development. How structured specifications and AI agents combine to produce deterministic software.">
+    <meta name="description" content="The Context Matrix: how PRD, architecture, and spec templates compose a context window that resolves implementation like a diffusion model.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -25,6 +25,7 @@
                 <li><a href="solution-space.html">The Solution Space</a></li>
                 <li class="nav-section-label">Approach Library</li>
                 <li><a href="matrix-methodology.html" class="active">Matrix Methodology</a></li>
+                <li><a href="matrix-way-of-working.html">Matrix Way of Working</a></li>
                 <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
                 <li><a href="gsd.html">GSD</a></li>
                 <li><a href="bmad.html">BMAD</a></li>
@@ -40,242 +41,84 @@
     <div class="container">
 
         <header class="page-header">
-            <div class="breadcrumb"><strong>Step 2 of 5</strong> · Practice</div>
             <h1>Matrix Methodology</h1>
-            <p class="subtitle">A formalized approach to AI-driven software generation. Combine structured specifications with architecture patterns to produce deterministic implementations.</p>
+            <p class="subtitle">Three inputs. One context window. Implementation resolves like a diffusion model.</p>
         </header>
 
         <section class="content">
 
-            <h2>What Matrix Is</h2>
-
-            <p>Matrix is a framework for thinking about <strong>what goes into the context window</strong>. It assumes you can one-shot any task if the context is right. The question it answers: what combination of specifications, architecture patterns, and templates produces predictable code from an AI agent?</p>
-
-            <p>The key insight: <strong>clean, complete inputs produce predictable outputs.</strong> When you constrain the solution space with well-structured specs and architecture patterns, agent-generated code becomes deterministic.</p>
-
-            <p>Matrix does not prescribe how to handle tasks that exceed one context window. That's what the <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> is for. Matrix composes the context. Ralph iterates when one shot isn't enough.</p>
-
-            <h2>Why This Works Now</h2>
-
-            <p>Modern AI models reason about code at a deep level. They understand why patterns exist, trace cause-and-effect when debugging, and self-correct when encountering errors. Agents can now run commands in real development environments: build, test, query databases, search codebases. This transforms them from code generators into interactive developers.</p>
-
             <h2>The Context Matrix</h2>
 
-            <p>Three inputs compose the context window:</p>
+            <p>Matrix is a framework for composing the context window. It assumes you can one-shot any task if the context is right. The question: what inputs produce predictable code?</p>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>PRD (Business)</th>
-                        <th>Spec Template (Translation)</th>
-                        <th>Architecture (How)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Pure business context. What the business wants, in business language. No implementation details.</td>
-                        <td>Maps business intent to implementation decisions. The validation checkpoint.</td>
-                        <td>Framework patterns, anti-patterns, reference implementations.</td>
-                    </tr>
-                </tbody>
-            </table>
+            <p>Three inputs form a literal matrix:</p>
 
-            <p>The PRD describes <em>what</em> the business wants. The architecture docs describe <em>how</em> things are built on this platform. The spec template connects the two: it resolves abstract business requirements into concrete implementation choices. Together, they constrain the solution space enough that output becomes predictable.</p>
+            <pre><code>                          Architecture (columns)
+                    ┌───────────┬───────────┬───────────┐
+                    │   Auth    │    API    │   State   │
+         ┌──────────┼───────────┼───────────┼───────────┤
+  PRD    │  Login   │  OAuth2 + │  POST     │  Session  │
+ (rows)  │          │  JWT      │  /login   │  store    │
+         ├──────────┼───────────┼───────────┼───────────┤
+         │  Cart    │  User     │  CRUD     │  Redis    │
+         │          │  scoped   │  /cart/*  │  cache    │
+         ├──────────┼───────────┼───────────┼───────────┤
+         │  Payment │  PCI      │  POST     │  Tx log   │
+         │          │  tokenize │  /pay     │  + saga   │
+         └──────────┴───────────┴───────────┴───────────┘</code></pre>
 
-            <p>The PRD is also fed directly to the agent as additional context. The agent sees both the raw business intent and the resolved implementation mapping. This preserves maximum information (see <a href="telephone-game.html">The Telephone Game</a>).</p>
+            <p>Each cell is a <strong>resolution point</strong>. PRD row (what the business wants) meets architecture column (how this platform builds things). The cell contains the resolved implementation decision.</p>
 
-            <h3>The Spec Template as Validation Point</h3>
+            <p>The spec template is the <strong>function</strong> that fills each cell. It takes (business requirement, technical pattern) and outputs the specific implementation choice. "Login" + "Auth patterns" = "OAuth2 with JWT rotation." "Cart" + "State management" = "Redis-cached, user-scoped."</p>
 
-            <p>The spec template is where product and engineering meet. It resolves business requirements into implementation-level detail:</p>
+            <h2>Simultaneous Resolution</h2>
 
-            <ul>
-                <li><strong>API endpoints</strong> — exact routes, methods, request/response shapes</li>
-                <li><strong>Form fields</strong> — field types, validation rules, conditional visibility</li>
-                <li><strong>Data types</strong> — entities, relationships, constraints, migrations</li>
-                <li><strong>Security permissions</strong> — role-based access, what each user persona can see and do</li>
-                <li><strong>Configuration</strong> — feature flags, environment-specific settings, integration parameters</li>
-            </ul>
+            <p>Here's where it gets interesting. In a diffusion model, the entire image resolves simultaneously. The eyes know about the nose. The background knows about the foreground. Every pixel is constrained by every other pixel in the same denoising step.</p>
 
-            <p>For example, a business requirement like "Support personal and business customers" resolves in the spec template to: Strategy pattern with <code>CustomerType</code> enum, conditional bean wiring via <code>@Profile</code>, separate form validation rules per type, different permission sets for each.</p>
+            <p>The context matrix works the same way. All three inputs sit in one context window. When the agent resolves "Login + Auth," it already sees "Payment + Auth" in the same context. The auth decisions are <em>consistent</em> across the entire matrix because they resolve together, not in isolation.</p>
 
-            <p>Writing the spec template forces you to connect the dots between the PRD and architecture and see how they resolve together. If the mapping doesn't make sense when you write it down, you've caught a problem before the agent touches any code.</p>
+            <pre><code>Diffusion model:    noise  →  →  →  coherent image
+                    (all pixels resolve together)
 
-            <p>The spec template adds information that didn't exist in either source document alone: the specific resolution of abstract business intent into concrete implementation decisions. It's not theoretically necessary (you could feed raw documents directly), but it's a validation checkpoint that pays for itself. See <a href="telephone-game.html">The Telephone Game</a> for why this distinction matters.</p>
+Context matrix:     PRD + Architecture + Spec Template  →  coherent implementation
+                    (all resolution points resolve together)</code></pre>
 
-            <h2>Templates as Control Knobs</h2>
+            <p>This is why one-shot works when the context is right. The agent isn't resolving cells sequentially. It's resolving the entire implementation surface at once, with every decision constrained by every other decision in the same window.</p>
 
-            <p>Architecture templates control the shape of generated code. Want different error handling? Update the error-codes template. Want different API structure? Update the client-apis template. Change the template, change the output across all future generations.</p>
+            <h2>The Spec Template as Resolution Function</h2>
 
-            <p>This compounds. Better templates improve every subsequent capability. The 10th capability generates faster and cleaner than the 1st.</p>
+            <p>The spec template maps abstract business intent to concrete implementation. It resolves each cell:</p>
 
-            <h2>Overcoming Failures</h2>
+            <pre><code># Spec Template (abbreviated)
 
-            <p>The combination of CLI execution, iterative loops, and supervision lets agents overcome obstacles:</p>
+## Authentication
+- Strategy: OAuth2 + JWT (from Architecture/auth-patterns.md)
+- Login flow: POST /api/auth/login → JWT pair
+- Session: Redis-backed, 15min access / 7d refresh
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Snag</th>
-                        <th>How Agent Overcomes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Build fails</td>
-                        <td>Reads error, fixes code, rebuilds</td>
-                    </tr>
-                    <tr>
-                        <td>Test fails</td>
-                        <td>Reads assertion, adjusts implementation</td>
-                    </tr>
-                    <tr>
-                        <td>Service won't start</td>
-                        <td>Checks logs, fixes configuration</td>
-                    </tr>
-                    <tr>
-                        <td>Missing dependency</td>
-                        <td>Searches reference implementation, adds it</td>
-                    </tr>
-                </tbody>
-            </table>
+## Cart  
+- Scope: User-bound via JWT subject claim
+- Storage: Redis cache (hot) + Postgres (durable)
+- API: CRUD at /api/cart/* with optimistic locking
 
-            <p>Agents aren't brittle. They can debug and self-correct within the iteration loop.</p>
+## Payment
+- Tokenization: Stripe tokenization (never raw card data)
+- Flow: POST /api/payments → saga with compensating transactions
+- Audit: Immutable transaction log, append-only</code></pre>
 
-            <h2>The Goal: E2E Tests Pass</h2>
+            <p>Each section is a row of resolved cells. The spec template adds information that didn't exist in either source: the <em>specific</em> resolution of abstract intent into concrete decisions. Writing it forces you to see where the PRD and architecture don't connect. If a cell doesn't resolve cleanly, you've caught a problem before any code is generated.</p>
 
-            <p>Every Matrix cycle has one definition of done: <strong>end-to-end integration tests run successfully.</strong> Not "code looks right." Not "agent completed all tasks." The tests pass or they don't.</p>
+            <p>The PRD is also fed directly to the agent alongside the spec. The agent sees both raw business intent and the resolved mapping. Maximum information, minimum loss (see <a href="telephone-game.html">The Telephone Game</a>).</p>
 
-            <p>This is what makes the methodology concrete. The spec template defines expected behavior. E2E tests encode that behavior as assertions. When the tests pass, the spec is implemented. When they fail, you know exactly what's wrong.</p>
+            <h2>Templates Compound</h2>
 
-            <p>The agent's job isn't "build the feature." It's "make the tests green." That's a verifiable goal with no ambiguity.</p>
+            <p>Architecture templates control the shape of each column. Better auth template? Every row that touches auth improves. Better API conventions? Every endpoint benefits. The 10th feature generates faster and cleaner than the 1st because the column patterns have been refined by the previous nine.</p>
 
-            <h2>The Daily Product Iteration</h2>
+            <h2>What Matrix Doesn't Cover</h2>
 
-            <p>Traditional development: sequential handoffs. Product thinks (2 weeks) → Product writes PRD (1 week) → Architect reviews (3 days) → Dev builds (3 weeks) → QA tests (1 week) → Feedback (too late).</p>
+            <p>Matrix composes the context. It doesn't prescribe what happens when a task exceeds one window (that's the <a href="ralph-wiggum.html">Ralph Loop</a>), how to coordinate multiple agents (left to the practitioner), or how to evolve live systems (see <a href="continuous-evolution.html">Continuous Evolution</a>).</p>
 
-            <p>Matrix Methodology: <strong>daily releases.</strong></p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Day</th>
-                        <th>PRD</th>
-                        <th>Release</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>v0.1</td>
-                        <td>R0</td>
-                        <td>Feedback surfaces gaps</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>v0.2</td>
-                        <td>R1</td>
-                        <td>Feedback surfaces edge cases</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>v0.3</td>
-                        <td>R2</td>
-                        <td>E2E mostly passing → RC ready</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>v0.4</td>
-                        <td>RC0</td>
-                        <td>E2E green, product reviewing</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>-</td>
-                        <td>RC0 → FINAL</td>
-                        <td>Ship it</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p>Early iterations (R0, R1, R2) are exploratory. Later iterations become release candidates once the PRD stabilizes. When an RC passes all gates - build green, tests green, product signoff, architecture signoff - you mark it final and ship.</p>
-
-            <h3>Why This Works</h3>
-
-            <p>Rejection is cheap. The agent rebuilds from updated specs in hours, not weeks. There's no sunk cost psychology. Nobody spent three weeks writing R1, so nobody fights to ship it despite known issues.</p>
-
-            <p>The PRD and the code converge together. Neither is "done" first. They're both done when E2E passes.</p>
-
-            <h2>Spec Quality Levels</h2>
-
-            <p>Not all specs start polished. They climb through maturity levels:</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>Description</th>
-                        <th>Agent Can...</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>L0: Sketch</td>
-                        <td>Bullet points, intent only</td>
-                        <td>Generate scaffolding, identify questions</td>
-                    </tr>
-                    <tr>
-                        <td>L1: Draft</td>
-                        <td>Structured sections, some gaps</td>
-                        <td>Generate compilable code, surface missing pieces</td>
-                    </tr>
-                    <tr>
-                        <td>L2: Specified</td>
-                        <td>Complete sections, edge cases noted</td>
-                        <td>Generate passing unit tests</td>
-                    </tr>
-                    <tr>
-                        <td>L3: Verified</td>
-                        <td>Validated by successful runs</td>
-                        <td>Generate passing E2E tests</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p><strong>Key point:</strong> You don't need L3 specs to start. Begin at L0 and let R0 tell you what's missing. This is the SpaceX approach applied to software - rapid iteration reveals truth faster than exhaustive upfront planning.</p>
-
-            <h2>Role Evolution</h2>
-
-            <p>The velocity of agent-driven development changes how teams work:</p>
-
-            <h3>Product Managers and Product Owners Become Builders</h3>
-
-            <p>When agents generate code from specs, the person writing the spec <em>is</em> the builder. PMs and POs move from describing what they want to directly shaping what gets built. Their product judgment becomes the primary input to the build loop.</p>
-
-            <h3>Engineers Become Architects and Orchestrators</h3>
-
-            <p>Engineers shift from writing code to designing the systems that generate it. They own the templates, architecture docs, and infrastructure that make the build loop reliable. They debug the loop, not just the code.</p>
-
-            <h2>Related Concepts</h2>
-
-            <p>The Matrix Methodology is grounded in deeper principles about how specifications relate to generated output:</p>
-
-            <ul>
-                <li><strong><a href="specs-as-dna.html">Specs as DNA</a></strong> - Why specifications behave like genetic code, and agents are the expression machinery</li>
-                <li><strong><a href="specs-as-dna.html#diffusion">Specs as Diffusion</a></strong> - Why iterative generation works like a diffusion model resolving noise into coherent output</li>
-            </ul>
-
-            <h2>Principles</h2>
-
-            <ol>
-                <li><strong>Ship specs daily, not quarterly.</strong> Treat PRDs like code: commit changes, iterate, version.</li>
-                <li><strong>Let the code challenge the spec.</strong> A failing test is a spec review. Listen to what the build tells you.</li>
-                <li><strong>Specs and code converge together.</strong> Neither is "done" first. Both are done when E2E passes.</li>
-                <li><strong>Invest in templates, not documents.</strong> A better template improves every future capability.</li>
-                <li><strong>Capture every lesson.</strong> Wisdom compounds. Architecture docs should prevent tomorrow's agent from hitting today's wall.</li>
-                <li><strong>Product stays in the loop daily.</strong> Not weekly standups. Daily review of running software.</li>
-                <li><strong>Start rough, sharpen through execution.</strong> An L0 spec that runs today teaches more than an L3 spec that ships next month.</li>
-            </ol>
+            <p>For how this changes daily development practice, see <a href="matrix-way-of-working.html">Matrix Way of Working</a>.</p>
 
             <h2>Strengths</h2>
 
@@ -284,10 +127,10 @@
                     <tr><th>Strength</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Template compounding</td><td>Better templates improve every future generation. The 10th capability builds faster than the 1st.</td></tr>
-                    <tr><td>Daily iteration</td><td>Rejection is cheap. Agent rebuilds from updated specs in hours, not weeks. No sunk cost psychology.</td></tr>
-                    <tr><td>Spec quality levels</td><td>Start at L0 (bullet points) and let R0 tell you what's missing. Don't wait for perfect specs.</td></tr>
-                    <tr><td>Information-theoretic foundation</td><td>Feeding raw PRD + architecture directly to the agent avoids lossy intermediate synthesis steps.</td></tr>
+                    <tr><td>Simultaneous resolution</td><td>All decisions resolve in one context window. Auth knows about state knows about API. Consistency emerges from shared context, not coordination.</td></tr>
+                    <tr><td>Template compounding</td><td>Better column patterns improve every future row. Investment in architecture templates pays compound interest.</td></tr>
+                    <tr><td>Information-theoretic foundation</td><td>Raw PRD + architecture fed directly to agent avoids lossy intermediate synthesis. Fewer transformations = less signal loss.</td></tr>
+                    <tr><td>Validation checkpoint</td><td>Writing the spec template surfaces gaps before code generation. If a cell doesn't resolve, the inputs don't connect.</td></tr>
                 </tbody>
             </table>
 
@@ -298,41 +141,17 @@
                     <tr><th>Limitation</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Template investment</td><td>The methodology is only as good as your architecture templates. Building good templates requires deep platform knowledge and significant upfront effort.</td></tr>
-                    <tr><td>Spec writing is hard</td><td>"Clean inputs produce predictable outputs" assumes you can write clean inputs. Translating product intent into framework-specific PRDs is a skill most teams don't have.</td></tr>
-                    <tr><td>Greenfield assumption</td><td>Daily regeneration works for new systems. Live products with real data, API consumers, and in-flight workflows need <a href="continuous-evolution.html">Continuous Evolution</a>, which adds significant complexity.</td></tr>
-                    <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same spec can produce different implementations across runs.</td></tr>
-                    <tr><td>Context window limits</td><td>PRD + architecture + templates must fit in one context window. Complex enterprise systems with large template libraries hit this ceiling.</td></tr>
-                    <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe how to coordinate multiple agents. The <a href="ralph-wiggum.html">Ralph Loop</a> handles execution, but multi-agent orchestration is left to the practitioner.</td></tr>
-                    <tr><td>Role shift resistance</td><td>"PMs become builders" and "Engineers become architects" sounds clean but requires organizational change that most enterprises resist.</td></tr>
+                    <tr><td>Template investment</td><td>Column quality determines output quality. Building good architecture templates requires deep platform knowledge and significant upfront effort.</td></tr>
+                    <tr><td>Context window ceiling</td><td>PRD + architecture + spec must fit in one window. Large matrices with many rows and columns hit this limit. Complex enterprise systems may not fit.</td></tr>
+                    <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same inputs can produce different resolutions across runs.</td></tr>
+                    <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe multi-agent coordination.</td></tr>
+                    <tr><td>Spec writing is a skill</td><td>Filling the matrix requires someone who understands both the business rows and the architecture columns. That person is rare.</td></tr>
                 </tbody>
             </table>
 
-            <h2>When to Use Matrix</h2>
+            <h2>Compare</h2>
 
-            <p>You have deep platform knowledge and can invest in architecture templates. You're building on a known framework (Spring Boot, Next.js, Rails) where patterns are well-established. You want daily iteration with product in the loop. You value spec quality over workflow automation.</p>
-
-            <h2>When to Look Elsewhere</h2>
-
-            <p>You want turnkey orchestration out of the box (<a href="gsd.html">GSD</a>). You need structured agent role separation (<a href="bmad.html">BMAD</a>). You don't have the platform expertise to build good templates. You're doing exploratory work where the architecture isn't settled yet.</p>
-
-            <h2>What This Is Not</h2>
-
-            <p><strong>Not waterfall with faster typing.</strong> The speed of code generation is wasted if inputs don't iterate at the same pace.</p>
-
-            <p><strong>Not vibe coding.</strong> Specs are essential. They're just not frozen. They improve through use, not committee review.</p>
-
-            <p><strong>Not "AI replaces product."</strong> Product judgment is more important, not less. Someone has to decide what the error message should say, whether the edge case matters, if the flow feels right.</p>
-
-            <p><strong>Not "AI replaces architecture."</strong> The infrastructure, templates, and architecture docs are the machine. The machine needs engineers who understand the platform deeply enough to keep it running right.</p>
-
-            <h2>Next Steps</h2>
-
-            <p>Explore the <a href="ralph-wiggum.html">Ralph Wiggum Loop</a> to understand autonomous execution patterns.</p>
-
-            <p>For teams working with live products, see <a href="continuous-evolution.html">Continuous Evolution</a> for diff-based development and safe evolution patterns.</p>
-
-            <p>Compare with other approaches: <a href="gsd.html">GSD</a> for turnkey context engineering, <a href="bmad.html">BMAD</a> for full agile lifecycle simulation.</p>
+            <p><strong><a href="gsd.html">GSD</a></strong> focuses on context engineering per-task with fresh sub-agent windows. <strong><a href="bmad.html">BMAD</a></strong> uses agent personas to simulate team roles across a structured lifecycle. Matrix focuses on composing the single context window that makes one-shot resolution possible.</p>
 
         </section>
 
@@ -341,9 +160,9 @@
                 <span class="page-nav-label">Previous</span>
                 <span class="page-nav-title">← Vibe vs Spec</span>
             </a>
-            <a href="ralph-wiggum.html" class="page-nav-next">
+            <a href="matrix-way-of-working.html" class="page-nav-next">
                 <span class="page-nav-label">Next</span>
-                <span class="page-nav-title">Ralph Loop →</span>
+                <span class="page-nav-title">Matrix Way of Working →</span>
             </a>
         </nav>
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Way of Working - Humble Tomato</title>
+    <meta name="description" content="How the Matrix Methodology changes daily development: daily iteration, spec quality levels, role evolution, and E2E as definition of done.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-section-label">Understand</li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
+                <li><a href="solution-space.html">The Solution Space</a></li>
+                <li class="nav-section-label">Approach Library</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="matrix-way-of-working.html" class="active">Matrix Way of Working</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li class="nav-section-label">Ideas</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
+                <li><a href="telephone-game.html">The Telephone Game</a></li>
+                <li class="nav-section-label">Concepts</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Matrix Way of Working</h1>
+            <p class="subtitle">How the Context Matrix changes daily development practice. Daily releases, evolving specs, and new roles.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>Daily Iteration, Not Quarterly Releases</h2>
+
+            <p>Traditional development: Product thinks (2 weeks) → PRD (1 week) → Architecture review (3 days) → Dev builds (3 weeks) → QA tests (1 week) → Feedback (too late).</p>
+
+            <p>With Matrix: <strong>daily releases.</strong></p>
+
+            <table>
+                <thead>
+                    <tr><th>Day</th><th>PRD</th><th>Release</th><th>Result</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>v0.1</td><td>R0</td><td>Feedback surfaces gaps</td></tr>
+                    <tr><td>2</td><td>v0.2</td><td>R1</td><td>Feedback surfaces edge cases</td></tr>
+                    <tr><td>3</td><td>v0.3</td><td>R2</td><td>E2E mostly passing → RC ready</td></tr>
+                    <tr><td>4</td><td>v0.4</td><td>RC0</td><td>E2E green, product reviewing</td></tr>
+                    <tr><td>5</td><td>-</td><td>RC0 → FINAL</td><td>Ship it</td></tr>
+                </tbody>
+            </table>
+
+            <p>Rejection is cheap. The agent rebuilds from updated specs in hours, not weeks. No sunk cost psychology. Nobody spent three weeks on R1, so nobody fights to ship it despite known issues.</p>
+
+            <p>The PRD and the code converge together. Neither is "done" first. Both are done when E2E passes.</p>
+
+            <h2>E2E Tests as Definition of Done</h2>
+
+            <p>Every cycle has one measure: <strong>end-to-end integration tests pass.</strong> Not "code looks right." Not "agent completed all tasks." The tests pass or they don't.</p>
+
+            <p>The <a href="matrix-methodology.html">spec template</a> defines expected behavior. E2E tests encode that behavior as assertions. The agent's job isn't "build the feature." It's "make the tests green." Verifiable, no ambiguity.</p>
+
+            <h2>Spec Quality Levels</h2>
+
+            <p>Specs climb through maturity levels. You don't need L3 to start.</p>
+
+            <table>
+                <thead>
+                    <tr><th>Level</th><th>Description</th><th>Agent Can...</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>L0: Sketch</td><td>Bullet points, intent only</td><td>Generate scaffolding, identify questions</td></tr>
+                    <tr><td>L1: Draft</td><td>Structured sections, some gaps</td><td>Generate compilable code, surface missing pieces</td></tr>
+                    <tr><td>L2: Specified</td><td>Complete sections, edge cases noted</td><td>Generate passing unit tests</td></tr>
+                    <tr><td>L3: Verified</td><td>Validated by successful runs</td><td>Generate passing E2E tests</td></tr>
+                </tbody>
+            </table>
+
+            <p>Start at L0 and let R0 tell you what's missing. Rapid iteration reveals truth faster than exhaustive upfront planning.</p>
+
+            <h2>Overcoming Failures</h2>
+
+            <p>Agents aren't brittle. CLI execution + iterative loops let them self-correct:</p>
+
+            <table>
+                <thead>
+                    <tr><th>Snag</th><th>How Agent Overcomes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Build fails</td><td>Reads error, fixes code, rebuilds</td></tr>
+                    <tr><td>Test fails</td><td>Reads assertion, adjusts implementation</td></tr>
+                    <tr><td>Service won't start</td><td>Checks logs, fixes configuration</td></tr>
+                    <tr><td>Missing dependency</td><td>Searches reference implementation, adds it</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Role Evolution</h2>
+
+            <h3>Product Managers Become Builders</h3>
+
+            <p>When agents generate code from specs, the person writing the spec <em>is</em> the builder. PMs move from describing what they want to directly shaping what gets built. Their product judgment becomes the primary input to the build loop.</p>
+
+            <h3>Engineers Become Architects</h3>
+
+            <p>Engineers shift from writing code to designing the systems that generate it. They own the templates, architecture docs, and infrastructure that make the build loop reliable. They debug the loop, not the code.</p>
+
+            <h2>Principles</h2>
+
+            <ol>
+                <li><strong>Ship specs daily, not quarterly.</strong> Treat PRDs like code: commit, iterate, version.</li>
+                <li><strong>Let the code challenge the spec.</strong> A failing test is a spec review.</li>
+                <li><strong>Specs and code converge together.</strong> Both are done when E2E passes.</li>
+                <li><strong>Invest in templates, not documents.</strong> Better templates improve every future capability.</li>
+                <li><strong>Start rough, sharpen through execution.</strong> An L0 spec that runs today teaches more than an L3 spec next month.</li>
+                <li><strong>Product stays in the loop daily.</strong> Not weekly standups. Daily review of running software.</li>
+            </ol>
+
+            <h2>What This Is Not</h2>
+
+            <p><strong>Not waterfall with faster typing.</strong> Speed is wasted if inputs don't iterate at the same pace.</p>
+
+            <p><strong>Not "AI replaces product."</strong> Product judgment is <em>more</em> important, not less. Someone has to decide what the error message should say.</p>
+
+            <p><strong>Not "AI replaces architecture."</strong> Templates and architecture docs are the machine. Engineers keep the machine running.</p>
+
+        </section>
+
+        <nav class="page-nav">
+            <a href="matrix-methodology.html" class="page-nav-prev">
+                <span class="page-nav-label">Previous</span>
+                <span class="page-nav-title">← Matrix Methodology</span>
+            </a>
+            <a href="ralph-wiggum.html" class="page-nav-next">
+                <span class="page-nav-label">Next</span>
+                <span class="page-nav-title">Ralph Loop →</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 - Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

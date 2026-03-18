@@ -48,9 +48,9 @@
 
             <h2>The Problem Ralph Solves</h2>
 
-            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> assumes you can one-shot any task if the context is right. But real features don't fit in one context window. A login system needs schema changes, middleware, UI components, and session handling. No single prompt covers all of that well.</p>
+            <p>Real features don't fit in one context window. A login system needs schema changes, middleware, UI components, and session handling. No single prompt covers all of that well. And even if you could fit it, quality degrades as the context fills up.</p>
 
-            <p>Ralph is the mitigation for context window limitations. It breaks work into tasks that each fit in one context window, then iterates with fresh context until the feature is complete.</p>
+            <p>Ralph breaks work into tasks that each fit in one context window, then iterates with fresh context until the feature is complete.</p>
 
             <h2>The Core Pattern</h2>
 
@@ -317,13 +317,9 @@ Add ability to mark tasks with different statuses.
 
             <p>The pattern is simple enough to implement anywhere but structured enough to produce reliable results.</p>
 
-            <h2>Relationship to Matrix Methodology</h2>
+            <h2>Use It With Anything</h2>
 
-            <p><a href="matrix-methodology.html">Matrix</a> answers: what goes into the context window? (PRD + architecture templates = constrained solution space.)</p>
-
-            <p>Ralph answers: what happens when one context window isn't enough? (Break work into one-shot tasks, iterate with fresh context each pass.)</p>
-
-            <p>Matrix composes the context. Ralph handles the iteration. They're complementary but separate ideas. You can use Ralph's execution pattern with any spec-driven approach, not just Matrix.</p>
+            <p>Ralph is a standalone execution pattern. It works with any spec-driven approach: feed it a PRD from <a href="bmad.html">BMAD</a>, plans from <a href="gsd.html">GSD</a>, or specs from any other framework. All it needs is a structured task list and clear acceptance criteria.</p>
 
         </section>
 

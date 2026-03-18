@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Methodology - Humble Tomato</title>
-    <meta name="description" content="The Context Matrix: how specs, architecture, and business requirements compose a context window that resolves implementation.">
+    <title>The Matrix — Humble Tomato</title>
+    <meta name="description" content="The Matrix: a documentation investment where context quality determines output quality. Rows are business specs. Columns are architecture. Where they intersect, implementation resolves.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -15,17 +15,13 @@
     <div class="container">
 
         <header class="page-header">
-            <h1>Matrix Methodology</h1>
-            <p class="subtitle">Spec + Architecture = Implementation</p>
+            <h1>The Matrix</h1>
+            <p class="subtitle">Context quality determines output quality.</p>
         </header>
 
         <section class="content">
 
-            <div class="callout">
-                <p><span class="callout-label">Spec + Architecture = Implementation</span></p>
-            </div>
-
-            <p>That's the whole idea. The spec says <em>what</em> to build. The architecture says <em>how this platform builds things</em>. Where they intersect, the implementation resolves.</p>
+            <p>The matrix is a documentation investment. Rows are business requirements. Columns are architecture decisions. Where they intersect, implementation resolves.</p>
 
             <pre><code>                        Architecture
                   ┌──────────┬──────────┬──────────┐
@@ -41,53 +37,53 @@
        │          │ tokenize │ /pay     │ + saga   │
        └──────────┴──────────┴──────────┴──────────┘</code></pre>
 
-            <p>Each cell is a <strong>resolution point</strong>. Remove either side and the agent guesses:</p>
+            <p>Each cell is a resolution point. Remove either axis and the AI guesses.</p>
 
             <div class="callout">
                 <p><span class="callout-label">Spec alone (no architecture)</span><br>
-                <span class="callout-detail">"Build login, cart, and checkout" — Agent invents its own auth model, state strategy, API style.</span></p>
+                <span class="callout-detail">"Build login, cart, checkout" — The AI invents its own auth model, state strategy, API patterns.</span></p>
                 <p><span class="callout-label">Architecture alone (no spec)</span><br>
-                <span class="callout-detail">"We use OAuth2, Redis, REST conventions" — Agent has no idea what to build.</span></p>
+                <span class="callout-detail">"We use OAuth2, Redis, REST" — The AI has no idea what to build.</span></p>
                 <p><span class="callout-label">Both</span><br>
-                <span class="callout-detail">"Login with OAuth2+JWT, cart user-scoped via JWT subject, checkout via Stripe tokenization with saga pattern" — Implementation resolves.</span></p>
+                <span class="callout-detail">"Login with OAuth2+JWT, cart scoped by JWT subject, checkout via Stripe tokenization with saga" — One valid implementation.</span></p>
             </div>
 
-            <h2>Business Requirements Sit Alongside</h2>
+            <h2>The investment is in the columns</h2>
 
-            <p>The raw business context isn't in the matrix. It sits next to it. The agent sees both the resolved spec and the original intent, so it understands <em>why</em> each decision was made without re-deriving what the spec already resolves.</p>
+            <p>Architecture templates are the columns. Good templates require deep platform knowledge. Someone has to know that your auth is OAuth2 with JWT, that state goes in Redis for sessions and Postgres for persistence, that APIs follow specific REST conventions.</p>
 
-            <h2>Templates Compound</h2>
+            <p>This is a one-time investment that compounds. Better auth template? Every row that touches auth improves. Better API conventions? Every endpoint benefits. The 10th feature generates faster than the 1st because the columns were refined by the previous nine.</p>
 
-            <p>Architecture is the columns. Better auth template? Every row that touches auth improves. Better API conventions? Every endpoint benefits. The 10th feature generates faster than the 1st because the column patterns were refined by the previous nine.</p>
+            <h2>The investment is in the rows</h2>
 
-            <h2>The Spec Surfaces Gaps</h2>
+            <p>Good specs require deep business domain knowledge. Someone has to understand what "checkout" actually means in your context: which payment processor, what happens on failure, what the legal holds are, which edge cases matter.</p>
 
-            <p>Writing the spec forces you to resolve every cell. If "Payment + State" doesn't resolve cleanly, you've found a gap between the business requirements and the architecture before any code is generated. The spec is a validation checkpoint.</p>
+            <p>This isn't something you can hand off to an AI. The business domain knowledge is the whole point of the row. Without it, the AI fills in reasonable-sounding defaults that miss your actual requirements.</p>
 
-            <h2>Don't Scope the Context</h2>
+            <h2>The skill is in filling the cells</h2>
 
-            <p>Engineers instinctively isolate. "I'm building the cart service, so I'll scope the context to cart stuff. Less noise." Good instinct for writing code. Wrong instinct for composing context.</p>
+            <p>Filling the matrix requires someone who understands both sides: the business rows and the architecture columns. That person maps "user logs in" (business) to "OAuth2 + JWT with Redis session store" (architecture). That mapping is the spec.</p>
 
-            <p>The agent building the cart needs to see the auth model (whose cart?), the payment flow (checkout handoff), the inventory rules (stock validation). Not because it's building those things, but because <strong>cart decisions are shaped by those things.</strong></p>
+            <p>This is a skill. It's the same skill a good tech lead has always had: translating business intent into technical decisions. The matrix just makes it explicit and feedable to an AI.</p>
+
+            <h2>Don't scope the context</h2>
+
+            <p>Engineers instinctively isolate. "I'm building the cart, so I'll scope context to cart." Good instinct for writing code. Wrong instinct for composing context.</p>
+
+            <p>The cart agent needs to see the auth model (whose cart?), the payment flow (checkout handoff), the inventory rules (stock validation). Not because it's building those things, but because cart decisions are shaped by them.</p>
 
             <div class="callout">
-                <p><span class="callout-label">Scoped context:</span><span class="callout-detail"> "Build the cart service. Here's the cart spec." Cart works in isolation. Breaks the moment it touches auth, payments, inventory.</span></p>
-                <p><span class="callout-label">Full system context:</span><span class="callout-detail"> "Build the cart service. Here's the cart spec, the auth model, the payment flow, the inventory rules." Cart integrates correctly on first generation.</span></p>
+                <p><span class="callout-label">Scoped context:</span> <span class="callout-detail">Cart works in isolation. Breaks the moment it touches auth, payments, inventory.</span></p>
+                <p><span class="callout-label">Full context:</span> <span class="callout-detail">Cart integrates correctly on first generation.</span></p>
             </div>
 
-            <p>Scoping context is just <a href="abstraction-paradox.html">abstraction</a> applied to the context window. It fails for the same reason: you're hiding information the agent will eventually need.</p>
-
-            <h2>What Matrix Doesn't Cover</h2>
-
-            <p>Matrix organizes context. It doesn't prescribe execution patterns (<a href="ralph-wiggum.html">Ralph Loop</a>), multi-agent coordination, or how to evolve live systems (<a href="continuous-evolution.html">Continuous Evolution</a>).</p>
-
-            <h2>Tradeoffs</h2>
+            <h2>What the matrix doesn't cover</h2>
 
             <ul>
-                <li><strong>Template investment.</strong> Column quality determines output quality. Good architecture templates require deep platform knowledge.</li>
-                <li><strong>Spec writing is a skill.</strong> Filling the matrix requires someone who understands both the business rows and the architecture columns.</li>
-                <li><strong>LLMs are probabilistic.</strong> Constrained solution spaces reduce variance but don't eliminate it.</li>
-                <li><strong>No built-in orchestration.</strong> Unlike <a href="gsd.html">GSD</a> or <a href="bmad.html">BMAD</a>, Matrix doesn't prescribe how agents coordinate.</li>
+                <li>Execution patterns — see <a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li>Multi-agent coordination — see <a href="gsd.html">GSD</a> or <a href="bmad.html">BMAD</a></li>
+                <li>Evolving live systems — see <a href="continuous-evolution.html">Continuous Evolution</a></li>
+                <li>LLMs are probabilistic. Constrained context reduces variance but doesn't eliminate it.</li>
             </ul>
 
         </section>
@@ -95,7 +91,7 @@
     </div>
 
     <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

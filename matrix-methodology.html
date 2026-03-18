@@ -46,14 +46,14 @@
 
         <header class="page-header">
             <h1>Matrix Methodology</h1>
-            <p class="subtitle">Three inputs. One context window. Implementation resolves from the intersection of spec and architecture.</p>
+            <p class="subtitle">Three inputs. All available. The agent knows what context to pull in and when.</p>
         </header>
 
         <section class="content">
 
             <h2>The Context Matrix</h2>
 
-            <p>Matrix is a framework for composing the context window. It assumes you can one-shot any task if the context is right. The question: what inputs produce predictable code?</p>
+            <p>Matrix is a framework for organizing the information an agent needs. Not everything has to fit in one context window — but all the information is available. The agent understands what context is necessary for a given task and knows how and when to retrieve it.</p>
 
             <p>Three inputs:</p>
 
@@ -85,13 +85,13 @@
 
             <h2>Simultaneous Resolution</h2>
 
-            <p>All three inputs sit in one context window. When the agent resolves "Login + Auth," it already sees "Payment + Auth" in the same context. The auth decisions are <em>consistent</em> across the entire matrix because they resolve together, not in isolation.</p>
+            <p>The agent doesn't need every input loaded at once. But when it resolves "Login + Auth," it knows "Payment + Auth" exists and can pull it in. Auth decisions stay consistent across the matrix because the agent has access to the full picture — not because everything is crammed into one window.</p>
 
-            <pre><code>Context matrix:     Spec + Architecture + Business Requirements
-                    →  coherent implementation
-                    (all resolution points resolve together)</code></pre>
+            <pre><code>All available:      Spec + Architecture + Business Requirements
+Agent retrieves:    What's relevant to the current task
+Result:             Coherent implementation with consistent decisions</code></pre>
 
-            <p>This is why one-shot works when the context is right. The agent isn't resolving cells sequentially. It's resolving the entire implementation surface at once, with every decision constrained by every other decision in the same window.</p>
+            <p>The agent's skill is knowing what context matters for a given resolution point. Build the cart service? It pulls in auth (whose cart?), inventory (stock checks), payments (checkout handoff). Not because you told it to — because the spec and architecture make the dependencies visible.</p>
 
             <h2>The Spec as Resolution Function</h2>
 
@@ -122,7 +122,7 @@
 
             <h2>What Matrix Doesn't Cover</h2>
 
-            <p>Matrix composes the context. It doesn't prescribe what happens when a task exceeds one window (that's the <a href="ralph-wiggum.html">Ralph Loop</a>), how to coordinate multiple agents (left to the practitioner), or how to evolve live systems (see <a href="continuous-evolution.html">Continuous Evolution</a>).</p>
+            <p>Matrix organizes the information. It doesn't prescribe execution patterns (that's the <a href="ralph-wiggum.html">Ralph Loop</a>), how to coordinate multiple agents (left to the practitioner), or how to evolve live systems (see <a href="continuous-evolution.html">Continuous Evolution</a>).</p>
 
             <h2>Strengths</h2>
 
@@ -131,7 +131,7 @@
                     <tr><th>Strength</th><th>Detail</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Simultaneous resolution</td><td>All decisions resolve in one context window. Auth knows about state knows about API. Consistency emerges from shared context, not coordination.</td></tr>
+                    <tr><td>Context-aware resolution</td><td>All information is available. The agent pulls in what's relevant — auth, state, API — and consistency emerges because the full picture is accessible, not hidden.</td></tr>
                     <tr><td>Template compounding</td><td>Better column patterns improve every future row. Investment in architecture templates pays compound interest.</td></tr>
                     <tr><td>Full context preservation</td><td>Raw business requirements + architecture fed directly to agent alongside the spec. Fewer transformations = less signal loss (see <a href="telephone-game.html">The Telephone Game</a>).</td></tr>
                     <tr><td>Validation checkpoint</td><td>Writing the spec surfaces gaps before code generation. If a cell doesn't resolve, the inputs don't connect.</td></tr>
@@ -146,7 +146,7 @@
                 </thead>
                 <tbody>
                     <tr><td>Template investment</td><td>Column quality determines output quality. Building good architecture templates requires deep platform knowledge and significant upfront effort.</td></tr>
-                    <tr><td>Context window ceiling</td><td>Spec + architecture + business requirements must fit in one window. Large systems with many rows and columns hit this limit.</td></tr>
+                    <tr><td>Information organization</td><td>The agent needs well-structured inputs to know what to retrieve. Poorly organized specs and architecture make it harder for the agent to find the right context.</td></tr>
                     <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same inputs can produce different resolutions across runs.</td></tr>
                     <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe multi-agent coordination.</td></tr>
                     <tr><td>Spec writing is a skill</td><td>Filling the matrix requires someone who understands both the business rows and the architecture columns. That person is rare.</td></tr>

@@ -30,6 +30,7 @@
 - **No buzzwords.** No "revolutionize," no "game-changing," no "unlock the power of." Just describe the thing.
 - **No AI writing tells.** Avoid: em dashes (—), "The Core Insight," "Let's dive in," "Here's the thing," "It's worth noting," "Crucially," "Importantly." Use periods and commas. Write like a person, not a language model. If a heading sounds like a ChatGPT section title, rewrite it.
 - **Credit sources.** If a technique came from somewhere, link it.
+- **Verify every link.** Every URL on the site must be tested and confirmed accessible. If you can't verify a link works, don't include it. No broken references, no dead footnotes, no 404s. Audit all links before publishing.
 - **Living content.** Pages get updated as techniques evolve. Date the last update.
 
 ## Content Scope

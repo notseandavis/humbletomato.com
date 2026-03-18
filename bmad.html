@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMAD Method — Humble Tomato</title>
-    <meta name="description" content="A complementary approach to spec-driven development using structured agent roles. Coming soon with detailed patterns and practices.">
+    <title>BMAD — Humble Tomato</title>
+    <meta name="description" content="Specialized AI agent personas for every dev lifecycle phase. From brainstorming to deployment with structured workflows.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -29,7 +29,9 @@
                 <li class="nav-section-label">Deepen</li>
                 <li><a href="specs-as-dna.html">Specs as DNA</a></li>
                 <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
-                <!-- BMAD hidden until content is ready -->
+                <li class="nav-section-label">Compare</li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html" class="active">BMAD</a></li>
             </ul>
         </div>
     </nav>
@@ -37,121 +39,329 @@
     <div class="container">
 
         <header class="page-header">
-            <h1>BMAD Method</h1>
-            <p class="subtitle">Structured AI-assisted development with specific agent roles for different phases of software creation.</p>
+            <div class="breadcrumb">Compare</div>
+            <h1>BMAD</h1>
+            <p class="subtitle">Breakthrough Method for Agile AI-Driven Development. Specialized agent personas guide you through the full lifecycle with structured workflows grounded in agile practices.</p>
         </header>
 
         <section class="content">
 
-            <h2>What Is BMAD?</h2>
+            <p><strong>Source:</strong> <a href="https://github.com/bmad-code-org/BMAD-METHOD">GitHub</a> · <a href="https://docs.bmad-method.org">Docs</a> · Created by BMad Code (open source, no paywalls)</p>
 
-            <p>BMAD is a complementary approach to spec-driven development that organizes AI agent work through specialized roles rather than a single autonomous loop.</p>
+            <p><strong>Also known as:</strong> Build More Architect Dreams</p>
 
-            <p>While the <a href="matrix-methodology.html">Matrix Methodology</a> focuses on specifications as source of truth and the <a href="ralph-wiggum.html">Ralph Loop</a> provides autonomous execution, BMAD explores how different agent roles can collaborate on complex development tasks.</p>
+            <h2>The Core Idea</h2>
 
-            <h2>Core Concept</h2>
+            <p>Different phases of development need different expertise. Requirements analysis needs different thinking than architecture design. Architecture needs different thinking than implementation.</p>
 
-            <p>The central idea: <strong>different phases of development benefit from different agent configurations</strong> — different context windows, different prompts, different specializations.</p>
-
-            <p>Rather than a single agent handling everything from architecture to implementation to testing, BMAD distributes work across specialized roles:</p>
+            <p>BMAD models this through specialized AI agent personas. Instead of one generalist agent doing everything, you work with experts:</p>
 
             <ul>
-                <li><strong>Builder</strong> — Generates implementation code from specifications</li>
-                <li><strong>Maintainer</strong> — Handles refactoring, optimization, and technical debt</li>
-                <li><strong>Analyzer</strong> — Reviews code quality, architecture alignment, test coverage</li>
-                <li><strong>Designer</strong> — Focuses on user experience, interface patterns, accessibility</li>
+                <li>Analyst for requirements</li>
+                <li>PM for roadmaps and prioritization</li>
+                <li>Architect for system design</li>
+                <li>Developer for implementation</li>
+                <li>UX Designer for interfaces</li>
+                <li>Scrum Master for process guidance</li>
+                <li>QA Engineer for testing strategies</li>
             </ul>
 
-            <p>Each role has different constraints, different context priorities, and different success criteria.</p>
+            <p>12+ personas total. Each has specific prompts, workflows, and outputs tuned to their role.</p>
 
-            <h2>How It Complements Matrix</h2>
+            <h2>How It Works</h2>
 
-            <p>The Matrix Methodology provides the <em>what</em> and <em>how</em> through structured specs and architecture patterns. BMAD provides the <em>who</em> — which agent role should handle which type of work.</p>
+            <p>Install via npm:</p>
 
-            <p>Think of Matrix as the governance layer (specs, templates, quality gates) and BMAD as the execution layer (role-based agent orchestration).</p>
+            <pre><code>npx bmad-method install</code></pre>
 
-            <h2>Coming Soon</h2>
+            <p>Invoke a persona:</p>
 
-            <p>Detailed BMAD documentation is in development and will cover:</p>
+            <pre><code>bmad analyst        # Start requirements gathering
+bmad architect      # Design system architecture
+bmad developer      # Begin implementation</code></pre>
 
-            <ul>
-                <li>Specific role definitions and responsibilities</li>
-                <li>Handoff patterns between roles</li>
-                <li>Context management strategies for each role</li>
-                <li>When to use BMAD vs. Ralph Loop vs. hybrid approaches</li>
-                <li>Real-world case studies and patterns</li>
-                <li>Tooling and infrastructure requirements</li>
-            </ul>
+            <p>Or use Party Mode to get multiple personas collaborating in one session:</p>
 
-            <h3>Why Not Release Now?</h3>
+            <pre><code>bmad party --roles analyst,architect,pm</code></pre>
 
-            <p>We're following our own principles: start rough, sharpen through execution. The Matrix and Ralph patterns are battle-tested — they've been used in production to generate real capabilities. BMAD is still being refined through experimentation.</p>
+            <p>The <code>bmad-help</code> skill provides guidance at any point. Stuck? Run <code>bmad-help</code> and the system suggests what to do next based on current project state.</p>
 
-            <p>Rather than document theory, we're building the patterns first and documenting what works. This page will be updated as those patterns solidify.</p>
+            <h2>Scale-Domain-Adaptive Planning</h2>
 
-            <h2>Early Insights</h2>
+            <p>Small projects don't need enterprise-level documentation. Big projects do.</p>
 
-            <p>While detailed documentation is pending, here are some early learnings:</p>
-
-            <h3>Role Specialization Reduces Context Bloat</h3>
-
-            <p>A single agent trying to handle architecture, implementation, and testing simultaneously struggles with context management. Specialized roles can maintain focused context windows with only the information relevant to their phase.</p>
-
-            <h3>Handoffs Need Structure</h3>
-
-            <p>The transition between roles (Builder → Analyzer, for example) requires structured artifacts. Just like the Matrix uses specs and fix_plan.md, BMAD needs role-specific handoff documents.</p>
-
-            <h3>Not Every Task Needs Every Role</h3>
-
-            <p>Simple feature additions might only need Builder. Complex refactors might need Maintainer + Analyzer. New user-facing features might need Designer + Builder + Analyzer. The orchestration layer needs to be smart about which roles to activate.</p>
-
-            <h2>Relationship to Other Patterns</h2>
+            <p>BMAD adjusts automatically:</p>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Pattern</th>
-                        <th>Focus</th>
-                        <th>When to Use</th>
+                        <th>Project Scale</th>
+                        <th>Planning Depth</th>
+                        <th>Artifacts Generated</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><a href="matrix-methodology.html">Matrix</a></td>
-                        <td>Spec quality, templates, daily iteration</td>
-                        <td>Always — it's the foundation</td>
+                        <td>Side project</td>
+                        <td>Light</td>
+                        <td>README, basic architecture doc</td>
                     </tr>
                     <tr>
-                        <td><a href="ralph-wiggum.html">Ralph Loop</a></td>
-                        <td>Autonomous execution, fresh context</td>
-                        <td>Well-defined features with clear acceptance criteria</td>
+                        <td>Startup MVP</td>
+                        <td>Medium</td>
+                        <td>PRD, architecture decision records, API specs</td>
                     </tr>
                     <tr>
-                        <td>BMAD</td>
-                        <td>Role-based orchestration</td>
-                        <td>Complex work requiring specialized perspectives</td>
-                    </tr>
-                    <tr>
-                        <td><a href="continuous-evolution.html">Continuous Evolution</a></td>
-                        <td>Diff-based dev, migrations, live products</td>
-                        <td>Working with production systems and real users</td>
+                        <td>Enterprise product</td>
+                        <td>Comprehensive</td>
+                        <td>Full spec suite, compliance docs, deployment runbooks</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h2>Stay Updated</h2>
+            <p>You tell BMAD the scale during setup. It adjusts workflow complexity accordingly.</p>
 
-            <p>This page will be updated as BMAD patterns mature. In the meantime:</p>
+            <h2>Structured Workflows</h2>
 
+            <p>34+ workflows covering the full lifecycle:</p>
+
+            <p><strong>Discovery Phase:</strong></p>
             <ul>
-                <li>Start with the <a href="matrix-methodology.html">Matrix Methodology</a> to understand spec-driven fundamentals</li>
-                <li>Use the <a href="ralph-wiggum.html">Ralph Loop</a> for autonomous feature development</li>
-                <li>Explore <a href="continuous-evolution.html">Continuous Evolution</a> for production system patterns</li>
+                <li>Idea brainstorming</li>
+                <li>Market research</li>
+                <li>Competitive analysis</li>
+                <li>User persona development</li>
             </ul>
 
-            <p>The BMAD approach will build on these foundations once the patterns are proven in practice.</p>
+            <p><strong>Planning Phase:</strong></p>
+            <ul>
+                <li>Requirements gathering</li>
+                <li>Feature prioritization</li>
+                <li>Roadmap creation</li>
+                <li>Risk assessment</li>
+            </ul>
+
+            <p><strong>Design Phase:</strong></p>
+            <ul>
+                <li>Architecture design</li>
+                <li>API contract definition</li>
+                <li>Data modeling</li>
+                <li>UI/UX wireframing</li>
+            </ul>
+
+            <p><strong>Implementation Phase:</strong></p>
+            <ul>
+                <li>Component development</li>
+                <li>Integration work</li>
+                <li>Testing strategy</li>
+                <li>Code review automation</li>
+            </ul>
+
+            <p><strong>Deployment Phase:</strong></p>
+            <ul>
+                <li>CI/CD setup</li>
+                <li>Infrastructure provisioning</li>
+                <li>Monitoring configuration</li>
+                <li>Rollback planning</li>
+            </ul>
+
+            <p>Each workflow provides templates, checklists, and agent prompts specific to that activity.</p>
+
+            <h2>Module Ecosystem</h2>
+
+            <p>BMAD is modular. Core installation gives you the base method. Additional modules add specialized capabilities:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BMM (Core)</td>
+                        <td>Base methodology and workflows</td>
+                    </tr>
+                    <tr>
+                        <td>BMB (Builder)</td>
+                        <td>Extended development workflows</td>
+                    </tr>
+                    <tr>
+                        <td>TEA (Test Architect)</td>
+                        <td>Advanced testing strategies</td>
+                    </tr>
+                    <tr>
+                        <td>BMGD (Game Dev Studio)</td>
+                        <td>Game-specific workflows and personas</td>
+                    </tr>
+                    <tr>
+                        <td>CIS (Creative Intelligence)</td>
+                        <td>Design and creative workflows</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Install what you need. Skip what you don't.</p>
+
+            <h2>Philosophy</h2>
+
+            <p>"AI agents as expert collaborators who guide YOU through structured process. Not doing thinking for you, bringing out your best thinking."</p>
+
+            <p>The personas ask questions. They surface tradeoffs. They suggest approaches. But you make decisions.</p>
+
+            <p>This is different from "agent does everything while you watch." BMAD assumes you're an active participant. The structure exists to make your thinking more rigorous, not to replace it.</p>
+
+            <h2>Party Mode in Practice</h2>
+
+            <p>Example session:</p>
+
+            <pre><code>You: "We need to add user authentication"
+
+Analyst: "What auth methods? Email/password, OAuth, both?"
+
+Architect: "If OAuth, which providers? How do we handle 
+           provider outages? Fallback to email/password?"
+
+PM: "This affects signup conversion. Do we require email 
+     verification? Adds friction but improves quality."
+
+UX Designer: "Social login buttons increase conversion but 
+              raise privacy concerns. How do we message that?"</code></pre>
+
+            <p>You get multiple expert perspectives in one conversation. Make an informed decision, then the Developer persona implements based on that decision.</p>
+
+            <h2>Compatible Tools</h2>
+
+            <p>Works with Claude Code, Cursor, Codex CLI. Designed for CLI-first workflows but adaptable to other environments.</p>
+
+            <h2>What It's Good At</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Strength</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Comprehensive coverage</td>
+                        <td>Full lifecycle, discovery to deployment</td>
+                    </tr>
+                    <tr>
+                        <td>Team-friendly</td>
+                        <td>Role separation maps to real team structures</td>
+                    </tr>
+                    <tr>
+                        <td>Modular/extensible</td>
+                        <td>Install only what you need, add more later</td>
+                    </tr>
+                    <tr>
+                        <td>Complex projects</td>
+                        <td>Scales up when you need deep planning</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Tradeoffs</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Limitation</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Heavier ceremony</td>
+                        <td>More structure than solo builders may want</td>
+                    </tr>
+                    <tr>
+                        <td>Learning curve</td>
+                        <td>34+ workflows, 12+ personas, multiple modules</td>
+                    </tr>
+                    <tr>
+                        <td>File management</td>
+                        <td>Many artifacts to track and maintain</td>
+                    </tr>
+                    <tr>
+                        <td>Feels enterprisey</td>
+                        <td>Can feel like process overhead for small projects</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>When to Use BMAD</h2>
+
+            <p>You're building something complex that benefits from structured planning. You have (or will have) a team and want role-based workflows. You value comprehensive lifecycle coverage over minimalism.</p>
+
+            <p>You want proven agile practices baked into your AI workflow. You're comfortable with more files and ceremony in exchange for thoroughness.</p>
+
+            <h2>When to Look Elsewhere</h2>
+
+            <p>You're a solo builder who wants maximum simplicity. You value speed over comprehensive documentation. You don't want to learn a large system upfront. You prefer lightweight, opinionated workflows.</p>
+
+            <p>In those cases, consider <a href="gsd.html">GSD</a> or similar methods that optimize for solo velocity over team coordination.</p>
+
+            <h2>BMAD vs GSD</h2>
+
+            <p>Both solve spec-driven development. Different philosophies:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>GSD</th>
+                        <th>BMAD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Workflow</td>
+                        <td>4 commands</td>
+                        <td>34+ workflows</td>
+                    </tr>
+                    <tr>
+                        <td>Personas</td>
+                        <td>One agent, task-focused</td>
+                        <td>12+ role-based personas</td>
+                    </tr>
+                    <tr>
+                        <td>Structure</td>
+                        <td>Minimal, hidden complexity</td>
+                        <td>Explicit, comprehensive</td>
+                    </tr>
+                    <tr>
+                        <td>Best for</td>
+                        <td>Solo builders, simple projects</td>
+                        <td>Teams, complex projects</td>
+                    </tr>
+                    <tr>
+                        <td>Learning curve</td>
+                        <td>Gentle</td>
+                        <td>Steeper</td>
+                    </tr>
+                    <tr>
+                        <td>Modularity</td>
+                        <td>Opinionated, all-or-nothing</td>
+                        <td>Modular, pick components</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Neither is universally better. Pick based on your project complexity, team size, and preference for simplicity versus comprehensiveness.</p>
 
         </section>
+
+        <nav class="page-nav">
+            <a href="gsd.html" class="page-nav-prev">
+                <span class="page-nav-label">Previous</span>
+                <span class="page-nav-title">← GSD</span>
+            </a>
+            <div class="page-nav-spacer"></div>
+        </nav>
 
     </div>
 

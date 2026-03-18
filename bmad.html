@@ -66,12 +66,14 @@
 
             <p>Each phase produces documents that become context for the next agent. Every handoff is a fresh chat session. Continuity lives in files, not conversation history.</p>
 
-            <pre><code>Analyst   → product-brief.md
-PM        → PRD.md            (reads product-brief)
-Architect → architecture.md   (reads PRD)
-PM        → epics/*.md        (reads PRD + architecture)
-SM        → story files       (reads epics)
-Developer → working code      (reads story + architecture)</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Analyst</span><span class="callout-detail"> → product-brief.md</span></p>
+                <p><span class="callout-label">PM</span><span class="callout-detail"> → PRD.md (reads product-brief)</span></p>
+                <p><span class="callout-label">Architect</span><span class="callout-detail"> → architecture.md (reads PRD)</span></p>
+                <p><span class="callout-label">PM</span><span class="callout-detail"> → epics/*.md (reads PRD + architecture)</span></p>
+                <p><span class="callout-label">SM</span><span class="callout-detail"> → story files (reads epics)</span></p>
+                <p><span class="callout-label">Developer</span><span class="callout-detail"> → working code (reads story + architecture)</span></p>
+            </div>
 
             <h2>Agents</h2>
 

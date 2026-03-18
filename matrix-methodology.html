@@ -51,7 +51,9 @@
 
         <section class="content">
 
-            <pre><code>Spec + Architecture = Implementation</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Spec + Architecture = Implementation</span></p>
+            </div>
 
             <p>That's the whole idea. The spec says <em>what</em> to build. The architecture says <em>how this platform builds things</em>. Where they intersect, the implementation resolves.</p>
 
@@ -71,18 +73,14 @@
 
             <p>Each cell is a <strong>resolution point</strong>. Remove either side and the agent guesses:</p>
 
-            <pre><code># Spec alone (no architecture)
-"Build login, cart, and checkout"
-→ Agent invents its own auth model, state strategy, API style
-
-# Architecture alone (no spec)
-"We use OAuth2, Redis, REST conventions"
-→ Agent has no idea what to build
-
-# Both
-"Login with OAuth2+JWT, cart user-scoped via JWT subject,
- checkout via Stripe tokenization with saga pattern"
-→ Implementation resolves</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Spec alone (no architecture)</span><br>
+                <span class="callout-detail">"Build login, cart, and checkout" — Agent invents its own auth model, state strategy, API style.</span></p>
+                <p><span class="callout-label">Architecture alone (no spec)</span><br>
+                <span class="callout-detail">"We use OAuth2, Redis, REST conventions" — Agent has no idea what to build.</span></p>
+                <p><span class="callout-label">Both</span><br>
+                <span class="callout-detail">"Login with OAuth2+JWT, cart user-scoped via JWT subject, checkout via Stripe tokenization with saga pattern" — Implementation resolves.</span></p>
+            </div>
 
             <h2>Business Requirements Sit Alongside</h2>
 

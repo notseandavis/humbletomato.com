@@ -65,13 +65,12 @@ public class OrderController {
 
             <h2>The Paradox</h2>
 
-            <pre><code>Path A: You understand what's behind it
-  → The abstraction is just an API over knowledge you already carry
-  → Nothing was actually hidden
-
-Path B: You don't understand what's behind it
-  → You can't debug failures that cross the boundary
-  → Code works in demos, breaks in production</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Path A: You understand what's behind it</span><br>
+                <span class="callout-detail">The abstraction is just an API over knowledge you already carry. Nothing was actually hidden.</span></p>
+                <p><span class="callout-label">Path B: You don't understand what's behind it</span><br>
+                <span class="callout-detail">You can't debug failures that cross the boundary. Code works in demos, breaks in production.</span></p>
+            </div>
 
             <p>There is no Path C where you productively ignore the abstraction and everything works. Spolsky called this the <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/">Law of Leaky Abstractions</a>. The paradox goes further: even when the abstraction doesn't leak, you still need to understand it to use it well.</p>
 
@@ -90,18 +89,14 @@ orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
 
             <p>This is why the <a href="matrix-methodology.html">Context Matrix</a> works the way it does. Spec plus architecture equals implementation. You don't get to skip one side:</p>
 
-            <pre><code># Spec alone (no architecture)
-"Build a cart service with checkout"
-→ Agent invents its own auth model, state strategy, payment flow
-
-# Architecture alone (no spec)
-"We use OAuth2, Redis, Stripe"
-→ Agent has no idea what to build
-
-# Spec + Architecture (full context)
-"Cart service with checkout. OAuth2+JWT auth,
- Redis sessions, Stripe tokenized payments, saga pattern."
-→ Agent produces a correct implementation</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Spec alone (no architecture)</span><br>
+                <span class="callout-detail">"Build a cart service with checkout" — Agent invents its own auth model, state strategy, payment flow.</span></p>
+                <p><span class="callout-label">Architecture alone (no spec)</span><br>
+                <span class="callout-detail">"We use OAuth2, Redis, Stripe" — Agent has no idea what to build.</span></p>
+                <p><span class="callout-label">Spec + Architecture</span><br>
+                <span class="callout-detail">"Cart service with checkout. OAuth2+JWT auth, Redis sessions, Stripe tokenized payments, saga pattern." — Agent produces a correct implementation.</span></p>
+            </div>
 
             <p>Abstracting either side away doesn't simplify the problem. It hides the information needed to solve it.</p>
 

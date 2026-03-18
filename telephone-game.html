@@ -52,11 +52,12 @@
 
         <section class="content">
 
-            <pre><code># Option A: Direct (less loss)
-PRD + Architecture  -->  Code Agent  -->  Code
-
-# Option B: Extra step (more loss)
-PRD + Architecture  -->  Synthesis Agent  -->  "Unified Spec"  -->  Code Agent  -->  Code</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Option A: Direct (less loss)</span><br>
+                <span class="callout-detail">PRD + Architecture → Code Agent → Code</span></p>
+                <p><span class="callout-label">Option B: Extra step (more loss)</span><br>
+                <span class="callout-detail">PRD + Architecture → Synthesis Agent → "Unified Spec" → Code Agent → Code</span></p>
+            </div>
 
             <p>Option B looks cleaner. You're "polishing" the inputs. But every LLM pass loses information. Option B is strictly worse.</p>
 
@@ -64,16 +65,12 @@ PRD + Architecture  -->  Synthesis Agent  -->  "Unified Spec"  -->  Code Agent  
 
             <p>Shannon's <a href="https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem">Data Processing Inequality</a>: processing can only preserve or destroy information, never create it.</p>
 
-            <pre><code># What the synthesis agent does to your docs:
-- Summarizes sections       → detail lost
-- Paraphrases ("must" → "should")  → meaning shifted
-- Drops "irrelevant" details  → edge cases lost
-- Guesses at ambiguities     → sometimes wrong
-
-# Cascading drift in multi-step chains:
-PRD + Arch  -->  "Unified Spec"     (some info lost)
-            -->  "Task Breakdown"   (more lost)
-            -->  Code               (working from degraded intent)</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">What the synthesis agent does to your docs:</span></p>
+                <p><span class="callout-detail">Summarizes sections (detail lost). Paraphrases "must" to "should" (meaning shifted). Drops "irrelevant" details (edge cases lost). Guesses at ambiguities (sometimes wrong).</span></p>
+                <p><span class="callout-label">Cascading drift:</span><br>
+                <span class="callout-detail">PRD + Arch → "Unified Spec" (some info lost) → "Task Breakdown" (more lost) → Code (working from degraded intent).</span></p>
+            </div>
 
             <p>The synthesis agent can't know what the code agent needs. It compresses based on general heuristics. Details it drops as noise might be exactly what handles an edge case downstream.</p>
 
@@ -101,11 +98,10 @@ PRD + Arch  -->  "Unified Spec"     (some info lost)
 
             <h2>The Rule</h2>
 
-            <pre><code># Optimal pipeline = shortest pipeline
-Your intent  -->  Agent  -->  Output
-
-# With 200K token context windows, your docs probably fit.
-# Every extra LLM step is another round of telephone.</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Optimal pipeline = shortest pipeline.</span><br>
+                <span class="callout-detail">Your intent → Agent → Output. With 200K token context windows, your docs probably fit. Every extra LLM step is another round of telephone.</span></p>
+            </div>
 
             <p>Feed agents the rawest context you can. Don't preprocess for clarity. Don't synthesize for convenience. Fewer steps, richer context, less telephone.</p>
 

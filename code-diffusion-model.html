@@ -65,11 +65,11 @@ Output: Specific implementation that matches what you described.</code></pre>
 
             <h2>Complexity is Conserved</h2>
 
-            <pre><code>Simple spec    → Agent guesses → Complex debugging
-Detailed spec  → Agent resolves → Working system
-
-The total work is the same. You choose when you do it:
-before generation (in the spec) or after (in debugging).</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Simple spec</span><span class="callout-detail"> — Agent guesses — Complex debugging</span></p>
+                <p><span class="callout-label">Detailed spec</span><span class="callout-detail"> — Agent resolves — Working system</span></p>
+                <p><span class="callout-detail">The total work is the same. You choose when you do it: before generation (in the spec) or after (in debugging).</span></p>
+            </div>
 
             <p>When your spec says "handle authentication," you haven't saved work. You've moved it from "writing the spec" to "debugging why the agent picked session cookies when you needed JWT."</p>
 

@@ -51,13 +51,12 @@
 
         <section class="content">
 
-            <pre><code>Traditional compiler:
-  source code  -->  deterministic  -->  binary
-  Precise input. Exact output. Every time.
-
-Fuzzy compiler (LLM):
-  natural language spec  -->  probabilistic  -->  source code
-  Ambiguous input. Approximate output. Usually.</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Traditional compiler</span><br>
+                <span class="callout-detail">Source code → deterministic → binary. Precise input. Exact output. Every time.</span></p>
+                <p><span class="callout-label">Fuzzy compiler (LLM)</span><br>
+                <span class="callout-detail">Natural language spec → probabilistic → source code. Ambiguous input. Approximate output. Usually.</span></p>
+            </div>
 
             <h2>Same Job, Different Contract</h2>
 
@@ -65,13 +64,10 @@ Fuzzy compiler (LLM):
 
             <p>An LLM <em>resolves</em> ambiguity. It picks an interpretation and keeps going. It never tells you it guessed.</p>
 
-            <pre><code>Traditional:
-  "int x = ???"    -->  ERROR: expected expression
-
-Fuzzy:
-  "handle auth"    -->  *builds session-cookie auth*
-                        (you wanted JWT)
-                        (it didn't ask)</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Traditional:</span><span class="callout-detail"> "int x = ???" → ERROR: expected expression</span></p>
+                <p><span class="callout-label">Fuzzy:</span><span class="callout-detail"> "handle auth" → builds session-cookie auth. You wanted JWT. It didn't ask.</span></p>
+            </div>
 
             <p>Every ambiguity in your spec is a branch point. More ambiguity, more branches, more drift from what you wanted.</p>
 
@@ -79,17 +75,12 @@ Fuzzy:
 
             <p>Traditional compilers fail loud: red text, line numbers. Fuzzy compilers fail silent: the code runs, tests pass, ships to production.</p>
 
-            <pre><code>Traditional error:
-  Line 42: undefined reference to 'processPayment'
-  Fix: define the function
-
-Fuzzy "error":
-  Code works. Tests pass. Ships.
-  Three weeks later: "Why does checkout fail
-  with mixed currencies?"
-  The spec never mentioned multi-currency.
-  The compiler assumed single-currency.
-  Nobody noticed.</code></pre>
+            <div class="callout">
+                <p><span class="callout-label">Traditional error:</span><br>
+                <span class="callout-detail">Line 42: undefined reference to 'processPayment'. Fix: define the function.</span></p>
+                <p><span class="callout-label">Fuzzy "error":</span><br>
+                <span class="callout-detail">Code works. Tests pass. Ships. Three weeks later: "Why does checkout fail with mixed currencies?" The spec never mentioned multi-currency. The compiler assumed single-currency. Nobody noticed.</span></p>
+            </div>
 
             <h2>The Implication</h2>
 

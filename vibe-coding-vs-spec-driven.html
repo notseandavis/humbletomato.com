@@ -52,293 +52,118 @@
 
         <section class="content">
 
-            <h2>The Two Modes</h2>
-
-            <p>By early 2026, two distinct patterns have emerged for AI-assisted development:</p>
-
-            <div class="comparison-grid">
-                <div class="card">
-                    <h3>💬 Vibe Coding</h3>
-                    <p>Conversational. Quick. Exploratory. Chat with Claude or GPT, iterate in real-time, get code fast.</p>
-                </div>
-                <div class="card">
-                    <h3>📝 Spec-Driven</h3>
-                    <p>Structured. Persistent. Deliberate. Write requirements first, generate code from specs, maintain context.</p>
-                </div>
-            </div>
-
-            <h2>What Vibe Coding Looks Like</h2>
+            <h2>Vibe Coding</h2>
 
             <pre><code>You: "Make a React component that shows user notifications"
-AI: *generates code*
-You: "Add a read/unread toggle"
-AI: *updates code*
-You: "Make it look better"
-AI: *tweaks styles*
-You: "Actually, use Tailwind instead"
-AI: *refactors to Tailwind*</code></pre>
+AI:  *generates component*
+You: "Add read/unread toggle"
+AI:  *updates code*
+You: "Use Tailwind instead"
+AI:  *refactors*</code></pre>
 
-            <p><strong>What just happened:</strong> You built something fast through conversation. No formal requirements. No design doc.</p>
+            <p>Fast. No requirements doc. Context lives in the chat window and dies when you close it.</p>
 
-            <h2>What Spec-Driven Looks Like</h2>
+            <h2>Spec-Driven</h2>
 
             <pre><code># notification-feature.md
 
 ## Requirements
-- Display notifications in descending chronological order
-- Mark notifications as read/unread
-- Support real-time updates via WebSocket
+- Notifications in descending chronological order
+- Read/unread toggle
+- Real-time updates via WebSocket
 - Filter by type (mention, like, follow)
-- Responsive design, mobile-first
-
-## Technical Design
-- React component with custom hooks
-- Tailwind for styling
-- WebSocket connection to /api/notifications
-- Local state + optimistic updates
 
 ## Acceptance Criteria
-- [ ] Unread count badge updates in real-time
-- [ ] Clicking notification marks it read
-- [ ] Works on mobile (320px width)
-- [ ] Keyboard navigation (Tab, Enter)
+- [ ] Unread badge updates in real-time
+- [ ] Click marks as read
+- [ ] Works at 320px width
+- [ ] Keyboard navigable</code></pre>
 
----
+            <p>Slower to start. Context persists in files. Agent reads the spec, builds it, checks criteria.</p>
 
-Agent: Reads spec, generates implementation, runs tests, verifies criteria.</code></pre>
-
-            <p><strong>What just happened:</strong> You wrote down what you want first. AI builds from the spec. Context persists across sessions.</p>
-
-            <h2>The Tradeoffs</h2>
+            <h2>Tradeoffs</h2>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Factor</th>
-                        <th>Vibe Coding</th>
+                        <th></th>
+                        <th>Vibe</th>
                         <th>Spec-Driven</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Speed to first prototype</strong></td>
-                        <td>⚡ Very fast (minutes)</td>
-                        <td>🐌 Slower (hours, but includes design)</td>
+                        <td><strong>First prototype</strong></td>
+                        <td>Minutes</td>
+                        <td>Hours (includes design)</td>
                     </tr>
                     <tr>
-                        <td><strong>Context retention</strong></td>
-                        <td>❌ Lost after chat window closes</td>
-                        <td>✅ Persists in files</td>
+                        <td><strong>Context</strong></td>
+                        <td>Lost when chat closes</td>
+                        <td>Lives in repo</td>
                     </tr>
                     <tr>
-                        <td><strong>Team collaboration</strong></td>
-                        <td>❌ Hard to share "what we talked about"</td>
-                        <td>✅ Specs are reviewable artifacts</td>
+                        <td><strong>Team handoff</strong></td>
+                        <td>"Read the chat history"</td>
+                        <td>Reviewable specs</td>
                     </tr>
                     <tr>
                         <td><strong>Exploration</strong></td>
-                        <td>✅ Great for trying new ideas</td>
-                        <td>❌ Overhead for experiments</td>
+                        <td>Great</td>
+                        <td>Too much overhead</td>
                     </tr>
                     <tr>
                         <td><strong>Maintenance</strong></td>
-                        <td>❌ No record of original intent</td>
-                        <td>✅ Specs document the "why"</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Learning curve</strong></td>
-                        <td>✅ Just talk to AI</td>
-                        <td>⚠️ Need to learn spec patterns</td>
+                        <td>No record of intent</td>
+                        <td>Specs document "why"</td>
                     </tr>
                 </tbody>
             </table>
 
             <h2>When to Use Each</h2>
 
-            <h3>Use Vibe Coding For:</h3>
+            <p><strong>Vibe coding:</strong> prototypes, learning a new framework, scripts under 200 lines, debugging, anything you'd be fine rewriting from scratch.</p>
 
-            <ul>
-                <li><strong>Quick prototypes</strong> — Exploring an idea, testing feasibility, demo for stakeholders</li>
-                <li><strong>Learning new tech</strong> — First time using a framework? Chat through it</li>
-                <li><strong>Small scripts</strong> — One-off automation, data processing, CLI tools under 200 lines</li>
-                <li><strong>Debugging help</strong> — "Why isn't this CSS working?" or "Explain this error"</li>
-                <li><strong>Refining existing code</strong> — Tweaking styles, optimizing a function, adding a small feature</li>
-            </ul>
+            <p><strong>Spec-driven:</strong> production features, team projects, multi-file changes, code you'll maintain for months, anything that needs an audit trail.</p>
 
-            <h3>Use Spec-Driven For:</h3>
+            <h2>The Hybrid Pattern</h2>
 
-            <ul>
-                <li><strong>Production features</strong> — Anything users will depend on</li>
-                <li><strong>Team projects</strong> — Multiple people need to understand the context</li>
-                <li><strong>Complex systems</strong> — Multi-file changes, database migrations, API versioning</li>
-                <li><strong>Long-term code</strong> — You'll maintain this for months or years</li>
-                <li><strong>Compliance or audit needs</strong> — Requirements must be documented</li>
-            </ul>
+            <pre><code>1. Vibe code a prototype     → get something working fast
+2. Extract into a spec       → document what worked
+3. Spec-driven rebuild       → agent generates clean implementation
+4. Vibe code refinements     → tweak styles, optimize</code></pre>
 
-            <h2>The Hybrid Approach</h2>
-
-            <p>Most teams end up using both. Here's a common pattern:</p>
-
-            <ol>
-                <li><strong>Vibe code a prototype</strong> — Chat with AI, get something working fast</li>
-                <li><strong>Extract learnings into a spec</strong> — Document what worked, what didn't</li>
-                <li><strong>Spec-driven rebuild</strong> — Agent generates clean implementation from spec</li>
-                <li><strong>Vibe code refinements</strong> — Tweak styles, adjust copy, optimize performance</li>
-            </ol>
-
-            <p>This gives you speed during exploration and structure during implementation.</p>
-
-            <h2>Real-World Example</h2>
-
-            <p>AWS team building a notification feature (source: <a href="https://builtin.com/articles/spec-driven-development-ai-assisted-software-engineering">Built In, Feb 2026</a>):</p>
-
-            <ul>
-                <li><strong>Vibe approach estimate:</strong> 2 weeks (chatting through OS differences, libraries, integration)</li>
-                <li><strong>Spec-driven actual:</strong> 2 days (wrote requirements, agent handled cross-platform complexity)</li>
-            </ul>
-
-            <p>The spec approach forced upfront thinking about edge cases and requirements. AI executed the complex parts. Result: 10x faster with better quality.</p>
-
-            <h2>Context is the Bottleneck</h2>
-
-            <p>The real difference between these approaches is <strong>how context is managed</strong>:</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Context Storage</th>
-                        <th>Vibe Coding</th>
-                        <th>Spec-Driven</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Where it lives</strong></td>
-                        <td>Chat window (ephemeral)</td>
-                        <td>Files in repo (permanent)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Who can access it</strong></td>
-                        <td>Only you, only now</td>
-                        <td>Whole team, anytime</td>
-                    </tr>
-                    <tr>
-                        <td><strong>What gets lost</strong></td>
-                        <td>Original intent, design decisions, tradeoffs considered</td>
-                        <td>Nothing (if specs are good)</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p>Vibe coding trades context persistence for conversation speed. Spec-driven trades upfront time for long-term clarity.</p>
+            <p>Most teams land here. Speed during exploration, structure during implementation.</p>
 
             <h2>Levels of Spec Rigor</h2>
 
-            <p>Spec-driven development isn't binary. There are levels of rigor (from <a href="https://arxiv.org/abs/2602.00180">arxiv:2602.00180</a>):</p>
+            <pre><code># Spec-First: high-level requirements, agent picks implementation
+"Full-text search, debounced 300ms, max 20 results"
+→ Agent chooses Elasticsearch vs Postgres FTS
 
-            <h3>1. Spec-First</h3>
-            <p>Write high-level requirements before coding. Agent fills in implementation details.</p>
-            <pre><code>## Feature: User Search
-- Full-text search across user profiles
-- Results ranked by relevance
-- Debounced input (300ms)
-- Max 20 results
+# Spec-Anchored: define the contract, implementation can vary
+"GET /api/users/search → { users: User[], total: number }, &lt;200ms p95"
+→ Agent can refactor internals freely
 
-Agent: Chooses tech (Elasticsearch? Postgres FTS?), implements, tests.</code></pre>
+# Spec-As-Source: specs ARE the code (Prisma, Terraform, etc.)
+"model User { id Int @id, email String @unique }"
+→ Agent runs migrations, generates types</code></pre>
 
-            <h3>2. Spec-Anchored</h3>
-            <p>Specs define contracts and interfaces. Implementation can vary as long as contracts hold.</p>
-            <pre><code>## API Contract
-GET /api/users/search?q={query}
-Returns: { users: User[], total: number }
-Response time: &lt;200ms p95
-
-Agent: Can refactor internals, switch databases, optimize—anything that preserves the contract.</code></pre>
-
-            <h3>3. Spec-As-Source</h3>
-            <p>Specifications are executable. Code is generated every time from specs.</p>
-            <pre><code>## Database Schema (Prisma)
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  posts     Post[]
-}
-
-Agent: Runs migrations, generates types, builds queries—all from schema.</code></pre>
-
-            <p>Most teams use <strong>Spec-First</strong> for features and <strong>Spec-Anchored</strong> for APIs. Spec-As-Source is rare outside infrastructure-as-code.</p>
+            <p>Most teams use Spec-First for features and Spec-Anchored for APIs.</p>
 
             <h2>Common Mistakes</h2>
 
-            <h3>Vibe Coding Pitfalls:</h3>
-            <ul>
-                <li>Building production code in chat windows</li>
-                <li>No record of why decisions were made</li>
-                <li>Context loss when switching sessions</li>
-                <li>Hard to onboard teammates ("just read the chat history")</li>
-            </ul>
+            <p><strong>Vibe pitfalls:</strong> shipping chat-window code to production, no record of decisions, onboarding teammates by sharing chat logs.</p>
 
-            <h3>Spec-Driven Pitfalls:</h3>
-            <ul>
-                <li>Writing specs for throwaway scripts</li>
-                <li>Over-specifying implementation details (agent can't adapt)</li>
-                <li>Treating specs as immutable (they should evolve)</li>
-                <li>Forgetting to update specs when code changes</li>
-            </ul>
+            <p><strong>Spec pitfalls:</strong> writing specs for throwaway scripts, over-specifying implementation (agent can't adapt), never updating specs when code changes.</p>
 
-            <h2>Tools and Workflows</h2>
-
-            <h3>Vibe Coding Tools:</h3>
-            <ul>
-                <li>ChatGPT, Claude, GitHub Copilot Chat</li>
-                <li>Cursor IDE (chat + codebase context)</li>
-                <li>Inline code suggestions</li>
-            </ul>
-
-            <h3>Spec-Driven Tools:</h3>
-            <ul>
-                <li>GitHub Spec Kit (mentioned in arxiv paper)</li>
-                <li>OpenClaw with Matrix templates</li>
-                <li>Kiro (AWS's internal tool)</li>
-                <li>BDD frameworks (Cucumber, Gherkin) adapted for AI</li>
-            </ul>
-
-            <h2>The Future: Convergence</h2>
-
-            <p>The line between vibe coding and spec-driven is blurring. Some trends:</p>
+            <h2>Related</h2>
 
             <ul>
-                <li><strong>Chat → Spec</strong> — Tools that convert conversations into structured specs automatically</li>
-                <li><strong>Live specs</strong> — Specs that update as code changes (bidirectional sync)</li>
-                <li><strong>Contextual prompting</strong> — Vibe coding that pulls in relevant specs automatically</li>
-                <li><strong>Adaptive rigor</strong> — AI suggests when to formalize (e.g., "This is getting complex, want a spec?")</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a> — spec-driven framework</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a> — specs as source of truth</li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a> — autonomous execution from specs</li>
             </ul>
-
-            <p>By late 2026, the best tools will let you start with vibes and graduate to specs seamlessly.</p>
-
-            <h2>Decision Framework</h2>
-
-            <p>Ask yourself:</p>
-
-            <ul>
-                <li><strong>Will this code live longer than a week?</strong> → Spec-driven</li>
-                <li><strong>Does anyone else need to understand it?</strong> → Spec-driven</li>
-                <li><strong>Is it under 200 lines and single-purpose?</strong> → Vibe coding is fine</li>
-                <li><strong>Are you exploring or implementing?</strong> → Explore with vibes, implement with specs</li>
-                <li><strong>Would you be okay rewriting this from scratch?</strong> → If yes, vibe away. If no, write the spec.</li>
-            </ul>
-
-            <h2>Learn More</h2>
-
-            <p>To dive deeper into spec-driven development:</p>
-
-            <ul>
-                <li><a href="matrix-methodology.html">Matrix Methodology</a> — Our core spec-driven framework</li>
-                <li><a href="specs-as-dna.html">Specs as DNA</a> — Philosophy of specifications as source of truth</li>
-                <li><a href="ralph-wiggum.html">Ralph Loop</a> — Autonomous execution from specs</li>
-            </ul>
-
-            <p>For a formal academic treatment, see <a href="https://arxiv.org/abs/2602.00180">Spec-Driven Development: From Code to Contract in the Age of AI Coding Assistants</a> (arxiv:2602.00180).</p>
 
         </section>
 

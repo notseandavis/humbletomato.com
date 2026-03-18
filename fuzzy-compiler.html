@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Compiler - Humble Tomato</title>
+    <meta name="description" content="A thought experiment: LLMs are compilers that accept natural language as source code — but the compilation is probabilistic, not deterministic.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍅</span>
+                <span>Humble Tomato</span>
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav-section-label">Understand</li>
+                <li><a href="vibe-coding-vs-spec-driven.html">Vibe vs Spec</a></li>
+                <li><a href="solution-space.html">The Solution Space</a></li>
+                <li><a href="telephone-game.html">The Telephone Game</a></li>
+                <li><a href="abstraction-paradox.html">The Abstraction Paradox</a></li>
+                <li class="nav-section-label">Approach Library</li>
+                <li><a href="matrix-methodology.html">Matrix Methodology</a></li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li><a href="gsd.html">GSD</a></li>
+                <li><a href="bmad.html">BMAD</a></li>
+                <li class="nav-section-label">Thought Experiments</li>
+                <li><a href="specs-as-dna.html">Specs as DNA</a></li>
+                <li><a href="code-diffusion-model.html">Code Diffusion Model</a></li>
+                <li><a href="fuzzy-compiler.html" class="active">Fuzzy Compiler</a></li>
+                <li class="nav-section-label">Concepts</li>
+                <li><a href="continuous-evolution.html">Continuous Evolution</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Fuzzy Compiler</h1>
+            <p class="subtitle">An LLM is a compiler that accepts natural language as source code. The compilation is probabilistic.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>The Mental Model</h2>
+
+            <p>A traditional compiler takes precise source code and produces deterministic output. Same input, same binary, every time. The contract is exact: you write valid syntax, you get correct machine code.</p>
+
+            <p>An LLM does the same job — takes a specification and produces code — but the contract is fuzzy. The input is natural language. The output is probabilistic. Same prompt, different run, slightly different code.</p>
+
+            <pre><code>Traditional compiler:
+  source code → deterministic → binary
+  Precise input. Exact output. Every time.
+
+Fuzzy compiler:
+  natural language spec → probabilistic → source code
+  Ambiguous input. Approximate output. Usually.</code></pre>
+
+            <h2>What Changes</h2>
+
+            <p>When you accept that you're writing source code for a fuzzy compiler, everything about how you write specs changes.</p>
+
+            <p>A traditional compiler rejects ambiguity — it throws a syntax error. A fuzzy compiler <em>resolves</em> ambiguity — it picks an interpretation and keeps going. It never tells you it guessed. It just builds what it thinks you meant.</p>
+
+            <pre><code>Traditional compiler:
+  "int x = ???"  →  ERROR: expected expression
+
+Fuzzy compiler:
+  "handle auth"  →  *builds session-cookie auth*
+                     (you wanted JWT)
+                     (it didn't ask)</code></pre>
+
+            <p>Every ambiguity in your spec is a branch point where the compiler might go a different direction than you intended. The more ambiguity, the more branches, the further the output drifts from what you actually wanted.</p>
+
+            <h2>Compiler Errors Look Different</h2>
+
+            <p>Traditional compilers fail loudly — red text, line numbers, clear errors. You fix the syntax, recompile, move on.</p>
+
+            <p>Fuzzy compilers fail silently. The code compiles. It runs. It even looks right. But it made assumptions you didn't intend, chose patterns you didn't want, and resolved ambiguity in directions you didn't expect. The "errors" are semantic, not syntactic.</p>
+
+            <pre><code>Traditional compiler error:
+  Line 42: undefined reference to 'processPayment'
+  → Fix: define the function
+
+Fuzzy compiler "error":
+  Code works. Tests pass. Ships to production.
+  Three weeks later: "Why does checkout fail 
+  when the cart has mixed currencies?"
+  → The spec never mentioned multi-currency.
+  → The compiler assumed single-currency.
+  → Nobody noticed.</code></pre>
+
+            <h2>Writing Better Source Code</h2>
+
+            <p>If the LLM is your compiler, your spec is your source code. The quality of your spec determines the quality of your compilation — not as a nice-to-have, but as a <a href="code-diffusion-model.html">conservation law</a>.</p>
+
+            <p>You wouldn't write half a function and expect the C compiler to figure out the rest. Don't write half a spec and expect the fuzzy compiler to guess correctly.</p>
+
+        </section>
+
+        <nav class="page-nav">
+            <a href="code-diffusion-model.html" class="page-nav-prev">
+                <span class="page-nav-label">Previous</span>
+                <span class="page-nav-title">← Code Diffusion Model</span>
+            </a>
+            <a href="continuous-evolution.html" class="page-nav-next">
+                <span class="page-nav-label">Next</span>
+                <span class="page-nav-title">Continuous Evolution →</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Built by <strong>RS</strong> 🤖 - Practicing what we preach</div>
+        <div class="footer-line">Running on <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · Hosted on GitHub Pages</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>

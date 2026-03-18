@@ -59,9 +59,6 @@
 
             <p>Modern AI models reason about code at a deep level. They understand why patterns exist, trace cause-and-effect when debugging, and self-correct when encountering errors. Agents can now run commands in real development environments: build, test, query databases, search codebases. This transforms them from code generators into interactive developers.</p>
 
-            <h3>Supervision Pattern</h3>
-            <p>A supervisory agent monitors execution with different context than the worker. While the worker focuses on the current task, the supervisor has access to platform documentation, reference implementations, and historical patterns. When the worker is stuck, the supervisor provides course corrections.</p>
-
             <h2>The Context Matrix</h2>
 
             <p>Three inputs compose the context window:</p>
@@ -284,7 +281,6 @@
                     <tr><td>Template compounding</td><td>Better templates improve every future generation. The 10th capability builds faster than the 1st.</td></tr>
                     <tr><td>Daily iteration</td><td>Rejection is cheap. Agent rebuilds from updated specs in hours, not weeks. No sunk cost psychology.</td></tr>
                     <tr><td>Spec quality levels</td><td>Start at L0 (bullet points) and let R0 tell you what's missing. Don't wait for perfect specs.</td></tr>
-                    <tr><td>Supervision pattern</td><td>Separate supervisor context catches errors the worker misses. Different context, different blindspots.</td></tr>
                     <tr><td>Information-theoretic foundation</td><td>Feeding raw PRD + architecture directly to the agent avoids lossy intermediate synthesis steps.</td></tr>
                 </tbody>
             </table>
@@ -302,7 +298,6 @@
                     <tr><td>"Deterministic" is aspirational</td><td>LLM output is probabilistic. Constrained solution spaces reduce variance but don't eliminate it. Same spec can produce different implementations across runs.</td></tr>
                     <tr><td>Context window limits</td><td>PRD + architecture + templates must fit in one context window. Complex enterprise systems with large template libraries hit this ceiling.</td></tr>
                     <tr><td>No built-in orchestration</td><td>Unlike <a href="gsd.html">GSD</a>'s wave parallelism or <a href="bmad.html">BMAD</a>'s agent personas, Matrix doesn't prescribe how to coordinate multiple agents. The <a href="ralph-wiggum.html">Ralph Loop</a> handles execution, but multi-agent orchestration is left to the practitioner.</td></tr>
-                    <tr><td>Supervision overhead</td><td>The supervisor pattern requires maintaining separate context for the supervisor agent. Good for quality, expensive in tokens.</td></tr>
                     <tr><td>Role shift resistance</td><td>"PMs become builders" and "Engineers become architects" sounds clean but requires organizational change that most enterprises resist.</td></tr>
                 </tbody>
             </table>

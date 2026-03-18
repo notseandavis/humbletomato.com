@@ -141,6 +141,14 @@
 
             <p>Agents aren't brittle. They can debug and self-correct within the iteration loop.</p>
 
+            <h2>The Goal: E2E Tests Pass</h2>
+
+            <p>Every Matrix cycle has one definition of done: <strong>end-to-end integration tests run successfully.</strong> Not "code looks right." Not "agent completed all tasks." The tests pass or they don't.</p>
+
+            <p>This is what makes the methodology concrete. The spec template defines expected behavior. E2E tests encode that behavior as assertions. When the tests pass, the spec is implemented. When they fail, you know exactly what's wrong.</p>
+
+            <p>The agent's job isn't "build the feature." It's "make the tests green." That's a verifiable goal with no ambiguity.</p>
+
             <h2>The Daily Product Iteration</h2>
 
             <p>Traditional development: sequential handoffs. Product thinks (2 weeks) → Product writes PRD (1 week) → Architect reviews (3 days) → Dev builds (3 weeks) → QA tests (1 week) → Feedback (too late).</p>

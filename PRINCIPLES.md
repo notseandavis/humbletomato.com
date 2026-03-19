@@ -32,6 +32,7 @@
 - **Credit sources.** If a technique came from somewhere, link it.
 - **Verify every link.** Every URL on the site must be tested and confirmed accessible. If you can't verify a link works, don't include it. No broken references, no dead footnotes, no 404s. Audit all links before publishing.
 - **Living content.** Pages get updated as techniques evolve. Date the last update.
+- **Thought experiments need grounding.** Philosophical/conceptual pages (fuzzy compiler, code diffusion, etc.) must include concrete code examples to anchor abstract ideas. If a page is under 100 lines and mostly abstract, either expand with examples or merge into a related page.
 
 ## Content Scope
 
@@ -70,4 +71,4 @@ Every day:
 
 ---
 
-*Last updated: 2026-03-18 — Added cost/token efficiency guidance, context engineering as discipline, AI writing tells in subtitles, clarified 3-screen violations, updated based on 2026 research (30+ SDD frameworks, Zencoder/Kiro/Kilo emergence)*
+*Last updated: 2026-03-19 — Daily self-review cycle: added "thought experiments need grounding" rule after identifying code-diffusion-model.html and fuzzy-compiler.html as too abstract. Continuous-evolution.html flagged for 3-screen violation (200+ lines), needs cutting. Solution-space.html, ralph-wiggum.html, spec-driven-development.html confirmed as gold standard examples.*

@@ -76,15 +76,7 @@ else:
                 </tbody>
             </table>
 
-            <h2>Failure Modes</h2>
-
-            <p><strong>Spec drift:</strong> Hotfixes without updating specs. Fix: validate spec matches code before diffs.</p>
-
-            <p><strong>Partial migration:</strong> Migration fails halfway. Fix: transactional or resumable migrations.</p>
-
-            <p><strong>Cascade misses:</strong> Agent changes A, misses dependent B. Fix: architecture templates capture dependencies.</p>
-
-            <h2>Rules for Agents</h2>
+            <h2>Agent Rules</h2>
 
             <ul>
                 <li>Never DROP without explicit instruction</li>

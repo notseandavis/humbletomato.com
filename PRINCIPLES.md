@@ -69,6 +69,23 @@ Every day:
 
 **The productivity paradox.** Some developers stopped using AI tools and saw no productivity decrease. The issue: tools that add friction. Good pages show what removes friction, not just what's possible.
 
+## Spec Progression Pattern (Effective)
+
+When demonstrating how spec detail affects output, use versioned progression:
+- **v1:** Minimal spec → problematic output → list what's missing
+- **v2:** Add constraints → better output → list what's still missing
+- **v3:** Production-ready detail → complete output
+
+This mirrors how developers actually refine specs. Shows the relationship between spec precision and output quality concretely. See solution-space.html and code-diffusion-model.html for examples.
+
+## Research Sources
+
+Stack Overflow has limited AI code gen content (field too new). Better sources:
+- GitHub Issues on GSD, BMAD, agent frameworks
+- Reddit r/LocalLLaMA, r/ClaudeAI, r/ChatGPTPro
+- HackerNews "Show HN" posts for AI dev tools
+- Practitioner blogs and Twitter threads
+
 ---
 
-*Last updated: 2026-03-22 — Self-review: continuous-evolution.html trimmed (removed Failure Modes section). Code-diffusion-model.html and fuzzy-compiler.html still flagged as too abstract — both need 2-3 concrete code progressions. Specs-as-dna.html "Don't Pre-Synthesize" subtitle sounds robotic (added to AI-tells guidance). Gold standards: solution-space.html (table-driven constraints), ralph-wiggum.html (format → examples → acceptance), spec-driven-development.html (portable specs), matrix-methodology.html (ASCII + callouts). Research: 2026 shift to agentic workflows (agents run for hours, not just prompt-response), Claude Code dominance, persistent memory as emerging pattern.*
+*Last updated: 2026-03-22 — Added spec progression pattern to principles. Improved code-diffusion-model.html with v1/v2/v3 user registration example showing how constraint additions eliminate bugs. Fuzzy-compiler.html still needs one more concrete failure example. Specs-as-dna.html information theory section could use code grounding. Gold standards: solution-space.html (table-driven constraints), ralph-wiggum.html (format → examples → acceptance), spec-driven-development.html (portable specs), matrix-methodology.html (ASCII + callouts), code-diffusion-model.html (spec progression). Research: AI code gen discussion happening on GitHub/Reddit/HN more than SO. 2026 trends: agentic workflows, Claude Code growth, cost-first thinking.*

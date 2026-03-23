@@ -27,41 +27,21 @@ Spec → Agent → System
 # Evolution: build from the delta
 Spec(v1) → Spec(v2) → Diff → Agent → Targeted Changes</code></pre>
 
-            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. The fix: agents work from <strong>spec version diffs</strong>, not whole specs.</p>
+            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. Agents work from <strong>spec version diffs</strong>, not whole specs.</p>
 
             <h2>Expand-Migrate-Contract</h2>
 
             <pre><code># Phase 1: Expand — add new alongside old
 ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
-# Code writes to BOTH, reads from old
+# Writes to BOTH, reads from old
 
 # Phase 2: Migrate — backfill and switch
 UPDATE users SET email_v2 = normalize(email);
-# Code reads from new, writes to both
+# Reads from new, writes to both
 
-# Phase 3: Contract — remove old (one-way door)
+# Phase 3: Contract — remove old
 ALTER TABLE users DROP COLUMN email;
 # Rollback no longer possible</code></pre>
-
-            <p>Slow by design. Greenfield sprints, evolution walks.</p>
-
-            <h2>Versioned Workflow State</h2>
-
-            <pre><code>{
-  "workflow_id": "abc123",
-  "schema_version": "2024.01.15",
-  "current_step": "awaiting_approval"
-}
-# On load: check version → proceed or migrate</code></pre>
-
-            <h2>Feature Flags as Rollback</h2>
-
-            <pre><code>if feature_flags.is_enabled("new_email"):
-    send_via_new(msg)
-else:
-    send_via_legacy(msg)</code></pre>
-
-            <p>Not true rollback — both paths deployed. But you can disable without redeploying.</p>
 
             <h2>Migration Risk Levels</h2>
 
@@ -71,12 +51,12 @@ else:
                 </thead>
                 <tbody>
                     <tr><td>Additive</td><td>New nullable column</td><td>Safe</td></tr>
-                    <tr><td>Structural</td><td>Relationship change</td><td>Needs expand-migrate-contract</td></tr>
+                    <tr><td>Structural</td><td>Relationship change</td><td>Expand-migrate-contract</td></tr>
                     <tr><td>Destructive</td><td>Column removal</td><td>Needs approval</td></tr>
                 </tbody>
             </table>
 
-            <h2>Agent Rules</h2>
+            <h2>Agent Rules for Evolution</h2>
 
             <ul>
                 <li>Never DROP without explicit instruction</li>
@@ -85,9 +65,7 @@ else:
                 <li>Preservation is default: anything not in diff stays unchanged</li>
             </ul>
 
-            <p>A project shifts from greenfield to evolution at the first real user or irreplaceable data. Before: regenerate freely. After: diffs only.</p>
-
-            <p><a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on. <a href="https://en.wikipedia.org/wiki/John_Gall_(author)#Gall's_law">Gall's Law</a>: complex systems that work evolved from simple systems that worked. Both say: evolve from diffs, not regeneration.</p>
+            <p>A project shifts from greenfield to evolution at the first real user or irreplaceable data. Before: regenerate freely. After: diffs only. <a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on.</p>
 
         </section>
 

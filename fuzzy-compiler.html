@@ -87,6 +87,59 @@ def authenticate(request):
                 <span class="callout-detail">Code works. Tests pass. Ships. Three weeks later: "Why does checkout fail with mixed currencies?" The spec never mentioned multi-currency. The compiler assumed single-currency. Nobody noticed.</span></p>
             </div>
 
+            <h2>Example: The Multi-Currency Bug</h2>
+
+            <p>Real production incident from a 2026 e-commerce platform:</p>
+
+            <pre><code># Vague spec (the fuzzy compiler filled in the gaps)
+"Add checkout with Stripe payments.
+Calculate total from cart items.
+Show success page after payment."
+
+# What the fuzzy compiler produced:
+def calculate_total(cart_items):
+    return sum(item.price * item.quantity for item in cart_items)
+
+def process_payment(total):
+    stripe.Charge.create(amount=int(total * 100), currency='usd')
+
+# Tests passed. Code shipped. Worked fine.
+# For three weeks.</code></pre>
+
+            <p>Then a customer in the UK bought something. Cart had GBP prices. Stripe charged 99 GBP as 9900 USD. $12,000 charge for a $120 order.</p>
+
+            <div class="callout">
+                <p><span class="callout-label">Why this is worse than a traditional compiler error:</span></p>
+                <p><span class="callout-detail">Traditional compiler: "Error: currency type undefined." You fix it before shipping.</span></p>
+                <p><span class="callout-detail">Fuzzy compiler: Assumes single currency. Tests pass (all test data was USD). Ships. Fails in production with real multi-currency traffic. You discover it via angry customers and chargebacks.</span></p>
+            </div>
+
+            <pre><code># What the spec needed to say:
+"Calculate total in item's native currency.
+Support USD, GBP, EUR.
+Pass currency to Stripe with amount.
+Reject if cart has mixed currencies."
+
+# Now the fuzzy compiler has constraints:
+def calculate_total(cart_items):
+    if not cart_items:
+        return 0, None
+    
+    currency = cart_items[0].currency
+    if any(item.currency != currency for item in cart_items):
+        raise ValueError('Mixed currencies in cart')
+    
+    total = sum(item.price * item.quantity for item in cart_items)
+    return total, currency
+
+def process_payment(total, currency):
+    if currency not in ['USD', 'GBP', 'EUR']:
+        raise ValueError(f'Unsupported currency: {currency}')
+    stripe.Charge.create(
+        amount=int(total * 100),
+        currency=currency.lower()
+    )</code></pre>
+
             <h2>The Implication</h2>
 
             <p>Your spec is source code. The quality of your spec determines the quality of your output, not as a nice-to-have but as a <a href="code-diffusion-model.html">conservation law</a>.</p>

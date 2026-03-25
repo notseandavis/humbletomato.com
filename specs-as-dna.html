@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Specs as DNA — Humble Tomato</title>
-    <meta name="description" content="Why specifications behave like genetic code in AI-driven development. The DNA analogy, diffusion model analogy, and the information theory behind spec-driven development.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Specs as DNA — Humble Tomato</title>
+
+    <meta name="description" content="Why specifications behave like genetic code in AI-driven development. The DNA analogy, diffusion model analogy, and the information theory behind spec-driven development.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,148 +25,304 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
-<body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Specs as DNA</h1>
-            <p class="subtitle">Specs encode intent like DNA encodes organisms. Agents express that intent as code. Different environments produce different implementations from the same spec.</p>
-        </header>
-
-        <section class="content">
-
-            <pre><code># Spec (the "DNA")
-# User Story: Display User Profile
-- Show user's name, email, join date
-- Format join date as "Member since MMM YYYY"
-- If user has no email, show "No email on file"</code></pre>
-
-            <p>Same spec, two frameworks. The spec is framework-agnostic. Architecture context determines output.</p>
-
-            <pre><code>// React expression
-function UserProfile({ user }) {
-  const joinDate = new Date(user.joinedAt)
-    .toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-  return (
-    &lt;div className="profile"&gt;
-      &lt;h2&gt;{user.name}&lt;/h2&gt;
-      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
-      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-
-            <pre><code>&lt;!-- Vue expression --&gt;
-&lt;template&gt;
-  &lt;div class="profile"&gt;
-    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
-    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
-    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/template&gt;</code></pre>
-
-            <p>Mutate the spec, output changes predictably:</p>
-
-            <pre><code>  + If user is premium, show gold star badge next to name
-
-// React now produces:
-&lt;h2&gt;{user.name} {user.isPremium && &lt;span className="badge"&gt;?&lt;/span&gt;}&lt;/h2&gt;</code></pre>
-
-            <h2>Vague Spec vs. Constrained Spec</h2>
-
-            <pre><code># Bad: vague DNA
-# Feature: User Settings
-Users need to be able to change their preferences.
-Make it easy to use.
-# What preferences? What UI? What storage? Unpredictable output.</code></pre>
-
-            <pre><code># Good: constrained DNA
-# Feature: User Settings
-
-## Data Model
-- user_preferences table
-  - theme: 'light' | 'dark' | 'auto'
-  - email_notifications: boolean
-  - language: ISO 639-1 string
-
-## API Contract
-POST /api/user/preferences
-Body: { theme, email_notifications, language }
-Returns: 200 + updated object | 400 + validation errors
-
-## Acceptance Criteria
-- Theme change updates UI without reload
-- Invalid language shows inline error
-- Unsaved changes warning on tab close</code></pre>
-
-            <p>Define <em>what</em> and <em>constraints</em>, not implementation details.</p>
-
-            <table>
-                <thead>
-                    <tr><th>Too Vague</th><th>Right</th><th>Over-Specified</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>"Make it fast"</td><td>"&lt;200ms p95"</td><td>"Use Redis with 60s TTL"</td></tr>
-                    <tr><td>"Handle errors"</td><td>"User-friendly message + log details"</td><td>"try-catch with react-hot-toast"</td></tr>
-                    <tr><td>"Users can search"</td><td>"Full-text, debounced 300ms, max 20"</td><td>"Use Elasticsearch with ngram tokenizer"</td></tr>
-                </tbody>
-            </table>
-
-            <h2>The Biology Mapping</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Biology</th><th>Spec-Driven Dev</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>DNA</td><td>Specs (PRD, data model, API contracts)</td></tr>
-                    <tr><td>Gene expression</td><td>Agent reading + executing specs</td></tr>
-                    <tr><td>Epigenetic context</td><td>Reference implementations</td></tr>
-                    <tr><td>Cell division</td><td>The <a href="ralph-wiggum.html">Ralph Loop</a></td></tr>
-                    <tr><td>Mutations</td><td>Spec changes that propagate to code</td></tr>
-                    <tr><td>Immune system</td><td>Supervisor agent catching drift</td></tr>
-                </tbody>
-            </table>
-
-            <p>Clean specs produce predictable output. Bad specs produce malformed output. Same as DNA and proteins.</p>
-
-            <h2 id="information-theory">Don't Pre-Synthesize Your Specs</h2>
-
-            <p>Tempting: merge your PRD + architecture docs into one clean file, then feed it to the agent. Don't.</p>
-
-            <p>The <strong>Data Processing Inequality</strong> says processing can only destroy information, never create it: <code>I(X; Z) &le; I(X; Y)</code></p>
-
-            <p>What you lose by synthesizing:</p>
-            <ul>
-                <li><strong>Redundancy</strong> that gives the agent multiple angles on a concept</li>
-                <li><strong>Structural context</strong> from how the original doc is organized</li>
-                <li><strong>Edge cases</strong> that get trimmed during summarization</li>
-            </ul>
-
-            <p><strong>Exception:</strong> synthesis that adds <em>new</em> information (resolving ambiguities, deriving constraints from combining two docs, resolving contradictions). If you're just reformatting, feed the raw files.</p>
-
-            <h2>Further Reading</h2>
-
-            <ul>
-                <li><a href="matrix-methodology.html">Matrix Methodology</a> - Full framework using these principles</li>
-                <li><a href="ralph-wiggum.html">The Ralph Loop</a> - The execution pattern (cell division)</li>
-                <li><a href="continuous-evolution.html">Continuous Evolution</a> - How specs evolve for live products</li>
-            </ul>
-
-            <p class="last-updated"><em>Last updated: March 17, 2026</em></p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
-    <script src="nav.js"></script>
-</body>
-</html>
+    </script>
+
+</head>
+
+<body>
+
+    <!-- nav injected by nav.js -->
+
+
+
+    <div class="container">
+
+
+
+        <header class="page-header">
+
+            <h1>Specs as DNA</h1>
+
+            <p class="subtitle">Specs encode intent like DNA encodes organisms. Agents express that intent as code. Different environments produce different implementations from the same spec.</p>
+
+        </header>
+
+
+
+        <section class="content">
+
+
+
+            <pre><code># Spec (the "DNA")
+
+# User Story: Display User Profile
+
+- Show user's name, email, join date
+
+- Format join date as "Member since MMM YYYY"
+
+- If user has no email, show "No email on file"</code></pre>
+
+
+
+            <p>Same spec, two frameworks. The spec is framework-agnostic. Architecture context determines output.</p>
+
+
+
+            <pre><code>// React expression
+
+function UserProfile({ user }) {
+
+  const joinDate = new Date(user.joinedAt)
+
+    .toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+  return (
+
+    &lt;div className="profile"&gt;
+
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+
+      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
+
+      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
+
+    &lt;/div&gt;
+
+  );
+
+}</code></pre>
+
+
+
+            <pre><code>&lt;!-- Vue expression --&gt;
+
+&lt;template&gt;
+
+  &lt;div class="profile"&gt;
+
+    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+
+    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
+
+    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
+
+  &lt;/div&gt;
+
+&lt;/template&gt;</code></pre>
+
+
+
+            <p>Mutate the spec, output changes predictably:</p>
+
+
+
+            <pre><code>  + If user is premium, show gold star badge next to name
+
+
+
+// React now produces:
+
+&lt;h2&gt;{user.name} {user.isPremium && &lt;span className="badge"&gt;?&lt;/span&gt;}&lt;/h2&gt;</code></pre>
+
+
+
+            <h2>Vague Spec vs. Constrained Spec</h2>
+
+
+
+            <pre><code># Bad: vague DNA
+
+# Feature: User Settings
+
+Users need to be able to change their preferences.
+
+Make it easy to use.
+
+# What preferences? What UI? What storage? Unpredictable output.</code></pre>
+
+
+
+            <pre><code># Good: constrained DNA
+
+# Feature: User Settings
+
+
+
+## Data Model
+
+- user_preferences table
+
+  - theme: 'light' | 'dark' | 'auto'
+
+  - email_notifications: boolean
+
+  - language: ISO 639-1 string
+
+
+
+## API Contract
+
+POST /api/user/preferences
+
+Body: { theme, email_notifications, language }
+
+Returns: 200 + updated object | 400 + validation errors
+
+
+
+## Acceptance Criteria
+
+- Theme change updates UI without reload
+
+- Invalid language shows inline error
+
+- Unsaved changes warning on tab close</code></pre>
+
+
+
+            <p>Define <em>what</em> and <em>constraints</em>, not implementation details.</p>
+
+
+
+            <table>
+
+                <thead>
+
+                    <tr><th>Too Vague</th><th>Right</th><th>Over-Specified</th></tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr><td>"Make it fast"</td><td>"&lt;200ms p95"</td><td>"Use Redis with 60s TTL"</td></tr>
+
+                    <tr><td>"Handle errors"</td><td>"User-friendly message + log details"</td><td>"try-catch with react-hot-toast"</td></tr>
+
+                    <tr><td>"Users can search"</td><td>"Full-text, debounced 300ms, max 20"</td><td>"Use Elasticsearch with ngram tokenizer"</td></tr>
+
+                </tbody>
+
+            </table>
+
+
+
+            <h2>The Biology Mapping</h2>
+
+
+
+            <table>
+
+                <thead>
+
+                    <tr><th>Biology</th><th>Spec-Driven Dev</th></tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr><td>DNA</td><td>Specs (PRD, data model, API contracts)</td></tr>
+
+                    <tr><td>Gene expression</td><td>Agent reading + executing specs</td></tr>
+
+                    <tr><td>Epigenetic context</td><td>Reference implementations</td></tr>
+
+                    <tr><td>Cell division</td><td>The <a href="ralph-wiggum.html">Ralph Loop</a></td></tr>
+
+                    <tr><td>Mutations</td><td>Spec changes that propagate to code</td></tr>
+
+                    <tr><td>Immune system</td><td>Supervisor agent catching drift</td></tr>
+
+                </tbody>
+
+            </table>
+
+
+
+            <p>Clean specs produce predictable output. Bad specs produce malformed output. Same as DNA and proteins.</p>
+
+
+
+                        <h2 id="information-theory">Feed Raw Context</h2>
+
+            <p>Tempting: merge your PRD + architecture docs into one clean file, then feed it to the agent. Don't.</p>
+
+            <pre><code># Original PRD excerpt
+Users can update their email address. Email must be verified
+before replacing the old one. Send confirmation to BOTH old
+and new addresses. If new email bounces, keep old email.
+Limit: 3 verification attempts per day.
+
+# Original Architecture doc excerpt
+Email service: SendGrid with templated emails.
+Verification tokens: 32-byte random, stored in Redis with 24h TTL.
+User table has email_pending column for staged changes.
+
+# ? Synthesized "unified spec"
+Implement email update with verification.
+Use SendGrid for emails and Redis for tokens.
+
+# What got lost:
+- Send to BOTH addresses (security detail)
+- Bounce handling (edge case)
+- Rate limit (abuse prevention)
+- 24h TTL (timing constraint)
+- email_pending column (schema detail)</code></pre>
+
+            <p>The synthesized version sounds clean but dropped five implementation details. An agent building from it would have to guess.</p>
+
+            <p>The <strong>Data Processing Inequality</strong> says processing can only destroy information, never create it: <code>I(X; Z) &le; I(X; Y)</code></p>
+
+            <p>What you lose by synthesizing:</p>
+            <ul>
+                <li><strong>Redundancy</strong> that gives the agent multiple angles on a concept</li>
+                <li><strong>Structural context</strong> from how the original doc is organized</li>
+                <li><strong>Edge cases</strong> that get trimmed during summarization</li>
+            </ul>
+
+            <p><strong>Exception:</strong> synthesis that adds <em>new</em> information (resolving ambiguities, deriving constraints from combining two docs, resolving contradictions). If you're just reformatting, feed the raw files.</p>
+
+
+
+            <h2>Further Reading</h2>
+
+
+
+            <ul>
+
+                <li><a href="matrix-methodology.html">Matrix Methodology</a> - Full framework using these principles</li>
+
+                <li><a href="ralph-wiggum.html">The Ralph Loop</a> - The execution pattern (cell division)</li>
+
+                <li><a href="continuous-evolution.html">Continuous Evolution</a> - How specs evolve for live products</li>
+
+            </ul>
+
+
+
+            <p class="last-updated"><em>Last updated: March 25, 2026</em></p>
+
+
+
+        </section>
+
+
+
+    </div>
+
+
+
+    <footer>
+
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+
+    </footer>
+
+
+
+    <script src="nav.js"></script>
+
+</body>
+
+</html>
+

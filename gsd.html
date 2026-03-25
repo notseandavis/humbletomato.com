@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSD (Get Shit Done) — Humble Tomato</title>
-    <meta name="description" content="Context engineering for AI coding. Fresh sub-agent contexts prevent quality degradation across tasks.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSD (Get Shit Done) â€” Humble Tomato</title>
+    <meta name="description" content="Context engineering for AI coding. Fresh sub-agent contexts prevent quality degradation across tasks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,99 +15,99 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
+    </script>
+</head>
 <body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>GSD (Get Shit Done)</h1>
-            <p class="subtitle">A meta-prompting and context engineering system that solves quality degradation by giving each task a fresh 200K token context window.</p>
-        </header>
-
-        <section class="content">
-
-            <p><strong>Source:</strong> <a href="https://github.com/gsd-build/get-shit-done">GitHub</a> · <a href="https://gsd.build">gsd.build</a> · Created by <a href="https://github.com/glittercowboy">Lex Christopherson</a></p>
-
-            <pre><code>/gsd:new-project    # Interview + 4 parallel research agents
-/gsd:discuss-phase  # Capture preferences for gray areas
-/gsd:build          # Atomic plans ? wave parallelism ? fresh agents
-/gsd:verify         # "Is it TRUE?" not "Was it done?"</code></pre>
-
-            <h2>Core Idea</h2>
-
-            <p>AI output degrades as context fills. Task 50 gets worse results than task 1. GSD spawns a fresh sub-agent per task, so every task gets a clean 200K token window with only what it needs.</p>
-
-            <h2>What's In the Box</h2>
-
-            <p><strong>v1:</strong> ~50 markdown files (29 slash commands, 12 agents, 2 hooks). Runs on native Claude Code. A Node.js CLI handles deterministic logic so the LLM focuses on reasoning.</p>
-
-            <p><strong>v2:</strong> Standalone TypeScript CLI that programmatically controls agent sessions. Adds crash recovery, stuck detection, cost tracking, and git worktree isolation.</p>
-
-            <h2>How Each Command Works</h2>
-
-            <p><strong>new-project</strong> interviews you while spawning 4 parallel research agents (stack, features, architecture, pitfalls). Outputs: <code>PROJECT.md</code>, <code>REQUIREMENTS.md</code>, <code>ROADMAP.md</code>, <code>STATE.md</code>.</p>
-
-            <p><strong>discuss-phase</strong> identifies gray areas and asks targeted questions. Answers go into <code>CONTEXT.md</code>. Every subsequent agent inherits them. Skipping this is the #1 source of misaligned output.</p>
-
-            <p><strong>build</strong> creates atomic <code>PLAN.md</code> files (2-3 tasks each, ~50% context window). Independent plans run in parallel waves. Each plan is the prompt. The sub-agent reads it directly as its instruction:</p>
-
-            <pre><code>&lt;task type="auto"&gt;
-  &lt;name&gt;Create login endpoint&lt;/name&gt;
-  &lt;files&gt;src/app/api/auth/login/route.ts&lt;/files&gt;
-  &lt;action&gt;Use jose for JWT. Validate against users table.&lt;/action&gt;
-  &lt;verify&gt;curl POST localhost:3000/api/auth/login returns 200&lt;/verify&gt;
-&lt;/task&gt;</code></pre>
-
-            <p>Each plan = one atomic git commit, one clean agent session.</p>
-
-            <p><strong>verify</strong> checks goals, not task completion. "Can a user sign up with email?" not "Does the signup route exist?" Failures generate new plans instead of retrying.</p>
-
-            <h2>Strengths</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Strength</th><th>Detail</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Fresh context per task</td><td>200K windows. No degradation from first to last task.</td></tr>
-                    <tr><td>Four commands</td><td>Complexity is in the system, not the interface.</td></tr>
-                    <tr><td>Wave parallelism</td><td>Independent tasks run simultaneously.</td></tr>
-                    <tr><td>Plan verification</td><td>Up to 3 iterations before execution. Checks scope, deps, conflicts.</td></tr>
-                </tbody>
-            </table>
-
-            <h2>Tradeoffs</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Limitation</th><th>Detail</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Token hungry</td><td>Multi-agent spawning burns through Pro plan limits fast.</td></tr>
-                    <tr><td>Greenfield bias</td><td>Deep dependency chains in large codebases can exceed single-task comprehension.</td></tr>
-                    <tr><td>Discuss phase is critical</td><td>Skip it and plans inherit bad assumptions.</td></tr>
-                    <tr><td>Solo-oriented</td><td>Less multi-person coordination than <a href="bmad.html">BMAD</a>.</td></tr>
-                    <tr><td>No MCP in sub-agents</td><td>Claude Code limitation, not GSD's.</td></tr>
-                </tbody>
-            </table>
-
-            <h2>Good Fit / Bad Fit</h2>
-
-            <p><strong>Use it:</strong> Solo/small team, greenfield, you want agents handling implementation while you make product decisions.</p>
-
-            <p><strong>Skip it:</strong> Large brownfield codebases, tightly coupled systems, teams needing role separation and audit trails.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>GSD (Get Shit Done)</h1>
+            <p class="subtitle">A meta-prompting and context engineering system that solves quality degradation by giving each task a fresh 200K token context window.</p>
+        </header>
+
+        <section class="content">
+
+            <p><strong>Source:</strong> <a href="https://github.com/gsd-build/get-shit-done">GitHub</a> Â· <a href="https://gsd.build">gsd.build</a> Â· Created by <a href="https://github.com/glittercowboy">Lex Christopherson</a></p>
+
+            <pre><code>/gsd:new-project    # Interview + 4 parallel research agents
+/gsd:discuss-phase  # Capture preferences for gray areas
+/gsd:build          # Atomic plans ? wave parallelism ? fresh agents
+/gsd:verify         # "Is it TRUE?" not "Was it done?"</code></pre>
+
+            <h2>Core Idea</h2>
+
+            <p>AI output degrades as context fills. Task 50 gets worse results than task 1. GSD spawns a fresh sub-agent per task, so every task gets a clean 200K token window with only what it needs.</p>
+
+            <h2>What's In the Box</h2>
+
+            <p><strong>v1:</strong> ~50 markdown files (29 slash commands, 12 agents, 2 hooks). Runs on native Claude Code. A Node.js CLI handles deterministic logic so the LLM focuses on reasoning.</p>
+
+            <p><strong>v2:</strong> Standalone TypeScript CLI that programmatically controls agent sessions. Adds crash recovery, stuck detection, cost tracking, and git worktree isolation.</p>
+
+            <h2>How Each Command Works</h2>
+
+            <p><strong>new-project</strong> interviews you while spawning 4 parallel research agents (stack, features, architecture, pitfalls). Outputs: <code>PROJECT.md</code>, <code>REQUIREMENTS.md</code>, <code>ROADMAP.md</code>, <code>STATE.md</code>.</p>
+
+            <p><strong>discuss-phase</strong> identifies gray areas and asks targeted questions. Answers go into <code>CONTEXT.md</code>. Every subsequent agent inherits them. Skipping this is the #1 source of misaligned output.</p>
+
+            <p><strong>build</strong> creates atomic <code>PLAN.md</code> files (2-3 tasks each, ~50% context window). Independent plans run in parallel waves. Each plan is the prompt. The sub-agent reads it directly as its instruction:</p>
+
+            <pre><code>&lt;task type="auto"&gt;
+  &lt;name&gt;Create login endpoint&lt;/name&gt;
+  &lt;files&gt;src/app/api/auth/login/route.ts&lt;/files&gt;
+  &lt;action&gt;Use jose for JWT. Validate against users table.&lt;/action&gt;
+  &lt;verify&gt;curl POST localhost:3000/api/auth/login returns 200&lt;/verify&gt;
+&lt;/task&gt;</code></pre>
+
+            <p>Each plan = one atomic git commit, one clean agent session.</p>
+
+            <p><strong>verify</strong> checks goals, not task completion. "Can a user sign up with email?" not "Does the signup route exist?" Failures generate new plans instead of retrying.</p>
+
+            <h2>Strengths</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Strength</th><th>Detail</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Fresh context per task</td><td>200K windows. No degradation from first to last task.</td></tr>
+                    <tr><td>Four commands</td><td>Complexity is in the system, not the interface.</td></tr>
+                    <tr><td>Wave parallelism</td><td>Independent tasks run simultaneously.</td></tr>
+                    <tr><td>Plan verification</td><td>Up to 3 iterations before execution. Checks scope, deps, conflicts.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Tradeoffs</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Limitation</th><th>Detail</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Token hungry</td><td>Multi-agent spawning burns through Pro plan limits fast.</td></tr>
+                    <tr><td>Greenfield bias</td><td>Deep dependency chains in large codebases can exceed single-task comprehension.</td></tr>
+                    <tr><td>Discuss phase is critical</td><td>Skip it and plans inherit bad assumptions.</td></tr>
+                    <tr><td>Solo-oriented</td><td>Less multi-person coordination than <a href="bmad.html">BMAD</a>.</td></tr>
+                    <tr><td>No MCP in sub-agents</td><td>Claude Code limitation, not GSD's.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Good Fit / Bad Fit</h2>
+
+            <p><strong>Use it:</strong> Solo/small team, greenfield, you want agents handling implementation while you make product decisions.</p>
+
+            <p><strong>Skip it:</strong> Large brownfield codebases, tightly coupled systems, teams needing role separation and audit trails.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
     <script src="nav.js"></script>
-</body>
-</html>
+</body>
+</html>

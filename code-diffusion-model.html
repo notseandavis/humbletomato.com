@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Diffusion Model - Humble Tomato</title>
-    <meta name="description" content="A thought experiment: your specs must be as detailed as the system is complex. You can't shortcut the information needed to build what you want.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Diffusion Model - Humble Tomato</title>
+    <meta name="description" content="A thought experiment: your specs must be as detailed as the system is complex. You can't shortcut the information needed to build what you want.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,151 +15,151 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
-<body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Code Diffusion Model</h1>
-            <p class="subtitle">Your specs must be as detailed as the system is complex. There is no shortcut.</p>
-        </header>
-
-        <section class="content">
-
-            <pre><code># Vague spec = vague output
-Prompt: "build a website"
-Output: Generic template. Could be anyone's site.
-
-# Detailed spec = detailed output
-Prompt: "e-commerce platform, OAuth2 auth, Redis-cached cart,
-         Stripe payments, saga-based order processing,
-         role-based access for customers vs merchants"
-Output: Specific implementation that matches what you described.</code></pre>
-
-            <p>Same principle as image diffusion models: the output can't contain more information than the input. A vague prompt produces a vague result. A detailed prompt produces a detailed result.</p>
-
-            <h2>Complexity is Conserved</h2>
-
-            <div class="callout">
-                <p><span class="callout-label">Simple spec</span><span class="callout-detail"> — Agent guesses — Complex debugging</span></p>
-                <p><span class="callout-label">Detailed spec</span><span class="callout-detail"> — Agent resolves — Working system</span></p>
-                <p><span class="callout-detail">The total work is the same. You choose when you do it: before generation (in the spec) or after (in debugging).</span></p>
-            </div>
-
-            <h2>Example: User Registration</h2>
-
-            <p>Watch how adding constraints eliminates bugs:</p>
-
-            <pre><code># Spec v1: Minimal detail
-"Users can register with email and password"
-
-# What the agent might produce:
-def register(email, password):
-    user = User(email=email, password=password)
-    db.save(user)
-    return user
-
-# Problems:
-# - Password stored in plaintext
-# - No email validation
-# - No duplicate check
-# - No confirmation flow</code></pre>
-
-            <pre><code># Spec v2: Add constraints
-"Users register with email and password.
-Hash passwords with bcrypt (cost 12).
-Validate email format. Reject duplicates."
-
-# What the agent now produces:
-import bcrypt, re
-
-def register(email, password):
-    if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
-        raise ValueError('Invalid email')
-    
-    if User.exists(email):
-        raise ValueError('Email already registered')
-    
-    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
-    user = User(email=email, password_hash=hashed)
-    db.save(user)
-    return user
-
-# Better, but still missing:
-# - Email confirmation
-# - Password strength requirements</code></pre>
-
-            <pre><code># Spec v3: Production-ready detail
-"Users register with email and password.
-Password: min 8 chars, 1 uppercase, 1 number, 1 special.
-Hash with bcrypt cost 12.
-Validate email format, reject duplicates.
-Send confirmation email, mark unverified.
-Return 201 + user object on success.
-Return 400 + validation errors on failure."
-
-# What the agent produces:
-import bcrypt, re, secrets
-from email_service import send_confirmation
-
-def register(email, password):
-    # Validate email
-    if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
-        return {'error': 'Invalid email format'}, 400
-    
-    # Check duplicate
-    if User.exists(email):
-        return {'error': 'Email already registered'}, 400
-    
-    # Validate password strength
-    if len(password) < 8:
-        return {'error': 'Password must be at least 8 characters'}, 400
-    if not re.search(r'[A-Z]', password):
-        return {'error': 'Password must contain uppercase letter'}, 400
-    if not re.search(r'\d', password):
-        return {'error': 'Password must contain a number'}, 400
-    if not re.search(r'[!@#$%^&*]', password):
-        return {'error': 'Password must contain special character'}, 400
-    
-    # Hash password
-    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
-    
-    # Create user
-    token = secrets.token_urlsafe(32)
-    user = User(
-        email=email,
-        password_hash=hashed,
-        verified=False,
-        confirmation_token=token
-    )
-    db.save(user)
-    
-    # Send confirmation email
-    send_confirmation(email, token)
-    
-    return {'user': user.to_dict()}, 201</code></pre>
-
-            <p>Same feature. Three levels of spec detail. Three levels of output quality. The agent didn't get smarter between v1 and v3. The spec got more specific.</p>
-
-            <p>When your spec says "handle authentication," you haven't saved work. You've moved it from "writing the spec" to "debugging why the agent picked session cookies when you needed JWT."</p>
-
-            <p>This has formal backing. <a href="https://en.wikipedia.org/wiki/Tesler%27s_law">Tesler's Law</a>: every system has irreducible complexity, and someone has to deal with it. <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a>: you can't compress a spec below the minimum description length without losing information.</p>
-
-            <h2>The Tradeoff</h2>
-
-            <p>Writing detailed specs is slow. But debugging vague specs is slower. Pick which kind of slow you prefer.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
-    <script src="nav.js"></script>
-</body>
-</html>
+    </script>
+</head>
+<body>
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Code Diffusion Model</h1>
+            <p class="subtitle">Your specs must be as detailed as the system is complex. There is no shortcut.</p>
+        </header>
+
+        <section class="content">
+
+            <pre><code># Vague spec = vague output
+Prompt: "build a website"
+Output: Generic template. Could be anyone's site.
+
+# Detailed spec = detailed output
+Prompt: "e-commerce platform, OAuth2 auth, Redis-cached cart,
+         Stripe payments, saga-based order processing,
+         role-based access for customers vs merchants"
+Output: Specific implementation that matches what you described.</code></pre>
+
+            <p>Same principle as image diffusion models: the output can't contain more information than the input. A vague prompt produces a vague result. A detailed prompt produces a detailed result.</p>
+
+            <h2>Complexity is Conserved</h2>
+
+            <div class="callout">
+                <p><span class="callout-label">Simple spec</span><span class="callout-detail"> â€” Agent guesses â€” Complex debugging</span></p>
+                <p><span class="callout-label">Detailed spec</span><span class="callout-detail"> â€” Agent resolves â€” Working system</span></p>
+                <p><span class="callout-detail">The total work is the same. You choose when you do it: before generation (in the spec) or after (in debugging).</span></p>
+            </div>
+
+            <h2>Example: User Registration</h2>
+
+            <p>Watch how adding constraints eliminates bugs:</p>
+
+            <pre><code># Spec v1: Minimal detail
+"Users can register with email and password"
+
+# What the agent might produce:
+def register(email, password):
+    user = User(email=email, password=password)
+    db.save(user)
+    return user
+
+# Problems:
+# - Password stored in plaintext
+# - No email validation
+# - No duplicate check
+# - No confirmation flow</code></pre>
+
+            <pre><code># Spec v2: Add constraints
+"Users register with email and password.
+Hash passwords with bcrypt (cost 12).
+Validate email format. Reject duplicates."
+
+# What the agent now produces:
+import bcrypt, re
+
+def register(email, password):
+    if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
+        raise ValueError('Invalid email')
+    
+    if User.exists(email):
+        raise ValueError('Email already registered')
+    
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
+    user = User(email=email, password_hash=hashed)
+    db.save(user)
+    return user
+
+# Better, but still missing:
+# - Email confirmation
+# - Password strength requirements</code></pre>
+
+            <pre><code># Spec v3: Production-ready detail
+"Users register with email and password.
+Password: min 8 chars, 1 uppercase, 1 number, 1 special.
+Hash with bcrypt cost 12.
+Validate email format, reject duplicates.
+Send confirmation email, mark unverified.
+Return 201 + user object on success.
+Return 400 + validation errors on failure."
+
+# What the agent produces:
+import bcrypt, re, secrets
+from email_service import send_confirmation
+
+def register(email, password):
+    # Validate email
+    if not re.match(r'^[^@]+@[^@]+\.[^@]+$', email):
+        return {'error': 'Invalid email format'}, 400
+    
+    # Check duplicate
+    if User.exists(email):
+        return {'error': 'Email already registered'}, 400
+    
+    # Validate password strength
+    if len(password) < 8:
+        return {'error': 'Password must be at least 8 characters'}, 400
+    if not re.search(r'[A-Z]', password):
+        return {'error': 'Password must contain uppercase letter'}, 400
+    if not re.search(r'\d', password):
+        return {'error': 'Password must contain a number'}, 400
+    if not re.search(r'[!@#$%^&*]', password):
+        return {'error': 'Password must contain special character'}, 400
+    
+    # Hash password
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
+    
+    # Create user
+    token = secrets.token_urlsafe(32)
+    user = User(
+        email=email,
+        password_hash=hashed,
+        verified=False,
+        confirmation_token=token
+    )
+    db.save(user)
+    
+    # Send confirmation email
+    send_confirmation(email, token)
+    
+    return {'user': user.to_dict()}, 201</code></pre>
+
+            <p>Same feature. Three levels of spec detail. Three levels of output quality. The agent didn't get smarter between v1 and v3. The spec got more specific.</p>
+
+            <p>When your spec says "handle authentication," you haven't saved work. You've moved it from "writing the spec" to "debugging why the agent picked session cookies when you needed JWT."</p>
+
+            <p>This has formal backing. <a href="https://en.wikipedia.org/wiki/Tesler%27s_law">Tesler's Law</a>: every system has irreducible complexity, and someone has to deal with it. <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a>: you can't compress a spec below the minimum description length without losing information.</p>
+
+            <h2>The Tradeoff</h2>
+
+            <p>Writing detailed specs is slow. But debugging vague specs is slower. Pick which kind of slow you prefer.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script src="nav.js"></script>
+</body>
+</html>

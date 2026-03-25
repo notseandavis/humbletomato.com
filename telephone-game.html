@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Telephone Game — Humble Tomato</title>
-    <meta name="description" content="A thought experiment: every LLM transformation loses information. Fewer steps with richer context beats more steps with processed context.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Telephone Game â€” Humble Tomato</title>
+    <meta name="description" content="A thought experiment: every LLM transformation loses information. Fewer steps with richer context beats more steps with processed context.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,81 +15,81 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
-<body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>The Telephone Game</h1>
-            <p class="subtitle">Every time you pass information through an LLM, you lose something. What does that mean for how we build AI workflows?</p>
-        </header>
-
-        <section class="content">
-
-            <div class="callout">
-                <p><span class="callout-label">Option A: Direct (less loss)</span><br>
-                <span class="callout-detail">Product Requirements + Spec ? Code Agent ? Code</span></p>
-                <p><span class="callout-label">Option B: Extra step (more loss)</span><br>
-                <span class="callout-detail">Product Requirements ? Synthesis Agent ? Spec ? Code Agent ? Code</span></p>
-            </div>
-
-            <p>Option B looks cleaner. You're "polishing" the inputs. But every LLM pass loses information. Option B is strictly worse.</p>
-
-            <h2>Why Each Step Loses Information</h2>
-
-            <p>Shannon's <a href="https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem">Data Processing Inequality</a>: processing can only preserve or destroy information, never create it.</p>
-
-            <div class="callout">
-                <p><span class="callout-label">What the synthesis agent does to your docs:</span></p>
-                <p><span class="callout-detail">Summarizes sections (detail lost). Paraphrases "must" to "should" (meaning shifted). Drops "irrelevant" details (edge cases lost). Guesses at ambiguities (sometimes wrong).</span></p>
-                <p><span class="callout-label">Cascading drift:</span><br>
-                <span class="callout-detail">PRD + Arch ? "Unified Spec" (some info lost) ? "Task Breakdown" (more lost) ? Code (working from degraded intent).</span></p>
-            </div>
-
-            <p>The synthesis agent can't know what the code agent needs. It compresses based on general heuristics. Details it drops as noise might be exactly what handles an edge case downstream.</p>
-
-            <h2>"But My Docs Are Messy"</h2>
-
-            <p>Modern LLMs handle messy documents fine. When you "clean up" docs through an LLM, you're not removing noise. You're removing information you can't distinguish from noise.</p>
-
-            <h2>When Extra Steps Help vs Hurt</h2>
-
-            <p>The exception: steps that add genuinely new information.</p>
-
-            <table>
-                <thead>
-                    <tr><th>Adds information (good)</th><th>Loses information (bad)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Human resolves conflict between PRD and arch</td><td>LLM "unifies" two docs into one</td></tr>
-                    <tr><td>Domain expert adds implicit constraints</td><td>LLM summarizes for "clarity"</td></tr>
-                    <tr><td>Generating tests (new artifact)</td><td>Restructuring docs to "help the agent"</td></tr>
-                    <tr><td>Validation that flags contradictions</td><td>Paraphrasing requirements</td></tr>
-                </tbody>
-            </table>
-
-            <p>A human writing a spec in the <a href="matrix-methodology.html">Matrix Methodology</a> adds signal: mapping "user enters address" to "REST controller with @Valid request body." That mapping didn't exist in either source doc. An LLM "unifying" documents can only rearrange what's there, losing some along the way.</p>
-
-            <h2>The Rule</h2>
-
-            <div class="callout">
-                <p><span class="callout-label">Optimal pipeline = shortest pipeline.</span><br>
-                <span class="callout-detail">Your intent ? Agent ? Output. With 200K token context windows, your docs probably fit. Every extra LLM step is another round of telephone.</span></p>
-            </div>
-
-            <p>Feed agents the rawest context you can. Don't preprocess for clarity. Don't synthesize for convenience. Fewer steps, richer context, less telephone.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
-    <script src="nav.js"></script>
-</body>
-</html>
+    </script>
+</head>
+<body>
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>The Telephone Game</h1>
+            <p class="subtitle">Every time you pass information through an LLM, you lose something. What does that mean for how we build AI workflows?</p>
+        </header>
+
+        <section class="content">
+
+            <div class="callout">
+                <p><span class="callout-label">Option A: Direct (less loss)</span><br>
+                <span class="callout-detail">Product Requirements + Spec ? Code Agent ? Code</span></p>
+                <p><span class="callout-label">Option B: Extra step (more loss)</span><br>
+                <span class="callout-detail">Product Requirements ? Synthesis Agent ? Spec ? Code Agent ? Code</span></p>
+            </div>
+
+            <p>Option B looks cleaner. You're "polishing" the inputs. But every LLM pass loses information. Option B is strictly worse.</p>
+
+            <h2>Why Each Step Loses Information</h2>
+
+            <p>Shannon's <a href="https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem">Data Processing Inequality</a>: processing can only preserve or destroy information, never create it.</p>
+
+            <div class="callout">
+                <p><span class="callout-label">What the synthesis agent does to your docs:</span></p>
+                <p><span class="callout-detail">Summarizes sections (detail lost). Paraphrases "must" to "should" (meaning shifted). Drops "irrelevant" details (edge cases lost). Guesses at ambiguities (sometimes wrong).</span></p>
+                <p><span class="callout-label">Cascading drift:</span><br>
+                <span class="callout-detail">PRD + Arch ? "Unified Spec" (some info lost) ? "Task Breakdown" (more lost) ? Code (working from degraded intent).</span></p>
+            </div>
+
+            <p>The synthesis agent can't know what the code agent needs. It compresses based on general heuristics. Details it drops as noise might be exactly what handles an edge case downstream.</p>
+
+            <h2>"But My Docs Are Messy"</h2>
+
+            <p>Modern LLMs handle messy documents fine. When you "clean up" docs through an LLM, you're not removing noise. You're removing information you can't distinguish from noise.</p>
+
+            <h2>When Extra Steps Help vs Hurt</h2>
+
+            <p>The exception: steps that add genuinely new information.</p>
+
+            <table>
+                <thead>
+                    <tr><th>Adds information (good)</th><th>Loses information (bad)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Human resolves conflict between PRD and arch</td><td>LLM "unifies" two docs into one</td></tr>
+                    <tr><td>Domain expert adds implicit constraints</td><td>LLM summarizes for "clarity"</td></tr>
+                    <tr><td>Generating tests (new artifact)</td><td>Restructuring docs to "help the agent"</td></tr>
+                    <tr><td>Validation that flags contradictions</td><td>Paraphrasing requirements</td></tr>
+                </tbody>
+            </table>
+
+            <p>A human writing a spec in the <a href="matrix-methodology.html">Matrix Methodology</a> adds signal: mapping "user enters address" to "REST controller with @Valid request body." That mapping didn't exist in either source doc. An LLM "unifying" documents can only rearrange what's there, losing some along the way.</p>
+
+            <h2>The Rule</h2>
+
+            <div class="callout">
+                <p><span class="callout-label">Optimal pipeline = shortest pipeline.</span><br>
+                <span class="callout-detail">Your intent ? Agent ? Output. With 200K token context windows, your docs probably fit. Every extra LLM step is another round of telephone.</span></p>
+            </div>
+
+            <p>Feed agents the rawest context you can. Don't preprocess for clarity. Don't synthesize for convenience. Fewer steps, richer context, less telephone.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>&copy; 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script src="nav.js"></script>
+</body>
+</html>

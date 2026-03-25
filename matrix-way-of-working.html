@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Way of Working - Humble Tomato</title>
-    <meta name="description" content="How the Matrix Methodology changes daily development: daily iteration, spec quality levels, role evolution, and E2E as definition of done.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Way of Working - Humble Tomato</title>
+    <meta name="description" content="How the Matrix Methodology changes daily development: daily iteration, spec quality levels, role evolution, and E2E as definition of done.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,118 +15,118 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
+    </script>
+</head>
 <body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Matrix Way of Working</h1>
-            <p class="subtitle">How the Context Matrix changes daily development practice. Daily releases, evolving specs, and new roles.</p>
-        </header>
-
-        <section class="content">
-
-            <h2>A Week With Matrix</h2>
-
-<pre><code># Day 1: Write a rough spec, get running code
-$ cat specs/checkout.md    # L0 sketch: bullet points, intent only
-$ matrix build             # Agent generates R0 from spec
-$ npm test                 # 3 of 12 E2E fail ? spec has gaps
-
-# Day 2: Fix the spec, not the code
-$ vim specs/checkout.md    # Add missing edge cases from test failures
-$ matrix build             # Agent regenerates R1 from updated spec
-$ npm test                 # 10 of 12 pass
-
-# Day 3: Converge
-$ vim specs/checkout.md    # Tighten error handling section
-$ matrix build             # R2
-$ npm test                 # 12 of 12 pass ? RC0
-
-# Day 4: Product reviews RC0, requests copy change
-$ vim specs/checkout.md    # Update error message wording
-$ matrix build && npm test # Green ? ship it</code></pre>
-
-            <p>Rejection is cheap. The agent rebuilds from updated specs in hours. Nobody spent three weeks on R1, so nobody fights to ship it despite known issues.</p>
-
-            <h2>The Daily Cycle</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Day</th><th>PRD</th><th>Release</th><th>Result</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>v0.1</td><td>R0</td><td>Feedback surfaces gaps</td></tr>
-                    <tr><td>2</td><td>v0.2</td><td>R1</td><td>Edge cases emerge</td></tr>
-                    <tr><td>3</td><td>v0.3</td><td>R2</td><td>E2E mostly passing</td></tr>
-                    <tr><td>4</td><td>v0.4</td><td>RC0</td><td>E2E green, product reviewing</td></tr>
-                    <tr><td>5</td><td>-</td><td>FINAL</td><td>Ship it</td></tr>
-                </tbody>
-            </table>
-
-            <p>The PRD and code converge together. Neither is "done" first. Both are done when E2E passes.</p>
-
-            <h2>E2E Tests as Definition of Done</h2>
-
-<pre><code>// The agent's job isn't "build the feature"
-// It's "make the tests green"
-describe('checkout', () => {
-  it('applies discount code', async () => {
-    await page.fill('#discount', 'SAVE20');
-    await page.click('#apply');
-    expect(await page.textContent('#total')).toBe('$80.00');
-  });
-
-  it('shows error for expired code', async () => {
-    await page.fill('#discount', 'EXPIRED');
-    await page.click('#apply');
-    expect(await page.textContent('#error')).toBe('This code has expired');
-  });
-});</code></pre>
-
-            <p>The <a href="matrix-methodology.html">spec template</a> defines expected behavior. E2E tests encode it as assertions. Tests pass or they don't. No ambiguity.</p>
-
-            <h2>Spec Quality Levels</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Level</th><th>What It Looks Like</th><th>Agent Output</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>L0: Sketch</td><td>Bullet points, intent only</td><td>Scaffolding + questions</td></tr>
-                    <tr><td>L1: Draft</td><td>Structured sections, some gaps</td><td>Compilable code</td></tr>
-                    <tr><td>L2: Specified</td><td>Complete, edge cases noted</td><td>Passing unit tests</td></tr>
-                    <tr><td>L3: Verified</td><td>Validated by successful runs</td><td>Passing E2E tests</td></tr>
-                </tbody>
-            </table>
-
-            <p>Start at L0. Let R0 tell you what's missing. A rough spec that runs today teaches more than a perfect spec next month.</p>
-
-            <h2>How Roles Change</h2>
-
-            <p><strong>PMs become builders.</strong> The person writing the spec shapes what gets built. Product judgment is the primary input to the build loop.</p>
-
-            <p><strong>Engineers become architects.</strong> They own the templates, architecture docs, and infrastructure. They debug the loop, not the code.</p>
-
-            <h2>What This Is Not</h2>
-
-            <p><strong>Not waterfall with faster typing.</strong> Speed is wasted if inputs don't iterate at the same pace.</p>
-
-            <p><strong>Not "AI replaces product."</strong> Product judgment matters <em>more</em>, not less. Someone still decides what the error message says.</p>
-
-            <p><strong>Not "AI replaces architecture."</strong> Templates and architecture docs are the machine. Engineers keep the machine running.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Matrix Way of Working</h1>
+            <p class="subtitle">How the Context Matrix changes daily development practice. Daily releases, evolving specs, and new roles.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>A Week With Matrix</h2>
+
+<pre><code># Day 1: Write a rough spec, get running code
+$ cat specs/checkout.md    # L0 sketch: bullet points, intent only
+$ matrix build             # Agent generates R0 from spec
+$ npm test                 # 3 of 12 E2E fail ? spec has gaps
+
+# Day 2: Fix the spec, not the code
+$ vim specs/checkout.md    # Add missing edge cases from test failures
+$ matrix build             # Agent regenerates R1 from updated spec
+$ npm test                 # 10 of 12 pass
+
+# Day 3: Converge
+$ vim specs/checkout.md    # Tighten error handling section
+$ matrix build             # R2
+$ npm test                 # 12 of 12 pass ? RC0
+
+# Day 4: Product reviews RC0, requests copy change
+$ vim specs/checkout.md    # Update error message wording
+$ matrix build && npm test # Green ? ship it</code></pre>
+
+            <p>Rejection is cheap. The agent rebuilds from updated specs in hours. Nobody spent three weeks on R1, so nobody fights to ship it despite known issues.</p>
+
+            <h2>The Daily Cycle</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Day</th><th>PRD</th><th>Release</th><th>Result</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>v0.1</td><td>R0</td><td>Feedback surfaces gaps</td></tr>
+                    <tr><td>2</td><td>v0.2</td><td>R1</td><td>Edge cases emerge</td></tr>
+                    <tr><td>3</td><td>v0.3</td><td>R2</td><td>E2E mostly passing</td></tr>
+                    <tr><td>4</td><td>v0.4</td><td>RC0</td><td>E2E green, product reviewing</td></tr>
+                    <tr><td>5</td><td>-</td><td>FINAL</td><td>Ship it</td></tr>
+                </tbody>
+            </table>
+
+            <p>The PRD and code converge together. Neither is "done" first. Both are done when E2E passes.</p>
+
+            <h2>E2E Tests as Definition of Done</h2>
+
+<pre><code>// The agent's job isn't "build the feature"
+// It's "make the tests green"
+describe('checkout', () => {
+  it('applies discount code', async () => {
+    await page.fill('#discount', 'SAVE20');
+    await page.click('#apply');
+    expect(await page.textContent('#total')).toBe('$80.00');
+  });
+
+  it('shows error for expired code', async () => {
+    await page.fill('#discount', 'EXPIRED');
+    await page.click('#apply');
+    expect(await page.textContent('#error')).toBe('This code has expired');
+  });
+});</code></pre>
+
+            <p>The <a href="matrix-methodology.html">spec template</a> defines expected behavior. E2E tests encode it as assertions. Tests pass or they don't. No ambiguity.</p>
+
+            <h2>Spec Quality Levels</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Level</th><th>What It Looks Like</th><th>Agent Output</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>L0: Sketch</td><td>Bullet points, intent only</td><td>Scaffolding + questions</td></tr>
+                    <tr><td>L1: Draft</td><td>Structured sections, some gaps</td><td>Compilable code</td></tr>
+                    <tr><td>L2: Specified</td><td>Complete, edge cases noted</td><td>Passing unit tests</td></tr>
+                    <tr><td>L3: Verified</td><td>Validated by successful runs</td><td>Passing E2E tests</td></tr>
+                </tbody>
+            </table>
+
+            <p>Start at L0. Let R0 tell you what's missing. A rough spec that runs today teaches more than a perfect spec next month.</p>
+
+            <h2>How Roles Change</h2>
+
+            <p><strong>PMs become builders.</strong> The person writing the spec shapes what gets built. Product judgment is the primary input to the build loop.</p>
+
+            <p><strong>Engineers become architects.</strong> They own the templates, architecture docs, and infrastructure. They debug the loop, not the code.</p>
+
+            <h2>What This Is Not</h2>
+
+            <p><strong>Not waterfall with faster typing.</strong> Speed is wasted if inputs don't iterate at the same pace.</p>
+
+            <p><strong>Not "AI replaces product."</strong> Product judgment matters <em>more</em>, not less. Someone still decides what the error message says.</p>
+
+            <p><strong>Not "AI replaces architecture."</strong> Templates and architecture docs are the machine. Engineers keep the machine running.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
     <script src="nav.js"></script>
-</body>
-</html>
+</body>
+</html>

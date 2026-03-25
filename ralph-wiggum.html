@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ralph Wiggum Loop — Humble Tomato</title>
-    <meta name="description" content="The autonomous agent execution pattern. Read the plan, do one task, verify, update, repeat — with fresh context every iteration.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ralph Wiggum Loop â€” Humble Tomato</title>
+    <meta name="description" content="The autonomous agent execution pattern. Read the plan, do one task, verify, update, repeat â€” with fresh context every iteration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,119 +15,119 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
+    </script>
+</head>
 <body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>The Ralph Wiggum Loop</h1>
-            <p class="subtitle">An autonomous execution pattern for AI agents. Small, focused iterations with fresh context prevent degradation and enable reliable autonomous work.</p>
-        </header>
-
-        <section class="content">
-
-            <h2>The Loop</h2>
-
-            <div class="callout">
-                <p><span class="callout-detail">Read prd.json ? Pick highest-priority task (passes: false) ? Implement ? Run checks ? Commit ? Update prd.json ? Repeat</span></p>
-            </div>
-
-            <p>Each iteration gets <strong>fresh context</strong>. No accumulated cruft. One task per loop.</p>
-
-            <h2>prd.json Format</h2>
-
-            <pre><code>{
-  "project": "TaskApp",
-  "branchName": "ralph/task-status",
-  "userStories": [
-    {
-      "id": "US-001",
-      "title": "Add status field to tasks table",
-      "acceptanceCriteria": [
-        "Add status column: 'pending'|'in_progress'|'done'",
-        "Migration runs successfully",
-        "Typecheck passes"
-      ],
-      "priority": 1,
-      "passes": false
-    },
-    {
-      "id": "US-002",
-      "title": "Display status badge on task cards",
-      "acceptanceCriteria": [
-        "Colored badge: gray=pending, blue=in_progress, green=done",
-        "Typecheck passes"
-      ],
-      "priority": 2,
-      "passes": false
-    }
-  ]
-}</code></pre>
-
-            <h2>Story Sizing</h2>
-
-            <p>Each story must fit in <strong>one context window</strong>. If you can't describe the change in 2-3 sentences, split it.</p>
-
-            <table>
-                <tr><th>Right-sized</th><th>Too big (split these)</th></tr>
-                <tr><td>Add a DB column + migration</td><td>"Build the dashboard"</td></tr>
-                <tr><td>Add a UI component to existing page</td><td>"Add authentication"</td></tr>
-                <tr><td>Add a filter dropdown</td><td>"Refactor the API"</td></tr>
-            </table>
-
-            <p>Order by dependency: schema ? backend ? UI ? aggregation views.</p>
-
-            <h2>Acceptance Criteria</h2>
-
-            <p>Must be verifiable by the agent, not vague.</p>
-
-            <pre><code>// Good
-"Add status column with default 'pending'"
-"Filter dropdown has options: All, Active, Completed"
-"Typecheck passes"
-
-// Bad
-"Works correctly"
-"Good UX"
-"Handles edge cases"</code></pre>
-
-            <p>Always include "Typecheck passes" as the final criterion.</p>
-
-            <h2>Progress Log</h2>
-
-            <pre><code>## Codebase Patterns        ? top of progress.txt, reusable across iterations
-- Use sql template for aggregations
-- Always use IF NOT EXISTS for migrations
-
-## 2026-03-15 - US-001       ? appended after each iteration
-- Added status column to tasks table
-- Files: db/migrations/004_status.sql, src/schema.ts
-- Learning: drizzle needs explicit push after generate</code></pre>
-
-            <p>Patterns go at the top. Future iterations read them first.</p>
-
-            <h2>Tradeoffs</h2>
-
-            <ul>
-                <li><strong>Pro:</strong> Fresh context every loop prevents degradation over long features</li>
-                <li><strong>Pro:</strong> Each commit is verified and passing before moving on</li>
-                <li><strong>Con:</strong> Overhead per iteration (re-reading specs, context loading)</li>
-                <li><strong>Con:</strong> Cross-cutting changes that touch many files are awkward to split</li>
-            </ul>
-
-            <p>Ralph works with any spec source: <a href="bmad.html">BMAD</a>, <a href="gsd.html">GSD</a>, or your own format. All it needs is a structured task list with clear acceptance criteria.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>The Ralph Wiggum Loop</h1>
+            <p class="subtitle">An autonomous execution pattern for AI agents. Small, focused iterations with fresh context prevent degradation and enable reliable autonomous work.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>The Loop</h2>
+
+            <div class="callout">
+                <p><span class="callout-detail">Read prd.json ? Pick highest-priority task (passes: false) ? Implement ? Run checks ? Commit ? Update prd.json ? Repeat</span></p>
+            </div>
+
+            <p>Each iteration gets <strong>fresh context</strong>. No accumulated cruft. One task per loop.</p>
+
+            <h2>prd.json Format</h2>
+
+            <pre><code>{
+  "project": "TaskApp",
+  "branchName": "ralph/task-status",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add status field to tasks table",
+      "acceptanceCriteria": [
+        "Add status column: 'pending'|'in_progress'|'done'",
+        "Migration runs successfully",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false
+    },
+    {
+      "id": "US-002",
+      "title": "Display status badge on task cards",
+      "acceptanceCriteria": [
+        "Colored badge: gray=pending, blue=in_progress, green=done",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false
+    }
+  ]
+}</code></pre>
+
+            <h2>Story Sizing</h2>
+
+            <p>Each story must fit in <strong>one context window</strong>. If you can't describe the change in 2-3 sentences, split it.</p>
+
+            <table>
+                <tr><th>Right-sized</th><th>Too big (split these)</th></tr>
+                <tr><td>Add a DB column + migration</td><td>"Build the dashboard"</td></tr>
+                <tr><td>Add a UI component to existing page</td><td>"Add authentication"</td></tr>
+                <tr><td>Add a filter dropdown</td><td>"Refactor the API"</td></tr>
+            </table>
+
+            <p>Order by dependency: schema ? backend ? UI ? aggregation views.</p>
+
+            <h2>Acceptance Criteria</h2>
+
+            <p>Must be verifiable by the agent, not vague.</p>
+
+            <pre><code>// Good
+"Add status column with default 'pending'"
+"Filter dropdown has options: All, Active, Completed"
+"Typecheck passes"
+
+// Bad
+"Works correctly"
+"Good UX"
+"Handles edge cases"</code></pre>
+
+            <p>Always include "Typecheck passes" as the final criterion.</p>
+
+            <h2>Progress Log</h2>
+
+            <pre><code>## Codebase Patterns        ? top of progress.txt, reusable across iterations
+- Use sql template for aggregations
+- Always use IF NOT EXISTS for migrations
+
+## 2026-03-15 - US-001       ? appended after each iteration
+- Added status column to tasks table
+- Files: db/migrations/004_status.sql, src/schema.ts
+- Learning: drizzle needs explicit push after generate</code></pre>
+
+            <p>Patterns go at the top. Future iterations read them first.</p>
+
+            <h2>Tradeoffs</h2>
+
+            <ul>
+                <li><strong>Pro:</strong> Fresh context every loop prevents degradation over long features</li>
+                <li><strong>Pro:</strong> Each commit is verified and passing before moving on</li>
+                <li><strong>Con:</strong> Overhead per iteration (re-reading specs, context loading)</li>
+                <li><strong>Con:</strong> Cross-cutting changes that touch many files are awkward to split</li>
+            </ul>
+
+            <p>Ralph works with any spec source: <a href="bmad.html">BMAD</a>, <a href="gsd.html">GSD</a>, or your own format. All it needs is a structured task list with clear acceptance criteria.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
     <script src="nav.js"></script>
-</body>
-</html>
+</body>
+</html>

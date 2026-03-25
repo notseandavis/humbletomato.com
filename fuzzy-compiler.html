@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fuzzy Compiler - Humble Tomato</title>
-    <meta name="description" content="A thought experiment: LLMs are compilers that accept natural language as source code — but the compilation is probabilistic, not deterministic.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Compiler - Humble Tomato</title>
+    <meta name="description" content="A thought experiment: LLMs are compilers that accept natural language as source code â€” but the compilation is probabilistic, not deterministic.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,155 +15,155 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
-<body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Fuzzy Compiler</h1>
-            <p class="subtitle">An LLM is a compiler that accepts natural language as source code. The compilation is probabilistic.</p>
-        </header>
-
-        <section class="content">
-
-            <div class="callout">
-                <p><span class="callout-label">Traditional compiler</span><br>
-                <span class="callout-detail">Source code ? deterministic ? binary. Precise input. Exact output. Every time.</span></p>
-                <p><span class="callout-label">Fuzzy compiler (LLM)</span><br>
-                <span class="callout-detail">Natural language spec ? probabilistic ? source code. Ambiguous input. Approximate output. Usually.</span></p>
-            </div>
-
-            <h2>Same Job, Different Contract</h2>
-
-            <p>A C compiler rejects ambiguity. It throws a syntax error. You fix it.</p>
-
-            <p>An LLM <em>resolves</em> ambiguity. It picks an interpretation and keeps going. It never tells you it guessed.</p>
-
-            <div class="callout">
-                <p><span class="callout-label">Traditional:</span><span class="callout-detail"> "int x = ???" ? ERROR: expected expression</span></p>
-                <p><span class="callout-label">Fuzzy:</span><span class="callout-detail"> "handle auth" ? builds session-cookie auth. You wanted JWT. It didn't ask.</span></p>
-            </div>
-
-            <p>Every ambiguity in your spec is a branch point. More ambiguity, more branches, more drift from what you wanted.</p>
-
-            <h2>Example: Authentication Ambiguity</h2>
-
-            <pre><code># Vague spec (many valid compilations)
-"Add authentication to the API"
-
-# What the fuzzy compiler might produce:
-# Option 1: Session cookies
-def authenticate(request):
-    session_id = request.cookies.get('session')
-    return db.get_user_by_session(session_id)
-
-# Option 2: JWT tokens
-def authenticate(request):
-    token = request.headers.get('Authorization')
-    return jwt.decode(token, SECRET_KEY)
-
-# Option 3: API keys
-def authenticate(request):
-    api_key = request.headers.get('X-API-Key')
-    return db.get_user_by_api_key(api_key)</code></pre>
-
-            <p>All three are valid interpretations. Traditional compiler: syntax error. Fuzzy compiler: picks one and keeps going.</p>
-
-            <pre><code># Constrained spec (one valid compilation)
-"Add JWT-based authentication with RS256 signing.
-Include refresh token rotation and 15-minute access token TTL."
-
-# Now the fuzzy compiler has one clear path:
-def authenticate(request):
-    token = request.headers.get('Authorization')
-    payload = jwt.decode(token, PUBLIC_KEY, algorithms=['RS256'])
-    if payload['exp'] < time.now():
-        raise TokenExpired()
-    return payload['sub']</code></pre>
-
-            <h2>Errors Are Silent</h2>
-
-            <p>Traditional compilers fail loud: red text, line numbers. Fuzzy compilers fail silent: the code runs, tests pass, ships to production.</p>
-
-            <div class="callout">
-                <p><span class="callout-label">Traditional error:</span><br>
-                <span class="callout-detail">Line 42: undefined reference to 'processPayment'. Fix: define the function.</span></p>
-                <p><span class="callout-label">Fuzzy "error":</span><br>
-                <span class="callout-detail">Code works. Tests pass. Ships. Three weeks later: "Why does checkout fail with mixed currencies?" The spec never mentioned multi-currency. The compiler assumed single-currency. Nobody noticed.</span></p>
-            </div>
-
-            <h2>Example: The Multi-Currency Bug</h2>
-
-            <p>Real production incident from a 2026 e-commerce platform:</p>
-
-            <pre><code># Vague spec (the fuzzy compiler filled in the gaps)
-"Add checkout with Stripe payments.
-Calculate total from cart items.
-Show success page after payment."
-
-# What the fuzzy compiler produced:
-def calculate_total(cart_items):
-    return sum(item.price * item.quantity for item in cart_items)
-
-def process_payment(total):
-    stripe.Charge.create(amount=int(total * 100), currency='usd')
-
-# Tests passed. Code shipped. Worked fine.
-# For three weeks.</code></pre>
-
-            <p>Then a customer in the UK bought something. Cart had GBP prices. Stripe charged 99 GBP as 9900 USD. $12,000 charge for a $120 order.</p>
-
-            <div class="callout">
-                <p><span class="callout-label">Why this is worse than a traditional compiler error:</span></p>
-                <p><span class="callout-detail">Traditional compiler: "Error: currency type undefined." You fix it before shipping.</span></p>
-                <p><span class="callout-detail">Fuzzy compiler: Assumes single currency. Tests pass (all test data was USD). Ships. Fails in production with real multi-currency traffic. You discover it via angry customers and chargebacks.</span></p>
-            </div>
-
-            <pre><code># What the spec needed to say:
-"Calculate total in item's native currency.
-Support USD, GBP, EUR.
-Pass currency to Stripe with amount.
-Reject if cart has mixed currencies."
-
-# Now the fuzzy compiler has constraints:
-def calculate_total(cart_items):
-    if not cart_items:
-        return 0, None
-    
-    currency = cart_items[0].currency
-    if any(item.currency != currency for item in cart_items):
-        raise ValueError('Mixed currencies in cart')
-    
-    total = sum(item.price * item.quantity for item in cart_items)
-    return total, currency
-
-def process_payment(total, currency):
-    if currency not in ['USD', 'GBP', 'EUR']:
-        raise ValueError(f'Unsupported currency: {currency}')
-    stripe.Charge.create(
-        amount=int(total * 100),
-        currency=currency.lower()
-    )</code></pre>
-
-            <h2>The Implication</h2>
-
-            <p>Your spec is source code. The quality of your spec determines the quality of your output, not as a nice-to-have but as a <a href="code-diffusion-model.html">conservation law</a>.</p>
-
-            <p>You wouldn't write half a function and expect <code>gcc</code> to figure out the rest. Don't write half a spec and expect the fuzzy compiler to guess correctly.</p>
-
-            <p><em>As one developer put it in 2026:</em> "The main weakness would be that they understand nothing about programming, they just generate text that they think you want to see."</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
-    <script src="nav.js"></script>
-</body>
-</html>
+    </script>
+</head>
+<body>
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Fuzzy Compiler</h1>
+            <p class="subtitle">An LLM is a compiler that accepts natural language as source code. The compilation is probabilistic.</p>
+        </header>
+
+        <section class="content">
+
+            <div class="callout">
+                <p><span class="callout-label">Traditional compiler</span><br>
+                <span class="callout-detail">Source code ? deterministic ? binary. Precise input. Exact output. Every time.</span></p>
+                <p><span class="callout-label">Fuzzy compiler (LLM)</span><br>
+                <span class="callout-detail">Natural language spec ? probabilistic ? source code. Ambiguous input. Approximate output. Usually.</span></p>
+            </div>
+
+            <h2>Same Job, Different Contract</h2>
+
+            <p>A C compiler rejects ambiguity. It throws a syntax error. You fix it.</p>
+
+            <p>An LLM <em>resolves</em> ambiguity. It picks an interpretation and keeps going. It never tells you it guessed.</p>
+
+            <div class="callout">
+                <p><span class="callout-label">Traditional:</span><span class="callout-detail"> "int x = ???" ? ERROR: expected expression</span></p>
+                <p><span class="callout-label">Fuzzy:</span><span class="callout-detail"> "handle auth" ? builds session-cookie auth. You wanted JWT. It didn't ask.</span></p>
+            </div>
+
+            <p>Every ambiguity in your spec is a branch point. More ambiguity, more branches, more drift from what you wanted.</p>
+
+            <h2>Example: Authentication Ambiguity</h2>
+
+            <pre><code># Vague spec (many valid compilations)
+"Add authentication to the API"
+
+# What the fuzzy compiler might produce:
+# Option 1: Session cookies
+def authenticate(request):
+    session_id = request.cookies.get('session')
+    return db.get_user_by_session(session_id)
+
+# Option 2: JWT tokens
+def authenticate(request):
+    token = request.headers.get('Authorization')
+    return jwt.decode(token, SECRET_KEY)
+
+# Option 3: API keys
+def authenticate(request):
+    api_key = request.headers.get('X-API-Key')
+    return db.get_user_by_api_key(api_key)</code></pre>
+
+            <p>All three are valid interpretations. Traditional compiler: syntax error. Fuzzy compiler: picks one and keeps going.</p>
+
+            <pre><code># Constrained spec (one valid compilation)
+"Add JWT-based authentication with RS256 signing.
+Include refresh token rotation and 15-minute access token TTL."
+
+# Now the fuzzy compiler has one clear path:
+def authenticate(request):
+    token = request.headers.get('Authorization')
+    payload = jwt.decode(token, PUBLIC_KEY, algorithms=['RS256'])
+    if payload['exp'] < time.now():
+        raise TokenExpired()
+    return payload['sub']</code></pre>
+
+            <h2>Errors Are Silent</h2>
+
+            <p>Traditional compilers fail loud: red text, line numbers. Fuzzy compilers fail silent: the code runs, tests pass, ships to production.</p>
+
+            <div class="callout">
+                <p><span class="callout-label">Traditional error:</span><br>
+                <span class="callout-detail">Line 42: undefined reference to 'processPayment'. Fix: define the function.</span></p>
+                <p><span class="callout-label">Fuzzy "error":</span><br>
+                <span class="callout-detail">Code works. Tests pass. Ships. Three weeks later: "Why does checkout fail with mixed currencies?" The spec never mentioned multi-currency. The compiler assumed single-currency. Nobody noticed.</span></p>
+            </div>
+
+            <h2>Example: The Multi-Currency Bug</h2>
+
+            <p>Real production incident from a 2026 e-commerce platform:</p>
+
+            <pre><code># Vague spec (the fuzzy compiler filled in the gaps)
+"Add checkout with Stripe payments.
+Calculate total from cart items.
+Show success page after payment."
+
+# What the fuzzy compiler produced:
+def calculate_total(cart_items):
+    return sum(item.price * item.quantity for item in cart_items)
+
+def process_payment(total):
+    stripe.Charge.create(amount=int(total * 100), currency='usd')
+
+# Tests passed. Code shipped. Worked fine.
+# For three weeks.</code></pre>
+
+            <p>Then a customer in the UK bought something. Cart had GBP prices. Stripe charged 99 GBP as 9900 USD. $12,000 charge for a $120 order.</p>
+
+            <div class="callout">
+                <p><span class="callout-label">Why this is worse than a traditional compiler error:</span></p>
+                <p><span class="callout-detail">Traditional compiler: "Error: currency type undefined." You fix it before shipping.</span></p>
+                <p><span class="callout-detail">Fuzzy compiler: Assumes single currency. Tests pass (all test data was USD). Ships. Fails in production with real multi-currency traffic. You discover it via angry customers and chargebacks.</span></p>
+            </div>
+
+            <pre><code># What the spec needed to say:
+"Calculate total in item's native currency.
+Support USD, GBP, EUR.
+Pass currency to Stripe with amount.
+Reject if cart has mixed currencies."
+
+# Now the fuzzy compiler has constraints:
+def calculate_total(cart_items):
+    if not cart_items:
+        return 0, None
+    
+    currency = cart_items[0].currency
+    if any(item.currency != currency for item in cart_items):
+        raise ValueError('Mixed currencies in cart')
+    
+    total = sum(item.price * item.quantity for item in cart_items)
+    return total, currency
+
+def process_payment(total, currency):
+    if currency not in ['USD', 'GBP', 'EUR']:
+        raise ValueError(f'Unsupported currency: {currency}')
+    stripe.Charge.create(
+        amount=int(total * 100),
+        currency=currency.lower()
+    )</code></pre>
+
+            <h2>The Implication</h2>
+
+            <p>Your spec is source code. The quality of your spec determines the quality of your output, not as a nice-to-have but as a <a href="code-diffusion-model.html">conservation law</a>.</p>
+
+            <p>You wouldn't write half a function and expect <code>gcc</code> to figure out the rest. Don't write half a spec and expect the fuzzy compiler to guess correctly.</p>
+
+            <p><em>As one developer put it in 2026:</em> "The main weakness would be that they understand nothing about programming, they just generate text that they think you want to see."</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script src="nav.js"></script>
+</body>
+</html>

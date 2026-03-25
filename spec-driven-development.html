@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spec-Driven Development - Humble Tomato</title>
-    <meta name="description" content="What spec-driven development actually means: specifications as the source of truth that AI agents compile into working software.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-Driven Development - Humble Tomato</title>
+    <meta name="description" content="What spec-driven development actually means: specifications as the source of truth that AI agents compile into working software.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,98 +15,98 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
+    </script>
+</head>
 <body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Spec-Driven Development</h1>
-            <p class="subtitle">Specifications aren't documentation. They're the source of truth that agents use to generate working code.</p>
-        </header>
-
-        <section class="content">
-
-            <pre><code># User Profile spec
-- Show user profile with name, email, join date
-- Format join date as "Member since MMM YYYY"
-- If no email, show "No email on file"</code></pre>
-
-            <p>Give this spec to an agent targeting React:</p>
-
-            <pre><code>function UserProfile({ user }) {
-  const joinDate = new Date(user.joinedAt)
-    .toLocaleDateString('en-US', { 
-      month: 'short', year: 'numeric' 
-    });
-
-  return (
-    &lt;div&gt;
-      &lt;h2&gt;{user.name}&lt;/h2&gt;
-      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
-      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
-    &lt;/div&gt;
-  );
-}</code></pre>
-
-            <p>Same spec, Vue:</p>
-
-            <pre><code>&lt;template&gt;
-  &lt;div&gt;
-    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
-    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
-    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-export default {
-  computed: {
-    formattedJoinDate() {
-      return new Date(this.user.joinedAt)
-        .toLocaleDateString('en-US', { 
-          month: 'short', year: 'numeric' 
-        });
-    }
-  }
-}
-&lt;/script&gt;</code></pre>
-
-            <p>Same spec, different output. The spec defines <strong>what</strong>. Architecture determines <strong>how</strong>. The spec is portable across frameworks, languages, and teams.</p>
-
-            <h2>With and Without a Spec</h2>
-
-            <div class="callout">
-                <p><span class="callout-label">Without spec:</span><span class="callout-detail"> "Build a user profile page" — Agent invents requirements + implements them. You debug both the requirements AND the code.</span></p>
-                <p><span class="callout-label">With spec:</span><span class="callout-detail"> "Build this user profile page" + spec — Agent implements your requirements. You debug only the code.</span></p>
-            </div>
-
-            <p>Without a spec, the agent picks a date format, decides what to show when email is missing, chooses component structure. Every decision it makes is one you didn't review.</p>
-
-            <p>With a spec, the agent translates intent to implementation. It doesn't invent.</p>
-
-            <h2>The Spec Is the Product</h2>
-
-            <p>Code gets generated, tested, regenerated. Frameworks change. Languages change. The spec persists. It's the source of truth; code is compiled output.</p>
-
-            <p>Fred Brooks called this <a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">essential vs. accidental complexity</a>. AI handles accidental complexity (boilerplate, syntax, framework wiring). Essential complexity (what the system actually does) stays with you. That's what specs capture.</p>
-
-            <h2>Tradeoffs</h2>
-
-            <p>Writing specs takes time upfront. For throwaway prototypes or one-off scripts, just prompting is faster. Specs pay off when code will be maintained, regenerated, or handed to different agents/frameworks over time.</p>
-
-            <p>Specs can also become stale if you edit generated code directly without updating the spec. Treat the spec as the thing you maintain, not the code.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Spec-Driven Development</h1>
+            <p class="subtitle">Specifications aren't documentation. They're the source of truth that agents use to generate working code.</p>
+        </header>
+
+        <section class="content">
+
+            <pre><code># User Profile spec
+- Show user profile with name, email, join date
+- Format join date as "Member since MMM YYYY"
+- If no email, show "No email on file"</code></pre>
+
+            <p>Give this spec to an agent targeting React:</p>
+
+            <pre><code>function UserProfile({ user }) {
+  const joinDate = new Date(user.joinedAt)
+    .toLocaleDateString('en-US', { 
+      month: 'short', year: 'numeric' 
+    });
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+      &lt;p&gt;{user.email || "No email on file"}&lt;/p&gt;
+      &lt;p&gt;Member since {joinDate}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+            <p>Same spec, Vue:</p>
+
+            <pre><code>&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+    &lt;p&gt;{{ user.email || "No email on file" }}&lt;/p&gt;
+    &lt;p&gt;Member since {{ formattedJoinDate }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  computed: {
+    formattedJoinDate() {
+      return new Date(this.user.joinedAt)
+        .toLocaleDateString('en-US', { 
+          month: 'short', year: 'numeric' 
+        });
+    }
+  }
+}
+&lt;/script&gt;</code></pre>
+
+            <p>Same spec, different output. The spec defines <strong>what</strong>. Architecture determines <strong>how</strong>. The spec is portable across frameworks, languages, and teams.</p>
+
+            <h2>With and Without a Spec</h2>
+
+            <div class="callout">
+                <p><span class="callout-label">Without spec:</span><span class="callout-detail"> "Build a user profile page" â€” Agent invents requirements + implements them. You debug both the requirements AND the code.</span></p>
+                <p><span class="callout-label">With spec:</span><span class="callout-detail"> "Build this user profile page" + spec â€” Agent implements your requirements. You debug only the code.</span></p>
+            </div>
+
+            <p>Without a spec, the agent picks a date format, decides what to show when email is missing, chooses component structure. Every decision it makes is one you didn't review.</p>
+
+            <p>With a spec, the agent translates intent to implementation. It doesn't invent.</p>
+
+            <h2>The Spec Is the Product</h2>
+
+            <p>Code gets generated, tested, regenerated. Frameworks change. Languages change. The spec persists. It's the source of truth; code is compiled output.</p>
+
+            <p>Fred Brooks called this <a href="https://en.wikipedia.org/wiki/No_Silver_Bullet">essential vs. accidental complexity</a>. AI handles accidental complexity (boilerplate, syntax, framework wiring). Essential complexity (what the system actually does) stays with you. That's what specs capture.</p>
+
+            <h2>Tradeoffs</h2>
+
+            <p>Writing specs takes time upfront. For throwaway prototypes or one-off scripts, just prompting is faster. Specs pay off when code will be maintained, regenerated, or handed to different agents/frameworks over time.</p>
+
+            <p>Specs can also become stale if you edit generated code directly without updating the spec. Treat the spec as the thing you maintain, not the code.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
     <script src="nav.js"></script>
-</body>
-</html>
+</body>
+</html>

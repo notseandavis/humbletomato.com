@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe Coding vs Spec-Driven — Humble Tomato</title>
-    <meta name="description" content="When to chat with AI, when to write specs. Two approaches to AI-assisted development, their tradeoffs, and when each one works.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding vs Spec-Driven â€” Humble Tomato</title>
+    <meta name="description" content="When to chat with AI, when to write specs. Two approaches to AI-assisted development, their tradeoffs, and when each one works.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,114 +15,114 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
+    </script>
+</head>
 <body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Vibe Coding vs Spec-Driven</h1>
-            <p class="subtitle">When to chat with AI, when to write specs. Two approaches to AI-assisted development and when each one works.</p>
-        </header>
-
-        <section class="content">
-
-            <h2>Vibe Coding</h2>
-
-            <pre><code>You: "Make a React component that shows user notifications"
-AI:  *generates component*
-You: "Add read/unread toggle"
-AI:  *updates code*
-You: "Use Tailwind instead"
-AI:  *refactors*</code></pre>
-
-            <p>Fast. No requirements doc. Context lives in the chat window and dies when you close it.</p>
-
-            <h2>Spec-Driven</h2>
-
-            <pre><code># notification-feature.md
-
-## Requirements
-- Notifications in descending chronological order
-- Read/unread toggle
-- Real-time updates via WebSocket
-- Filter by type (mention, like, follow)
-
-## Acceptance Criteria
-- [ ] Unread badge updates in real-time
-- [ ] Click marks as read
-- [ ] Works at 320px width
-- [ ] Keyboard navigable</code></pre>
-
-            <p>Slower to start. Context persists in files. Agent reads the spec, builds it, checks criteria.</p>
-
-            <h2>Tradeoffs</h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Vibe</th>
-                        <th>Spec-Driven</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>First prototype</strong></td>
-                        <td>Minutes</td>
-                        <td>Hours (includes design)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Context</strong></td>
-                        <td>Lost when chat closes</td>
-                        <td>Lives in repo</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Team handoff</strong></td>
-                        <td>"Read the chat history"</td>
-                        <td>Reviewable specs</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Exploration</strong></td>
-                        <td>Great</td>
-                        <td>Too much overhead</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Maintenance</strong></td>
-                        <td>No record of intent</td>
-                        <td>Specs document "why"</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h2>When to Use Each</h2>
-
-            <p><strong>Vibe coding:</strong> prototypes, learning a new framework, scripts under 200 lines, debugging, anything you'd be fine rewriting from scratch.</p>
-
-            <p><strong>Spec-driven:</strong> production features, team projects, multi-file changes, code you'll maintain for months, anything that needs an audit trail.</p>
-
-            <h2>The Hybrid Pattern</h2>
-
-            <div class="callout">
-                <p><span class="callout-label">1.</span><span class="callout-detail"> Vibe code a prototype — get something working fast</span></p>
-                <p><span class="callout-label">2.</span><span class="callout-detail"> Extract into a spec — document what worked</span></p>
-                <p><span class="callout-label">3.</span><span class="callout-detail"> Spec-driven rebuild — agent generates clean implementation</span></p>
-                <p><span class="callout-label">4.</span><span class="callout-detail"> Vibe code refinements — tweak styles, optimize</span></p>
-            </div>
-
-            <p>Most teams land here. Speed during exploration, structure during implementation.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div class="footer-line">Last updated: March 14, 2026</div>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Vibe Coding vs Spec-Driven</h1>
+            <p class="subtitle">When to chat with AI, when to write specs. Two approaches to AI-assisted development and when each one works.</p>
+        </header>
+
+        <section class="content">
+
+            <h2>Vibe Coding</h2>
+
+            <pre><code>You: "Make a React component that shows user notifications"
+AI:  *generates component*
+You: "Add read/unread toggle"
+AI:  *updates code*
+You: "Use Tailwind instead"
+AI:  *refactors*</code></pre>
+
+            <p>Fast. No requirements doc. Context lives in the chat window and dies when you close it.</p>
+
+            <h2>Spec-Driven</h2>
+
+            <pre><code># notification-feature.md
+
+## Requirements
+- Notifications in descending chronological order
+- Read/unread toggle
+- Real-time updates via WebSocket
+- Filter by type (mention, like, follow)
+
+## Acceptance Criteria
+- [ ] Unread badge updates in real-time
+- [ ] Click marks as read
+- [ ] Works at 320px width
+- [ ] Keyboard navigable</code></pre>
+
+            <p>Slower to start. Context persists in files. Agent reads the spec, builds it, checks criteria.</p>
+
+            <h2>Tradeoffs</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Vibe</th>
+                        <th>Spec-Driven</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>First prototype</strong></td>
+                        <td>Minutes</td>
+                        <td>Hours (includes design)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Context</strong></td>
+                        <td>Lost when chat closes</td>
+                        <td>Lives in repo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Team handoff</strong></td>
+                        <td>"Read the chat history"</td>
+                        <td>Reviewable specs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exploration</strong></td>
+                        <td>Great</td>
+                        <td>Too much overhead</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Maintenance</strong></td>
+                        <td>No record of intent</td>
+                        <td>Specs document "why"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>When to Use Each</h2>
+
+            <p><strong>Vibe coding:</strong> prototypes, learning a new framework, scripts under 200 lines, debugging, anything you'd be fine rewriting from scratch.</p>
+
+            <p><strong>Spec-driven:</strong> production features, team projects, multi-file changes, code you'll maintain for months, anything that needs an audit trail.</p>
+
+            <h2>The Hybrid Pattern</h2>
+
+            <div class="callout">
+                <p><span class="callout-label">1.</span><span class="callout-detail"> Vibe code a prototype â€” get something working fast</span></p>
+                <p><span class="callout-label">2.</span><span class="callout-detail"> Extract into a spec â€” document what worked</span></p>
+                <p><span class="callout-label">3.</span><span class="callout-detail"> Spec-driven rebuild â€” agent generates clean implementation</span></p>
+                <p><span class="callout-label">4.</span><span class="callout-detail"> Vibe code refinements â€” tweak styles, optimize</span></p>
+            </div>
+
+            <p>Most teams land here. Speed during exploration, structure during implementation.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-line">Last updated: March 14, 2026</div>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
     <script src="nav.js"></script>
-</body>
-</html>
+</body>
+</html>

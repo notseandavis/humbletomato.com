@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuous Evolution — Humble Tomato</title>
-    <meta name="description" content="Extending spec-driven development to live products. Diff-based development, migrations, API versioning, and safe evolution patterns.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous Evolution â€” Humble Tomato</title>
+    <meta name="description" content="Extending spec-driven development to live products. Diff-based development, migrations, API versioning, and safe evolution patterns.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
     <script>
@@ -15,74 +15,74 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7817N1MTCV');
-    </script>
-</head>
-<body>
-    <!-- nav injected by nav.js -->
-
-    <div class="container">
-
-        <header class="page-header">
-            <h1>Continuous Evolution</h1>
-            <p class="subtitle">Spec-driven development for live systems. Work from diffs, not regeneration.</p>
-        </header>
-
-        <section class="content">
-
-            <pre><code># Greenfield: build from complete spec
-Spec ? Agent ? System
-
-# Evolution: build from the delta
-Spec(v1) ? Spec(v2) ? Diff ? Agent ? Targeted Changes</code></pre>
-
-            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. Agents work from <strong>spec version diffs</strong>, not whole specs.</p>
-
-            <h2>Expand-Migrate-Contract</h2>
-
-            <pre><code># Phase 1: Expand — add new alongside old
-ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
-# Writes to BOTH, reads from old
-
-# Phase 2: Migrate — backfill and switch
-UPDATE users SET email_v2 = normalize(email);
-# Reads from new, writes to both
-
-# Phase 3: Contract — remove old
-ALTER TABLE users DROP COLUMN email;
-# Rollback no longer possible</code></pre>
-
-            <h2>Migration Risk Levels</h2>
-
-            <table>
-                <thead>
-                    <tr><th>Type</th><th>Example</th><th>Risk</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Additive</td><td>New nullable column</td><td>Safe</td></tr>
-                    <tr><td>Structural</td><td>Relationship change</td><td>Expand-migrate-contract</td></tr>
-                    <tr><td>Destructive</td><td>Column removal</td><td>Needs approval</td></tr>
-                </tbody>
-            </table>
-
-            <h2>Agent Rules for Evolution</h2>
-
-            <ul>
-                <li>Never DROP without explicit instruction</li>
-                <li>Never assume data loss is acceptable</li>
-                <li>Flag migrations that lock production tables</li>
-                <li>Preservation is default: anything not in diff stays unchanged</li>
-            </ul>
-
-            <p>A project shifts from greenfield to evolution at the first real user or irreplaceable data. Before: regenerate freely. After: diffs only. <a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on.</p>
-
-        </section>
-
-    </div>
-
-    <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
-    </footer>
-
-    <script src="nav.js"></script>
-</body>
-</html>
+    </script>
+</head>
+<body>
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>Continuous Evolution</h1>
+            <p class="subtitle">Spec-driven development for live systems. Work from diffs, not regeneration.</p>
+        </header>
+
+        <section class="content">
+
+            <pre><code># Greenfield: build from complete spec
+Spec ? Agent ? System
+
+# Evolution: build from the delta
+Spec(v1) ? Spec(v2) ? Diff ? Agent ? Targeted Changes</code></pre>
+
+            <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. Agents work from <strong>spec version diffs</strong>, not whole specs.</p>
+
+            <h2>Expand-Migrate-Contract</h2>
+
+            <pre><code># Phase 1: Expand â€” add new alongside old
+ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
+# Writes to BOTH, reads from old
+
+# Phase 2: Migrate â€” backfill and switch
+UPDATE users SET email_v2 = normalize(email);
+# Reads from new, writes to both
+
+# Phase 3: Contract â€” remove old
+ALTER TABLE users DROP COLUMN email;
+# Rollback no longer possible</code></pre>
+
+            <h2>Migration Risk Levels</h2>
+
+            <table>
+                <thead>
+                    <tr><th>Type</th><th>Example</th><th>Risk</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Additive</td><td>New nullable column</td><td>Safe</td></tr>
+                    <tr><td>Structural</td><td>Relationship change</td><td>Expand-migrate-contract</td></tr>
+                    <tr><td>Destructive</td><td>Column removal</td><td>Needs approval</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Agent Rules for Evolution</h2>
+
+            <ul>
+                <li>Never DROP without explicit instruction</li>
+                <li>Never assume data loss is acceptable</li>
+                <li>Flag migrations that lock production tables</li>
+                <li>Preservation is default: anything not in diff stays unchanged</li>
+            </ul>
+
+            <p>A project shifts from greenfield to evolution at the first real user or irreplaceable data. Before: regenerate freely. After: diffs only. <a href="https://www.hyrumslaw.com/">Hyrum's Law</a>: every observable behavior becomes depended-on.</p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script src="nav.js"></script>
+</body>
+</html>

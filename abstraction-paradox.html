@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -56,11 +56,11 @@ public class OrderController {
 
             <p>An LLM already knows Spring, Jackson, HikariCP. Standard abstractions are free. But <strong>your</strong> abstractions don't exist in the weights:</p>
 
-            <pre><code>// In the training data â€” agent knows exactly what this does
+            <pre><code>// In the training data — agent knows exactly what this does
 @Transactional
 public Order createOrder(Order order) { ... }
 
-// NOT in the training data â€” agent will hallucinate
+// NOT in the training data — agent will hallucinate
 orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
 
             <p>Your custom service layer, your internal SDK, your domain patterns. If they're not in the context window, they don't exist for the agent. Hiding them behind a vague description is the worst of both worlds: the agent can't fall back on training knowledge, and you've removed the only source of truth.</p>
@@ -69,11 +69,11 @@ orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
 
             <div class="callout">
                 <p><span class="callout-label">Spec alone (no architecture)</span><br>
-                <span class="callout-detail">"Build a cart service with checkout" â€” Agent invents its own auth model, state strategy, payment flow.</span></p>
+                <span class="callout-detail">"Build a cart service with checkout" — Agent invents its own auth model, state strategy, payment flow.</span></p>
                 <p><span class="callout-label">Architecture alone (no spec)</span><br>
-                <span class="callout-detail">"We use OAuth2, Redis, Stripe" â€” Agent has no idea what to build.</span></p>
+                <span class="callout-detail">"We use OAuth2, Redis, Stripe" — Agent has no idea what to build.</span></p>
                 <p><span class="callout-label">Spec + Architecture</span><br>
-                <span class="callout-detail">"Cart service with checkout. OAuth2+JWT auth, Redis sessions, Stripe tokenized payments, saga pattern." â€” Agent produces a correct implementation.</span></p>
+                <span class="callout-detail">"Cart service with checkout. OAuth2+JWT auth, Redis sessions, Stripe tokenized payments, saga pattern." — Agent produces a correct implementation.</span></p>
             </div>
 
             <p>Abstracting either side away doesn't simplify the problem. It hides the information needed to solve it.</p>
@@ -85,7 +85,7 @@ orderPipeline.execute(order, PipelineMode.ASYNC_WITH_ROLLBACK);</code></pre>
     </div>
 
     <footer>
-        <div>Â© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Telephone Game — Humble Tomato</title>
+    <title>The Telephone Game � Humble Tomato</title>
     <meta name="description" content="A thought experiment: every LLM transformation loses information. Fewer steps with richer context beats more steps with processed context.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -31,9 +31,9 @@
 
             <div class="callout">
                 <p><span class="callout-label">Option A: Direct (less loss)</span><br>
-                <span class="callout-detail">Product Requirements + Spec → Code Agent → Code</span></p>
+                <span class="callout-detail">Product Requirements + Spec ? Code Agent ? Code</span></p>
                 <p><span class="callout-label">Option B: Extra step (more loss)</span><br>
-                <span class="callout-detail">Product Requirements → Synthesis Agent → Spec → Code Agent → Code</span></p>
+                <span class="callout-detail">Product Requirements ? Synthesis Agent ? Spec ? Code Agent ? Code</span></p>
             </div>
 
             <p>Option B looks cleaner. You're "polishing" the inputs. But every LLM pass loses information. Option B is strictly worse.</p>
@@ -46,7 +46,7 @@
                 <p><span class="callout-label">What the synthesis agent does to your docs:</span></p>
                 <p><span class="callout-detail">Summarizes sections (detail lost). Paraphrases "must" to "should" (meaning shifted). Drops "irrelevant" details (edge cases lost). Guesses at ambiguities (sometimes wrong).</span></p>
                 <p><span class="callout-label">Cascading drift:</span><br>
-                <span class="callout-detail">PRD + Arch → "Unified Spec" (some info lost) → "Task Breakdown" (more lost) → Code (working from degraded intent).</span></p>
+                <span class="callout-detail">PRD + Arch ? "Unified Spec" (some info lost) ? "Task Breakdown" (more lost) ? Code (working from degraded intent).</span></p>
             </div>
 
             <p>The synthesis agent can't know what the code agent needs. It compresses based on general heuristics. Details it drops as noise might be exactly what handles an edge case downstream.</p>
@@ -77,7 +77,7 @@
 
             <div class="callout">
                 <p><span class="callout-label">Optimal pipeline = shortest pipeline.</span><br>
-                <span class="callout-detail">Your intent → Agent → Output. With 200K token context windows, your docs probably fit. Every extra LLM step is another round of telephone.</span></p>
+                <span class="callout-detail">Your intent ? Agent ? Output. With 200K token context windows, your docs probably fit. Every extra LLM step is another round of telephone.</span></p>
             </div>
 
             <p>Feed agents the rawest context you can. Don't preprocess for clarity. Don't synthesize for convenience. Fewer steps, richer context, less telephone.</p>

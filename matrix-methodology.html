@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Context Matrix — Humble Tomato</title>
+    <title>Context Matrix � Humble Tomato</title>
     <meta name="description" content="The Context Matrix: a documentation investment where context quality determines output quality. Rows are business specs. Columns are architecture. Where they intersect, implementation resolves.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -32,28 +32,28 @@
             <p>The context matrix is a documentation investment. Rows are business requirements. Columns are architecture decisions. Where they intersect, implementation resolves.</p>
 
             <pre><code>                        Architecture
-                  ┌──────────┬──────────┬──────────┐
-                  │   Auth   │   API    │  State   │
-       ┌──────────┼──────────┼──────────┼──────────┤
-       │  Login   │ OAuth2 + │ POST     │ Redis    │
- Spec  │          │ JWT      │ /login   │ sessions │
-       ├──────────┼──────────┼──────────┼──────────┤
-       │  Cart    │ User-    │ CRUD     │ Redis +  │
-       │          │ scoped   │ /cart/*  │ Postgres │
-       ├──────────┼──────────┼──────────┼──────────┤
-       │  Payment │ PCI      │ POST     │ Tx log   │
-       │          │ tokenize │ /pay     │ + saga   │
-       └──────────┴──────────┴──────────┴──────────┘</code></pre>
+                  +--------------------------------+
+                  �   Auth   �   API    �  State   �
+       +----------+----------+----------+----------�
+       �  Login   � OAuth2 + � POST     � Redis    �
+ Spec  �          � JWT      � /login   � sessions �
+       +----------+----------+----------+----------�
+       �  Cart    � User-    � CRUD     � Redis +  �
+       �          � scoped   � /cart/*  � Postgres �
+       +----------+----------+----------+----------�
+       �  Payment � PCI      � POST     � Tx log   �
+       �          � tokenize � /pay     � + saga   �
+       +-------------------------------------------+</code></pre>
 
             <p>Each cell is a resolution point. Remove either axis and the AI guesses.</p>
 
             <div class="callout">
                 <p><span class="callout-label">Spec alone (no architecture)</span><br>
-                <span class="callout-detail">"Build login, cart, checkout" — The AI invents its own auth model, state strategy, API patterns.</span></p>
+                <span class="callout-detail">"Build login, cart, checkout" � The AI invents its own auth model, state strategy, API patterns.</span></p>
                 <p><span class="callout-label">Architecture alone (no spec)</span><br>
-                <span class="callout-detail">"We use OAuth2, Redis, REST" — The AI has no idea what to build.</span></p>
+                <span class="callout-detail">"We use OAuth2, Redis, REST" � The AI has no idea what to build.</span></p>
                 <p><span class="callout-label">Both</span><br>
-                <span class="callout-detail">"Login with OAuth2+JWT, cart scoped by JWT subject, checkout via Stripe tokenization with saga" — One valid implementation.</span></p>
+                <span class="callout-detail">"Login with OAuth2+JWT, cart scoped by JWT subject, checkout via Stripe tokenization with saga" � One valid implementation.</span></p>
             </div>
 
             <h2>The investment is in the columns</h2>
@@ -94,9 +94,9 @@
             <h2>What the matrix doesn't cover</h2>
 
             <ul>
-                <li>Execution patterns — see <a href="ralph-wiggum.html">Ralph Loop</a></li>
-                <li>Multi-agent coordination — see <a href="gsd.html">GSD</a> or <a href="bmad.html">BMAD</a></li>
-                <li>Evolving live systems — see <a href="continuous-evolution.html">Continuous Evolution</a></li>
+                <li>Execution patterns � see <a href="ralph-wiggum.html">Ralph Loop</a></li>
+                <li>Multi-agent coordination � see <a href="gsd.html">GSD</a> or <a href="bmad.html">BMAD</a></li>
+                <li>Evolving live systems � see <a href="continuous-evolution.html">Continuous Evolution</a></li>
                 <li>LLMs are probabilistic. Constrained context reduces variance but doesn't eliminate it.</li>
             </ul>
 

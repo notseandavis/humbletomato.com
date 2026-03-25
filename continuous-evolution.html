@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuous Evolution — Humble Tomato</title>
+    <title>Continuous Evolution � Humble Tomato</title>
     <meta name="description" content="Extending spec-driven development to live products. Diff-based development, migrations, API versioning, and safe evolution patterns.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
@@ -30,24 +30,24 @@
         <section class="content">
 
             <pre><code># Greenfield: build from complete spec
-Spec → Agent → System
+Spec ? Agent ? System
 
 # Evolution: build from the delta
-Spec(v1) → Spec(v2) → Diff → Agent → Targeted Changes</code></pre>
+Spec(v1) ? Spec(v2) ? Diff ? Agent ? Targeted Changes</code></pre>
 
             <p>The <a href="matrix-methodology.html">Matrix Methodology</a> regenerates from specs. That breaks when you have customers, production data, and API contracts. Agents work from <strong>spec version diffs</strong>, not whole specs.</p>
 
             <h2>Expand-Migrate-Contract</h2>
 
-            <pre><code># Phase 1: Expand — add new alongside old
+            <pre><code># Phase 1: Expand � add new alongside old
 ALTER TABLE users ADD COLUMN email_v2 VARCHAR(255);
 # Writes to BOTH, reads from old
 
-# Phase 2: Migrate — backfill and switch
+# Phase 2: Migrate � backfill and switch
 UPDATE users SET email_v2 = normalize(email);
 # Reads from new, writes to both
 
-# Phase 3: Contract — remove old
+# Phase 3: Contract � remove old
 ALTER TABLE users DROP COLUMN email;
 # Rollback no longer possible</code></pre>
 
@@ -80,7 +80,7 @@ ALTER TABLE users DROP COLUMN email;
     </div>
 
     <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>� 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

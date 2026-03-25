@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,7 +34,7 @@
 <pre><code># Day 1: Write a rough spec, get running code
 $ cat specs/checkout.md    # L0 sketch: bullet points, intent only
 $ matrix build             # Agent generates R0 from spec
-$ npm test                 # 3 of 12 E2E fail → spec has gaps
+$ npm test                 # 3 of 12 E2E fail ? spec has gaps
 
 # Day 2: Fix the spec, not the code
 $ vim specs/checkout.md    # Add missing edge cases from test failures
@@ -44,11 +44,11 @@ $ npm test                 # 10 of 12 pass
 # Day 3: Converge
 $ vim specs/checkout.md    # Tighten error handling section
 $ matrix build             # R2
-$ npm test                 # 12 of 12 pass → RC0
+$ npm test                 # 12 of 12 pass ? RC0
 
 # Day 4: Product reviews RC0, requests copy change
 $ vim specs/checkout.md    # Update error message wording
-$ matrix build && npm test # Green → ship it</code></pre>
+$ matrix build && npm test # Green ? ship it</code></pre>
 
             <p>Rejection is cheap. The agent rebuilds from updated specs in hours. Nobody spent three weeks on R1, so nobody fights to ship it despite known issues.</p>
 
@@ -124,7 +124,7 @@ describe('checkout', () => {
     </div>
 
     <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>� 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

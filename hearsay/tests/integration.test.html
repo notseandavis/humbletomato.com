@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
     </script>
 </head>
 <body>
-    <h1>🎙️ Hearsay Integration Tests</h1>
+    <h1>??? Hearsay Integration Tests</h1>
     <div id="results"></div>
     <script type="module">
         import { TranscriptionEngine } from '../js/modules/TranscriptionEngine.js';
@@ -50,10 +50,10 @@
 
         function assert(name, condition) {
             if (condition) {
-                log(`  ✅ ${name}`, 'pass');
+                log(`  ? ${name}`, 'pass');
                 passed++;
             } else {
-                log(`  ❌ ${name}`, 'fail');
+                log(`  ? ${name}`, 'fail');
                 failed++;
             }
         }
@@ -61,10 +61,10 @@
         async function assertThrows(name, fn) {
             try {
                 await fn();
-                log(`  ❌ ${name} (no error thrown)`, 'fail');
+                log(`  ? ${name} (no error thrown)`, 'fail');
                 failed++;
             } catch (e) {
-                log(`  ✅ ${name} (threw: ${e.message})`, 'pass');
+                log(`  ? ${name} (threw: ${e.message})`, 'pass');
                 passed++;
             }
         }
@@ -294,7 +294,7 @@
         }
 
         run().catch(e => {
-            log(`\n💥 Test runner error: ${e.message}`, 'fail');
+            log(`\n?? Test runner error: ${e.message}`, 'fail');
             console.error(e);
         });
     </script>

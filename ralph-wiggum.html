@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ralph Wiggum Loop — Humble Tomato</title>
-    <meta name="description" content="The autonomous agent execution pattern. Read the plan, do one task, verify, update, repeat — with fresh context every iteration.">
+    <title>Ralph Wiggum Loop � Humble Tomato</title>
+    <meta name="description" content="The autonomous agent execution pattern. Read the plan, do one task, verify, update, repeat � with fresh context every iteration.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -32,7 +32,7 @@
             <h2>The Loop</h2>
 
             <div class="callout">
-                <p><span class="callout-detail">Read prd.json → Pick highest-priority task (passes: false) → Implement → Run checks → Commit → Update prd.json → Repeat</span></p>
+                <p><span class="callout-detail">Read prd.json ? Pick highest-priority task (passes: false) ? Implement ? Run checks ? Commit ? Update prd.json ? Repeat</span></p>
             </div>
 
             <p>Each iteration gets <strong>fresh context</strong>. No accumulated cruft. One task per loop.</p>
@@ -78,7 +78,7 @@
                 <tr><td>Add a filter dropdown</td><td>"Refactor the API"</td></tr>
             </table>
 
-            <p>Order by dependency: schema → backend → UI → aggregation views.</p>
+            <p>Order by dependency: schema ? backend ? UI ? aggregation views.</p>
 
             <h2>Acceptance Criteria</h2>
 
@@ -98,11 +98,11 @@
 
             <h2>Progress Log</h2>
 
-            <pre><code>## Codebase Patterns        ← top of progress.txt, reusable across iterations
+            <pre><code>## Codebase Patterns        ? top of progress.txt, reusable across iterations
 - Use sql template for aggregations
 - Always use IF NOT EXISTS for migrations
 
-## 2026-03-15 - US-001       ← appended after each iteration
+## 2026-03-15 - US-001       ? appended after each iteration
 - Added status column to tasks table
 - Files: db/migrations/004_status.sql, src/schema.ts
 - Learning: drizzle needs explicit push after generate</code></pre>
@@ -125,7 +125,7 @@
     </div>
 
     <footer>
-        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+        <div>� 2026 Humble Tomato. Knowledge shared freely.</div>
     </footer>
 
     <script src="nav.js"></script>

@@ -89,4 +89,4 @@ Stack Overflow has limited AI code gen content (field too new). Better sources:
 
 ---
 
-*Last updated: 2026-03-28 — **Expanded what-the-model-knows.html** from ~70 lines to ~120 lines by adding 3 concrete "skip vs specify" examples (REST, database, React). All 16 pages now meet quality bar: 8 gold standards, 7 strong, 1 improved today. Agent safety emerging as major topic (Stanford jai project trending on HN with 506 points): real incidents of agents wiping directories driving sandboxing adoption. Site quality stable — further changes should be additive (new pages) not refinements.*
+*Last updated: 2026-03-30 — **Enhanced bmad.html** with concrete workflow example showing agent handoff files (product-brief.md → PRD.md → architecture.md). Addressed table-heavy critique from self-review. All 16 pages meet quality bar. Trust emerging as parallel concern to safety: Copilot ad injection incident (1.5M PRs affected) trending on HN with 1400+ combined points. Spec-driven approach provides verification surface for detecting unexpected changes. Site quality stable — further changes should be additive (new pages) not refinements.*

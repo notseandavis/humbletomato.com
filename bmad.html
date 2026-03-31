@@ -136,101 +136,25 @@ Client: React form with validation, optimistic update.</code></pre>
 
             <h2>Agents</h2>
 
-            <table>
+            <p><strong>Seven specialized personas:</strong> Analyst (requirements), PM (PRD + epics), Architect (system design), Developer (implementation), Scrum Master (sprint planning), QA (test strategy), Orchestrator (coordinates all).</p>
 
-                <thead>
-
-                    <tr><th>Agent</th><th>Role</th><th>Context Loaded</th></tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr><td>Analyst ("Mary")</td><td>Requirements, research</td><td>Existing briefs</td></tr>
-
-                    <tr><td>PM ("John")</td><td>PRD, epics, strategy</td><td>Product brief</td></tr>
-
-                    <tr><td>Architect</td><td>System design, ADRs</td><td>PRD, project-context</td></tr>
-
-                    <tr><td>Developer ("James")</td><td>Implementation</td><td>Story, architecture</td></tr>
-
-                    <tr><td>Scrum Master</td><td>Sprint planning</td><td>PRD, architecture, epics</td></tr>
-
-                    <tr><td>QA</td><td>Test strategy</td><td>Stories, architecture</td></tr>
-
-                    <tr><td>Orchestrator</td><td>Coordinates all</td><td>Everything</td></tr>
-
-                </tbody>
-
-            </table>
-
-
+            <p>Each agent loads only its inputs. Analyst reads existing briefs. PM reads product brief. Architect reads PRD. Developer reads story + architecture.</p>
 
             <h2>Planning Tracks</h2>
 
+            <p><strong>Quick Flow:</strong> Bug fixes, small features (tech-spec only).</p>
 
+            <p><strong>BMad Method:</strong> Products, platforms (PRD + Architecture + UX).</p>
 
-            <table>
-
-                <thead>
-
-                    <tr><th>Track</th><th>For</th><th>Artifacts</th></tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr><td>Quick Flow</td><td>Bug fixes, small features</td><td>Tech-spec only</td></tr>
-
-                    <tr><td>BMad Method</td><td>Products, platforms</td><td>PRD + Architecture + UX</td></tr>
-
-                    <tr><td>Enterprise</td><td>Compliance, multi-tenant</td><td>Full spec suite + security</td></tr>
-
-                </tbody>
-
-            </table>
-
-
+            <p><strong>Enterprise:</strong> Compliance, multi-tenant (full spec suite + security).</p>
 
             <h2>Party Mode</h2>
 
-
-
-            <p>Multiple agent personas in one session. The Orchestrator picks which persona responds. Useful for brainstorming tradeoffs from different perspectives.</p>
-
-
-
-            <p>Under the hood: one LLM role-playing multiple characters, not independent agents with separate reasoning.</p>
-
-
+            <p>Multiple agent personas in one session. The Orchestrator picks which persona responds. Under the hood: one LLM role-playing multiple characters.</p>
 
             <h2>Modules</h2>
 
-
-
-            <table>
-
-                <thead>
-
-                    <tr><th>Module</th><th>Purpose</th></tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr><td><a href="https://github.com/bmad-code-org/BMAD-METHOD">BMM (Core)</a></td><td>Base methodology, 4-phase lifecycle</td></tr>
-
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-builder">BMB (Builder)</a></td><td>Create custom agents/workflows</td></tr>
-
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-method-test-architecture-enterprise">TEA (Test Architect)</a></td><td>Risk-based test strategy</td></tr>
-
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-game-dev-studio">BMGD (Game Dev)</a></td><td>Unity, Unreal, Godot</td></tr>
-
-                    <tr><td><a href="https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite">CIS (Creative)</a></td><td>Design thinking workflows</td></tr>
-
-                </tbody>
-
-            </table>
+            <p><strong>Core modules:</strong> <a href="https://github.com/bmad-code-org/BMAD-METHOD">BMM</a> (base methodology), <a href="https://github.com/bmad-code-org/bmad-builder">BMB</a> (custom agents), <a href="https://github.com/bmad-code-org/bmad-method-test-architecture-enterprise">TEA</a> (test architecture), <a href="https://github.com/bmad-code-org/bmad-module-game-dev-studio">BMGD</a> (game dev), <a href="https://github.com/bmad-code-org/bmad-module-creative-intelligence-suite">CIS</a> (creative workflows).</p>
 
 
 
@@ -248,31 +172,9 @@ Client: React form with validation, optimistic update.</code></pre>
 
             <h2>BMAD vs GSD</h2>
 
+            <p><strong>BMAD:</strong> Full agile lifecycle, sequential phases, document handoffs, active human each phase. Best for complex greenfield with teams.</p>
 
-
-            <table>
-
-                <thead>
-
-                    <tr><th>Dimension</th><th>BMAD</th><th>GSD</th></tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr><td>Approach</td><td>Full agile lifecycle</td><td>Four commands</td></tr>
-
-                    <tr><td>Context</td><td>Documents as handoffs</td><td>Fresh 200K windows</td></tr>
-
-                    <tr><td>Parallelism</td><td>Sequential</td><td>Wave-based parallel</td></tr>
-
-                    <tr><td>Human role</td><td>Active each phase</td><td>Define intent, delegate</td></tr>
-
-                    <tr><td>Best for</td><td>Complex greenfield, teams</td><td>Solo, clear vision, ship fast</td></tr>
-
-                </tbody>
-
-            </table>
+            <p><strong>GSD:</strong> Four commands, wave-based parallelism, fresh 200K windows per task. Best for solo dev with clear vision.</p>
 
 
 

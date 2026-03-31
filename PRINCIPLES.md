@@ -24,6 +24,7 @@
 - **Concrete over abstract.** Show the PRD. Show the loop. Show the diff. Real examples, not theory.
 - **Examples ground philosophy.** Philosophical/conceptual pages need at least 2-3 concrete code examples to anchor abstract ideas. Specs-as-DNA needs more concrete "how to write a spec" examples.
 - **Code-first test.** Before publishing/refining a page, ask: "Could I understand this from the code examples alone, without reading the text?" If no, add better examples.
+- **Real incidents anchor abstract concepts.** Production bugs, real team mistakes, actual Stack Overflow confusion — concrete failures make abstract principles memorable. fuzzy-compiler.html's multi-currency bug is the pattern: show the vague spec, the generated code that worked in tests, the production incident, what the spec should have said. This grounds "why specs matter" better than theory.
 - **Avoid em dashes in body text.** Use periods and commas. Em dashes (—) are fine in callouts for visual separation, but avoid them in paragraph text where they sound like AI.
 - **Tables supplement, don't replace.** Comparison tables are good but don't replace concrete examples. Use both.
 - **No placeholder pages in navigation.** If content is mostly "coming soon," hide the page from nav until it's ready. Ship complete pages or don't ship at all. BMAD is currently hidden for this reason.
@@ -89,4 +90,4 @@ Stack Overflow has limited AI code gen content (field too new). Better sources:
 
 ---
 
-*Last updated: 2026-03-30 — **Enhanced bmad.html** with concrete workflow example showing agent handoff files (product-brief.md → PRD.md → architecture.md). Addressed table-heavy critique from self-review. All 16 pages meet quality bar. Trust emerging as parallel concern to safety: Copilot ad injection incident (1.5M PRs affected) trending on HN with 1400+ combined points. Spec-driven approach provides verification surface for detecting unexpected changes. Site quality stable — further changes should be additive (new pages) not refinements.*
+*Last updated: 2026-03-31 — **Fixed bmad.html length** (175→100 lines, now under 3-screen rule). Replaced 4 tables with tighter prose. Added "Real incidents anchor abstract concepts" principle (fuzzy-compiler multi-currency bug pattern). Research validates approach: context engineering now recognized discipline (context rot, mode collapse identified as 2026 challenges). Stripe shipping 1000+ AI-generated PRs/week. Security concerns emerging (Rules File Backdoor, CVE-2025-62453). All 16 pages meet quality bar.*

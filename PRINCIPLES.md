@@ -90,4 +90,4 @@ Stack Overflow has limited AI code gen content (field too new). Better sources:
 
 ---
 
-*Last updated: 2026-03-31 — **Fixed bmad.html length** (175→100 lines, now under 3-screen rule). Replaced 4 tables with tighter prose. Added "Real incidents anchor abstract concepts" principle (fuzzy-compiler multi-currency bug pattern). Research validates approach: context engineering now recognized discipline (context rot, mode collapse identified as 2026 challenges). Stripe shipping 1000+ AI-generated PRs/week. Security concerns emerging (Rules File Backdoor, CVE-2025-62453). All 16 pages meet quality bar.*
+*Last updated: 2026-04-01 — **Added tools-landscape.html** (quick reference: Claude Code vs Cursor vs Aider vs GSD vs BMAD vs GitHub Spec Kit). Research confirms site ahead of curve: Matrix = context engineering (now recognized discipline), GSD = fresh contexts (validated by tool comparisons showing Cursor's context compression under load), Telephone Game = don't synthesize (confirmed by Aider's 80-98% token savings). Tool ecosystem matured Q1 2026 with comprehensive comparisons emerging. All 17 pages meet quality bar.*

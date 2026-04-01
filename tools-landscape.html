@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Coding Tools: Quick Reference - Humble Tomato</title>
+    <meta name="description" content="Which tool for which workflow in 2026. Terminal agents, IDE integrations, and frameworks compared.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7817N1MTCV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7817N1MTCV');
+    </script>
+</head>
+<body>
+    <!-- nav injected by nav.js -->
+
+    <div class="container">
+
+        <header class="page-header">
+            <h1>AI Coding Tools: Quick Reference</h1>
+            <p class="subtitle">Which tool for which workflow in 2026. Terminal agents, IDE integrations, and structured frameworks compared.</p>
+        </header>
+
+        <section class="content">
+
+            <p>The AI coding ecosystem split into three categories: terminal agents (autonomous debugging, infra work), IDE integrations (visual feature building), and structured frameworks (spec-driven workflows). Pick by workflow, not hype.</p>
+
+            <h2>Tool Comparison</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool</th>
+                        <th>Interface</th>
+                        <th>Best For</th>
+                        <th>SWE-bench</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://claude.ai/code">Claude Code</a></td>
+                        <td>Terminal</td>
+                        <td>Autonomous debugging, multi-file refactoring, infra setup</td>
+                        <td>77.2% (Sonnet 4.5)</td>
+                        <td>$20-200/mo</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://cursor.sh">Cursor</a></td>
+                        <td>IDE (VS Code fork)</td>
+                        <td>Feature building, UI work, visual workflows</td>
+                        <td>~52% (GPT-4o)</td>
+                        <td>$20-200/mo</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://aider.chat">Aider</a></td>
+                        <td>Terminal CLI</td>
+                        <td>Git-aware refactoring, precise edits, cost optimization</td>
+                        <td>Model-dependent</td>
+                        <td>$0.01-0.10/feature</td>
+                    </tr>
+                    <tr>
+                        <td><a href="gsd.html">GSD</a></td>
+                        <td>Framework (CLI)</td>
+                        <td>Greenfield projects, solo dev, wave parallelism</td>
+                        <td>N/A (meta-framework)</td>
+                        <td>API costs only</td>
+                    </tr>
+                    <tr>
+                        <td><a href="bmad.html">BMAD</a></td>
+                        <td>Framework (files)</td>
+                        <td>Full agile lifecycle, team coordination, audit trails</td>
+                        <td>N/A (meta-framework)</td>
+                        <td>API costs only</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://github.com/github/spec-kit">GitHub Spec Kit</a></td>
+                        <td>CLI toolkit</td>
+                        <td>Spec-first workflows, structured development, 22+ agent support</td>
+                        <td>N/A (toolkit)</td>
+                        <td>Free (OSS)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Decision Guide</h2>
+
+            <pre><code># Scenario: "I have a legacy bug in my auth middleware"
+→ Claude Code (autonomous trace + fix)
+
+# Scenario: "Build a new dashboard page with 3 charts"
+→ Cursor (visual interface, Composer mode)
+
+# Scenario: "Migrate entire DB schema from Prisma to Drizzle"
+→ Aider (surgical precision, git-aware commits)
+
+# Scenario: "Build a full product from PRD, solo developer"
+→ GSD (fresh context per task, wave parallelism)
+
+# Scenario: "Complex greenfield, team needs coordination"
+→ BMAD (full lifecycle, document handoffs, audit trail)
+
+# Scenario: "Move from vibe coding to structured specs"
+→ GitHub Spec Kit (spec → plan → tasks → implement)</code></pre>
+
+            <h2>Key Differences</h2>
+
+            <p><strong>Claude Code:</strong> Autonomous execution (~20 consecutive tool calls). Reads files, plans changes, executes, runs tests, commits. Best SWE-bench score (77.2%). Terminal-native. Extended Thinking mode for complex reasoning. $20-200/mo.</p>
+
+            <p><strong>Cursor:</strong> GUI powerhouse. Composer mode for multi-file editing. "Mind-reading" autocomplete. Codebase indexing (RAG-like). Privacy Mode + SOC 2 certified. Context compression under load (200K → 70K-120K). 7-15GB RAM consumption. $20-200/mo.</p>
+
+            <p><strong>Aider:</strong> Git-aware editing (automatic commit per change). 80-98% token reduction vs naive approaches. Voice-to-code support. Three modes: Ask, Code, Architect. Works with local models (Ollama). $0.01-0.10 per feature with GPT-4o.</p>
+
+            <p><strong>GSD:</strong> Meta-prompting system. Fresh 200K token window per task. Wave-based parallelism. Four commands: new-project, discuss-phase, build, verify. Token-hungry but prevents degradation. Covered <a href="gsd.html">here</a>.</p>
+
+            <p><strong>BMAD:</strong> Agent-as-code framework. Seven specialized personas (Analyst, PM, Architect, Developer, SM, QA, Orchestrator). Sequential phases with document handoffs. Party Mode for multi-persona sessions. Covered <a href="bmad.html">here</a>.</p>
+
+            <p><strong>GitHub Spec Kit:</strong> Open-source toolkit (28K+ stars). CLI + templates + prompts. Works with 22+ AI agents. Workflow: spec → plan → tasks → implement → review → merge. Addresses "vibe coding" drift.</p>
+
+            <h2>Hybrid Workflows</h2>
+
+            <p>2026 pattern: Cursor for UI + Claude Code in integrated terminal for backend/infra work. Or Aider for surgical edits + GSD for greenfield features. Tools are complementary, not exclusive.</p>
+
+            <p>Secret sauce: <code>CLAUDE.md</code> or <code>.cursorrules</code> files store project preferences ("Use Functional Components only", "Always use Zod for validation"). Agents read these as context.</p>
+
+            <h2>Tool-Agnostic Principles</h2>
+
+            <p>These patterns work regardless of tool:</p>
+
+            <ul>
+                <li><a href="matrix-methodology.html">Context Matrix</a> — Compose specs + architecture → implementation</li>
+                <li><a href="ralph-wiggum.html">Ralph Loop</a> — Fresh context per iteration prevents degradation</li>
+                <li><a href="spec-driven-development.html">Spec-Driven Development</a> — Specs as source of truth, code as compiled output</li>
+                <li><a href="solution-space.html">Solution Space</a> — Constraints eliminate valid alternatives</li>
+                <li><a href="telephone-game.html">Telephone Game</a> — Fewer LLM steps = less information loss</li>
+            </ul>
+
+            <p>Good tools implement these principles. Great developers understand the principles behind the tools.</p>
+
+            <p class="last-updated"><em>Last updated: April 1, 2026</em></p>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <div>© 2026 Humble Tomato. Knowledge shared freely.</div>
+    </footer>
+
+    <script src="nav.js"></script>
+</body>
+</html>

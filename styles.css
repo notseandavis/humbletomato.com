@@ -121,7 +121,24 @@ nav {
     padding-top: 12px;
 }
 
-/* Desktop sidebar layout (>960px) */
+/* ===== Container ===== */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    flex: 1;
+}
+
+.wide-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Desktop sidebar layout (>960px)
+   Must come after the container rules above: media queries add no specificity,
+   so an earlier `margin: 0 auto` would otherwise win and re-center the content
+   underneath the fixed sidebar. */
 @media (min-width: 961px) {
     .menu-toggle {
         display: none;
@@ -169,26 +186,13 @@ nav {
     .wide-container,
     footer {
         margin-left: var(--sidebar-width);
+        margin-right: 0;
     }
 
     .container {
         max-width: calc(800px + var(--sidebar-width));
         padding-left: 48px;
     }
-}
-
-/* ===== Container ===== */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 24px;
-    flex: 1;
-}
-
-.wide-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
 }
 
 /* ===== Typography ===== */

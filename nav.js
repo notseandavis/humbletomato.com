@@ -65,6 +65,9 @@
         return `<li><a href="${item.href}"${active}>${item.label}</a></li>`;
     }).join('\n                ') : '';
 
+    // The sidebar is a sibling of <nav>, not a child. Nesting a position:fixed
+    // element inside the fixed top bar makes Safari attach it to the bar's
+    // compositing layer, where it drifts or disappears while scrolling.
     const navHTML = `
     <nav>
         <div class="nav-container">
@@ -73,14 +76,14 @@
                 <span>Humble Tomato</span>
             </a>
             <button class="menu-toggle" aria-label="Toggle menu">☰</button>
-            <ul class="nav-links">
-                <li class="nav-switcher">
-                    ${switcherHTML}
-                </li>
-                ${listItems}
-            </ul>
         </div>
-    </nav>`;
+    </nav>
+    <ul class="nav-links">
+        <li class="nav-switcher">
+            ${switcherHTML}
+        </li>
+        ${listItems}
+    </ul>`;
 
     // The hub has no sidebar, so its content is centred full-width instead of offset.
     if (isHub) {

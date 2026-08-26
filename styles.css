@@ -22,16 +22,24 @@ body {
     color: var(--dark);
     line-height: 1.7;
     font-size: 17px;
+    /* Top bar is fixed, so reserve its height here instead of in the flow */
+    padding-top: 64px;
 }
 
 /* ===== Navigation ===== */
 
-/* Top bar */
+/* Top bar.
+   Fixed rather than sticky: the sidebar below is position:fixed, and Safari
+   attaches a fixed element to its sticky ancestor's compositing layer, which
+   makes the nav drift or vanish mid-scroll. The sidebar is also a sibling of
+   this element (not a child) for the same reason. */
 nav {
     background: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
     height: 64px;
 }
@@ -60,10 +68,13 @@ nav {
     font-size: 24px;
 }
 
-/* Desktop: sidebar nav */
+/* Desktop: sidebar nav.
+   Zero the margins the global `ul, ol` rule applies, which otherwise inset the
+   fixed sidebar 24px from the left edge and 16px from the bottom. */
 .nav-links {
     display: none;
     list-style: none;
+    margin: 0;
 }
 
 /* Menu toggle (hamburger) */
@@ -76,20 +87,22 @@ nav {
     color: var(--dark);
 }
 
-/* Mobile overlay nav */
-.nav-links.active {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: white;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    z-index: 99;
-    padding-bottom: 32px;
+/* Mobile overlay nav. Scoped to mobile so that opening the menu and then
+   resizing to desktop can't leave a full-width overlay covering the page. */
+@media (max-width: 960px) {
+    .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        overflow-y: auto;
+        z-index: 99;
+        padding-bottom: 32px;
+    }
 }
 
 .nav-links a {

@@ -121,6 +121,65 @@ nav {
     padding-top: 12px;
 }
 
+/* Top-level section switcher (AI Tips / iOS Games) */
+.nav-switcher {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    list-style: none;
+    padding: 16px 16px 16px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.nav-switcher .section-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--mid);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.nav-switcher .section-tab:hover {
+    border-color: rgba(232, 68, 48, 0.4);
+    color: var(--tomato);
+    text-decoration: none;
+}
+
+.nav-switcher .section-tab.active {
+    border-color: var(--tomato);
+    background: rgba(232, 68, 48, 0.08);
+    color: var(--tomato);
+}
+
+.section-tab-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.section-tab-label {
+    white-space: nowrap;
+}
+
+.section-tab-soon {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--light);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-weight: 600;
+}
+
 /* ===== Container ===== */
 .container {
     max-width: 800px;
@@ -181,6 +240,13 @@ nav {
         font-size: 10px;
     }
 
+    /* Sidebar is only 240px — stack the section tabs instead of sitting them side by side */
+    .nav-switcher {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 4px 12px 14px;
+    }
+
     /* Offset main content for sidebar */
     .container,
     .wide-container,
@@ -192,6 +258,23 @@ nav {
     .container {
         max-width: calc(800px + var(--sidebar-width));
         padding-left: 48px;
+    }
+
+    /* The root hub has no sidebar — centre it full-width instead */
+    body.no-sidebar .nav-links {
+        display: none;
+    }
+
+    body.no-sidebar .container,
+    body.no-sidebar .wide-container,
+    body.no-sidebar footer {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body.no-sidebar .container {
+        max-width: 800px;
+        padding-left: 24px;
     }
 }
 
@@ -332,8 +415,12 @@ blockquote {
 
 /* ===== Hero Section ===== */
 .hero {
-    padding: 80px 0 60px;
+    padding: 80px 0 24px;
     text-align: center;
+}
+
+.hero + .content {
+    padding-top: 0;
 }
 
 .hero-icon {
@@ -529,6 +616,122 @@ footer a {
     font-size: 32px;
     margin-bottom: 12px;
     display: block;
+}
+
+/* ===== Section Cards (root hub) ===== */
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin: 8px 0 32px;
+}
+
+.section-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    padding: 32px;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.section-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232, 68, 48, 0.3);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+}
+
+.section-card-icon {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 20px;
+}
+
+.section-card h2 {
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.section-card p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.section-card-meta {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--light);
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.section-card-cta {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--tomato);
+}
+
+.badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--mid);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ===== Coming Soon ===== */
+.coming-soon {
+    background: white;
+    border: 1px dashed rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    padding: 56px 32px;
+    text-align: center;
+    margin: 8px 0 32px;
+}
+
+.coming-soon-icon {
+    font-size: 48px;
+    line-height: 1;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.coming-soon h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 28px;
+}
+
+.coming-soon p {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.coming-soon-aside {
+    font-size: 15px;
+    color: var(--light);
+    margin-bottom: 0;
+}
+
+/* Section tag above a page title */
+.page-header .tag {
+    margin-bottom: 16px;
 }
 
 /* ===== Utility ===== */
